@@ -19,6 +19,9 @@ camera_apply(camera);
 
 vertex_submit(grid, pr_linelist, -1);
 
+shape_1.draw();
+shape_2.draw();
+
 shader_reset();
 gpu_set_zwriteenable(false);
 gpu_set_ztestenable(false);

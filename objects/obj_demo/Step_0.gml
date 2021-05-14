@@ -16,3 +16,6 @@ if (keyboard_check(ord("Q"))) {
 if (keyboard_check(ord("E"))) {
     dist = min(++dist, 400);
 }
+
+shape_1.update();
+shape_2.update();
