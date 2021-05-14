@@ -32,7 +32,7 @@ function ColSphere(position, radius) constructor {
     self.radius = radius;                   // Vec3
     
     static CheckPoint = function(point) {
-        
+        return point.CheckSphere(self);
     };
     
     static CheckSphere = function(sphere) {
@@ -61,11 +61,11 @@ function ColAABB(position, half_extents) constructor {
     self.half_extents = half_extents;       // Vec3
     
     static CheckPoint = function(point) {
-        
+        return point.CheckAABB(self);
     };
     
     static CheckSphere = function(sphere) {
-        
+        return sphere.CheckAABB(self);
     };
     
     static CheckAABB = function(aabb) {
@@ -90,15 +90,15 @@ function ColPlane(normal, distance) constructor {
     self.distance = distance;               // number
     
     static CheckPoint = function(point) {
-        
+        return point.CheckPlane(self);
     };
     
     static CheckSphere = function(sphere) {
-        
+        return sphere.CheckPlane(self);
     };
     
     static CheckAABB = function(aabb) {
-        
+        return aabb.CheckPlane(self);
     };
     
     static CheckPlane = function(plane) {
