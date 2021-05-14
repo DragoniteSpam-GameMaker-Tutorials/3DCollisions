@@ -2,6 +2,7 @@
   "resources": [
     {"id":{"name":"obj_demo","path":"objects/obj_demo/obj_demo.yy",},"order":1,},
     {"id":{"name":"shd_demo","path":"shaders/shd_demo/shd_demo.yy",},"order":2,},
+    {"id":{"name":"Col_Vector","path":"scripts/Col_Vector/Col_Vector.yy",},"order":20,},
     {"id":{"name":"fnt_demo","path":"fonts/fnt_demo/fnt_demo.yy",},"order":0,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":14,},
   ],
