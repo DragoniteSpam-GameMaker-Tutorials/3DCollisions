@@ -49,4 +49,8 @@ function Vector3(x, y, z) constructor {
         var mag = self.Magnitude();
         return new Vector3(self.x / mag, self.y / mag, self.z / mag);
     };
+    
+    static Abs = function() {
+        return new Vector3(abs(self.x), abs(self.y), abs(self.z));
+    };
 }

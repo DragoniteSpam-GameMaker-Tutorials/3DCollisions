@@ -83,6 +83,14 @@ function ColAABB(position, half_extents) constructor {
     static CheckLine = function(line) {
         
     };
+    
+    static GetMin = function() {
+        return self.position.Sub(self.half_extents);
+    };
+    
+    static GetMax = function() {
+        return self.position.Add(self.half_extents);
+    };
 }
 
 function ColPlane(normal, distance) constructor {
@@ -123,4 +131,8 @@ function ColRay(origin, direction) constructor {
 function ColLine(start, finish) constructor {
     self.start = start;                     // Vec3
     self.finish = finish;                   // Vec3
+    
+    static Length = function() {
+        return self.start.DistanceTo(self.finish);
+    };
 }
