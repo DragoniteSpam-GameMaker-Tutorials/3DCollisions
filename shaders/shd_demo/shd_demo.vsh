@@ -1,0 +1,12 @@
+attribute vec3 in_Position;
+attribute vec3 in_Normal;
+attribute vec4 in_Colour;
+
+varying vec4 v_vColour;
+varying vec3 v_vWorldNormal;
+
+void main() {
+    gl_Position = gm_Matrices[MATRIX_WORLD_VIEW_PROJECTION] * vec4(in_Position, 1);
+    v_vWorldNormal = (gm_Matrices[MATRIX_WORLD] * vec4(in_Normal, 0)).xyz;
+    v_vColour = in_Colour;
+}
