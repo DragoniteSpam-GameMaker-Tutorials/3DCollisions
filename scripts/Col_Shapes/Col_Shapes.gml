@@ -41,15 +41,19 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        
+        return self.position.DistanceTo(sphere.position) <= (self.radius + sphere.radius);
     };
     
     static CheckAABB = function(aabb) {
-        
+        var nearest = aabb.NearestPoint(self.position);
+        var dist = nearest.DistanceTo(self.position);
+        return dist <= self.radius;
     };
     
     static CheckPlane = function(plane) {
-        
+        var nearest = plane.NearestPoint(self.position);
+        var dist = nearest.DistanceTo(self.position);
+        return dist <= self.radius;
     };
     
     static CheckRay = function(ray) {
