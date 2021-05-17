@@ -84,11 +84,19 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckAABB = function(aabb) {
-        
+        var box_min = self.GetMin();
+        var box_max = self.GetMax();
+        var other_min = aabb.GetMin();
+        var other_max = aabb.GetMax();
+        return ((box_min.x <= other_max.x) && (box_max.x >= other_min.x) && (box_min.y <= other_max.y) && (box_max.y >= other_min.y) && (box_min.z <= other_max.z) && (box_max.z >= other_min.z));
     };
     
     static CheckPlane = function(plane) {
-        
+        var anorm = plane.normal.Abs();
+        var plength = self.half_extents.Dot(anorm);
+        var ndot = plane.normal.Dot(self.position);
+        var dist = ndot - plane.distance;
+        return (abs(dist) <= plength);
     };
     
     static CheckRay = function(ray) {
@@ -137,7 +145,8 @@ function ColPlane(normal, distance) constructor {
     };
     
     static CheckPlane = function(plane) {
-        
+        var cross = self.normal.Cross(plane.normal);
+        return (cross.Magnitude() > 0) || (self.distance == plane.distance);
     };
     
     static CheckRay = function(ray) {

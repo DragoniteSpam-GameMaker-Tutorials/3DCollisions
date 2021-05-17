@@ -109,7 +109,8 @@ function ColTestAABB(vbuff) constructor {
 }
 
 function ColTestPlane(vbuff) constructor {
-    self.rotation = random(360);
+    //self.rotation = random(360);
+    self.rotation = 0;
     self.data = new ColPlane(new Vector3(0, -dsin(self.rotation), dcos(self.rotation)), 0);
     self.vbuff = vbuff;
     
