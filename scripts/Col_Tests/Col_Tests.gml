@@ -71,7 +71,7 @@ function ColTestSphere(vbuff) constructor {
 }
 
 function ColTestAABB(vbuff) constructor {
-    self.data = new ColAABB(new Vector3(0, 0, 0), new Vector3(4, 8, 6));
+    self.data = new ColAABB(new Vector3(0, 0, 0), new Vector3(irandom_range(2, 8), irandom_range(2, 8), irandom_range(2, 8)));
     self.vbuff = vbuff;
     
     self.update = function() {
@@ -109,23 +109,30 @@ function ColTestAABB(vbuff) constructor {
 }
 
 function ColTestPlane(vbuff) constructor {
-    self.data = new ColPlane(new Vector3(0, 0, 1), 0);
+    self.rotation = random(360);
+    self.data = new ColPlane(new Vector3(0, -dsin(self.rotation), dcos(self.rotation)), 0);
     self.vbuff = vbuff;
     
     self.update = function() {
         if (keyboard_check(vk_up)) {
-            self.data.distance--;
+            self.data.distance++;
         }
         if (keyboard_check(vk_down)) {
-            self.data.distance++;
+            self.data.distance--;
+        }
+        
+        if (keyboard_check(vk_right)) {
+            self.rotation--;
+            self.data.normal = new Vector3(0, -dsin(self.rotation), dcos(self.rotation));
+        }
+        if (keyboard_check(vk_left)) {
+            self.rotation++;
+            self.data.normal = new Vector3(0, -dsin(self.rotation), dcos(self.rotation));
         }
     };
     self.draw = function() {
-        matrix_set(matrix_world, matrix_build(
-            0, 0, self.data.distance,
-            0, 0, 0,
-            1, 1, 1
-        ));
+        var mat1 = matrix_build(0, 0, self.data.distance, 0, 0, 0, 1, 1, 1);
+        matrix_set(matrix_world, matrix_multiply(mat1, matrix_build(0, 0, 0, self.rotation, 0, 0, 1, 1, 1)));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build_identity());
     };
