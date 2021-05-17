@@ -6,6 +6,7 @@
     {"id":{"name":"Col_Helper_Functions","path":"scripts/Col_Helper_Functions/Col_Helper_Functions.yy",},"order":22,},
     {"id":{"name":"Col_Vector","path":"scripts/Col_Vector/Col_Vector.yy",},"order":20,},
     {"id":{"name":"fnt_demo","path":"fonts/fnt_demo/fnt_demo.yy",},"order":0,},
+    {"id":{"name":"Col_Tests","path":"scripts/Col_Tests/Col_Tests.yy",},"order":23,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":14,},
   ],
   "Options": [
@@ -41,6 +42,7 @@
     {"CopyToMask":-1,"filePath":"datafiles/shapes","resourceVersion":"1.0","name":"plane.vbuff","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/shapes","resourceVersion":"1.0","name":"point.vbuff","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/shapes","resourceVersion":"1.0","name":"sphere.vbuff","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/shapes","resourceVersion":"1.0","name":"sphere.000.vbuff","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.2.560",

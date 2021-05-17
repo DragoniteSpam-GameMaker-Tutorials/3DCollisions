@@ -7,6 +7,6 @@ draw_text_colour(192, 60, "S: rotate camera down", c_white, c_white, c_white, c_
 draw_text_colour(480, 40, "A: rotate camera left", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(480, 60, "D: rotate camera right", c_white, c_white, c_white, c_white, 1);
 
-if (shape_2.data.CheckPoint(shape_1.data)) {
+if (shape_2.test(shape_1)) {
     draw_text_colour(32, 100, "Shapes overlap!", c_red, c_red, c_red, c_red, 1);
 }
