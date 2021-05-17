@@ -24,7 +24,7 @@ if (keyboard_check(vk_numpad1)) {
     shape_1 = new ColTestSphere(sphere, false);
 }
 if (keyboard_check(vk_numpad2)) {
-    shape_1 = new ColTestSphere(aabb, false);
+    shape_1 = new ColTestAABB(aabb, false);
 }
 if (keyboard_check(vk_numpad3)) {
     shape_1 = new ColTestPlane(plane, false);
@@ -37,7 +37,7 @@ if (keyboard_check(vk_numpad5)) {
     shape_2 = new ColTestSphere(sphere, true);
 }
 if (keyboard_check(vk_numpad6)) {
-    shape_2 = new ColTestSphere(aabb, true);
+    shape_2 = new ColTestAABB(aabb, true);
 }
 if (keyboard_check(vk_numpad7)) {
     shape_2 = new ColTestPlane(plane, true);
