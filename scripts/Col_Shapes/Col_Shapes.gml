@@ -3,19 +3,24 @@ function ColPoint(position) constructor {
     self.position = position;               // Vec3
     
     static CheckPoint = function(point) {
-        
+        return self.position.Equals(point.position);
     };
     
     static CheckSphere = function(sphere) {
-        
+        return self.position.DistanceTo(sphere.position) <= sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
-        
+        var box_min = aabb.GetMin();
+        var box_max = aabb.GetMax();
+        if (self.position.x < box_min.x || self.position.y < box_min.y || self.position.z < box_min.z) return false;
+        if (self.position.x > box_max.x || self.position.y > box_max.y || self.position.z > box_max.z) return false;
+        return true;
     };
     
     static CheckPlane = function(plane) {
-        
+        var ndot = self.position.Dot(plane.normal);
+        return (ndot == plane.distance);
     };
     
     static CheckRay = function(ray) {
@@ -94,7 +99,7 @@ function ColAABB(position, half_extents) constructor {
 }
 
 function ColPlane(normal, distance) constructor {
-    self.normal = normal;                   // Vec3
+    self.normal = normal.Normalize();       // Vec3
     self.distance = distance;               // number
     
     static CheckPoint = function(point) {
