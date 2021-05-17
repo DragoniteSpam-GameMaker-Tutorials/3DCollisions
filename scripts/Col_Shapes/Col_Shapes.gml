@@ -59,6 +59,12 @@ function ColSphere(position, radius) constructor {
     static CheckLine = function(line) {
         
     };
+    
+    static NearestPoint = function(vec3) {
+        var dist = vec3.Sub(self.position).Normalize();
+        var scaled_dist = dist.Mul(self.radius);
+        return scaled_dist.Add(self.position);
+    };
 }
 
 function ColAABB(position, half_extents) constructor {
@@ -96,6 +102,18 @@ function ColAABB(position, half_extents) constructor {
     static GetMax = function() {
         return self.position.Add(self.half_extents);
     };
+    
+    static NearestPoint = function(vec3) {
+        var box_min = self.GetMin();
+        var box_max = self.GetMax();
+        var xx = (vec3.x < box_min.x) ? box_min.x : vec3.x;
+        var yy = (vec3.y < box_min.y) ? box_min.y : vec3.y;
+        var zz = (vec3.z < box_min.z) ? box_min.z : vec3.z;
+        xx = (xx > box_max.x) ? box_max.x : xx;
+        yy = (yy > box_max.y) ? box_max.y : yy;
+        zz = (zz > box_max.z) ? box_max.z : zz;
+        return new Vector3(xx, yy, zz);
+    };
 }
 
 function ColPlane(normal, distance) constructor {
@@ -125,12 +143,26 @@ function ColPlane(normal, distance) constructor {
     static CheckLine = function(line) {
         
     };
+    
+    static NearestPoint = function(vec3) {
+        var ndot = self.normal.Dot(vec3);
+        var dist = ndot - self.distance;
+        var scaled_dist = self.normal.Mul(dist);
+        return vec3.Sub(scaled_dist);
+    };
 }
 
 // Line "shapes"
 function ColRay(origin, direction) constructor {
     self.origin = origin;                   // Vec3
-    self.direction = direction;             // Vec3
+    self.direction = direction.Normalize(); // Vec3
+    
+    static NearestPoint = function(vec3) {
+        var diff = vec3.Sub(self.origin);
+        var t = max(diff.Dot(ray.direction), 0);
+        var scaled_dir = ray.direction.Mul(t);
+        return self.origin.Add(scaled_dir);
+    };
 }
 
 function ColLine(start, finish) constructor {
@@ -139,5 +171,13 @@ function ColLine(start, finish) constructor {
     
     static Length = function() {
         return self.start.DistanceTo(self.finish);
+    };
+    
+    static NearestPoint = function(vec3) {
+        var line_vec = self.finish.Sub(self.start);
+        var point_vec = vec3.Sub(self.start);
+        var t = clamp(point_vec.Dot(line_vec) / line_vec.Dot(line_vec), 0, 1);
+        var scaled_vec = line_vec.Mul(t);
+        return self.start.Add(scaled_vec);
     };
 }
