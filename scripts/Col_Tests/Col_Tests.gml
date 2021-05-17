@@ -122,7 +122,7 @@ function ColTestPlane(vbuff) constructor {
     };
     self.draw = function() {
         matrix_set(matrix_world, matrix_build(
-            0, 0, 0,
+            0, 0, self.data.distance,
             0, 0, 0,
             1, 1, 1
         ));
