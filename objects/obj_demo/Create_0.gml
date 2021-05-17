@@ -29,4 +29,4 @@ sphere = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
 shape_1 = new ColTestPoint(point, false);
-shape_2 = new ColTestSphere(sphere, true);
+shape_2 = new ColTestPoint(point, true);

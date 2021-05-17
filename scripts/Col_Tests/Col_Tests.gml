@@ -130,9 +130,9 @@ function ColTestPlane(vbuff, is_live) constructor {
     };
     self.draw = function() {
         matrix_set(matrix_world, matrix_build(
-            self.data.position.x, self.data.position.y, self.data.position.z,
             0, 0, 0,
-            self.data.half_extents.x, self.data.half_extents.y, self.data.half_extents.z
+            0, 0, 0,
+            1, 1, 1
         ));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build_identity());
