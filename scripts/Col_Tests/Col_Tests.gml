@@ -1,10 +1,8 @@
-function ColTestPoint(vbuff, is_live) constructor {
+function ColTestPoint(vbuff) constructor {
     self.data = new ColPoint(new Vector3(0, 0, 0));
     self.vbuff = vbuff;
-    self.is_live = is_live;
     
     self.update = function() {
-        if (!self.is_live) return;
         if (keyboard_check(vk_left)) {
             self.data.position.x--;
         }
@@ -34,13 +32,11 @@ function ColTestPoint(vbuff, is_live) constructor {
     };
 }
 
-function ColTestSphere(vbuff, is_live) constructor {
+function ColTestSphere(vbuff) constructor {
     self.data = new ColSphere(new Vector3(0, 0, 0), 8);
     self.vbuff = vbuff;
-    self.is_live = is_live;
     
     self.update = function() {
-        if (!self.is_live) return;
         if (keyboard_check(vk_left)) {
             self.data.position.x--;
         }
@@ -74,13 +70,11 @@ function ColTestSphere(vbuff, is_live) constructor {
     };
 }
 
-function ColTestAABB(vbuff, is_live) constructor {
+function ColTestAABB(vbuff) constructor {
     self.data = new ColAABB(new Vector3(0, 0, 0), new Vector3(4, 8, 6));
     self.vbuff = vbuff;
-    self.is_live = is_live;
     
     self.update = function() {
-        if (!self.is_live) return;
         if (keyboard_check(vk_left)) {
             self.data.position.x--;
         }
@@ -114,13 +108,11 @@ function ColTestAABB(vbuff, is_live) constructor {
     };
 }
 
-function ColTestPlane(vbuff, is_live) constructor {
+function ColTestPlane(vbuff) constructor {
     self.data = new ColPlane(new Vector3(0, 0, 1), 0);
     self.vbuff = vbuff;
-    self.is_live = is_live;
     
     self.update = function() {
-        if (!self.is_live) return;
         if (keyboard_check(vk_up)) {
             self.data.distance--;
         }
