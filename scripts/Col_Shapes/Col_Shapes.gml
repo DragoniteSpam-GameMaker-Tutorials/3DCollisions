@@ -225,7 +225,7 @@ function ColPlane(normal, distance) constructor {
         
         var contact_point = ray.origin.Add(ray.direction.Mul(t));
         
-        hit_info.Update(t, self, contact_point, undefined);
+        hit_info.Update(t, self, contact_point, self.normal);
         
         return true;
     };
