@@ -215,6 +215,10 @@ function ColPlane(normal, distance) constructor {
         var t = (self.distance - OdotN) / DdotN;
         if (t < 0) return false;
         
+        var contact_point = ray.origin.Add(ray.direction.Mul(t));
+        
+        hit_info.Update(t, self, contact_point, undefined);
+        
         return true;
     };
     
