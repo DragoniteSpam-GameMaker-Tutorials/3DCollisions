@@ -23,4 +23,11 @@ function RaycastHitInformation() constructor {
             self.normal = normal;
         }
     };
+    
+    static Clear = function() {
+        self.shape = undefined;
+        self.point = undefined;
+        self.distance = infinity;
+        self.normal = undefined;
+    };
 }
