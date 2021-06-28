@@ -130,10 +130,8 @@ function ColAABB(position, half_extents) constructor {
         
         var t1 = (box_min.x - ray.origin.x) / ray_x;
         var t2 = (box_max.x - ray.origin.x) / ray_x;
-        
         var t3 = (box_min.y - ray.origin.y) / ray_y;
         var t4 = (box_max.y - ray.origin.y) / ray_y;
-        
         var t5 = (box_min.z - ray.origin.z) / ray_z;
         var t6 = (box_max.z - ray.origin.z) / ray_z;
         
@@ -150,6 +148,15 @@ function ColAABB(position, half_extents) constructor {
         
         if (tmax < 0) return false;
         if (tmin > tmax) return false;
+        
+        var t = tmax;
+        if (tmin > 0) {
+            t = tmin;
+        }
+        
+        var contact_point = ray.origin.Add(ray.direction.Mul(t));
+        
+        hit_info.Update(t, self, contact_point, undefined);
         
         return true;
     };
