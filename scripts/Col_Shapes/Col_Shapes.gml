@@ -108,7 +108,37 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckRay = function(ray) {
+        var box_min = self.GetMin();
+        var box_max = self.GetMax();
         
+        var ray_x = (ray.direction.x == 0) ? 0.0001 : ray.direction.x;
+        var ray_y = (ray.direction.y == 0) ? 0.0001 : ray.direction.y;
+        var ray_z = (ray.direction.z == 0) ? 0.0001 : ray.direction.z;
+        
+        var t1 = (box_min.x - ray.origin.x) / ray_x;
+        var t2 = (box_max.x - ray.origin.x) / ray_x;
+        
+        var t3 = (box_min.y - ray.origin.y) / ray_y;
+        var t4 = (box_max.y - ray.origin.y) / ray_y;
+        
+        var t5 = (box_min.z - ray.origin.z) / ray_z;
+        var t6 = (box_max.z - ray.origin.z) / ray_z;
+        
+        var tmin = max(
+            min(t1, t2),
+            min(t3, t4),
+            min(t5, t6)
+        );
+        var tmax = min(
+            max(t1, t2),
+            max(t3, t4),
+            max(t5, t6)
+        );
+        
+        if (tmax < 0) return false;
+        if (tmin > tmax) return false;
+        
+        return true;
     };
     
     static CheckLine = function(line) {
