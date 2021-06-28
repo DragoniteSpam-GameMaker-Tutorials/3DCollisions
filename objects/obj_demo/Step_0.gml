@@ -29,18 +29,24 @@ if (keyboard_check(vk_numpad2)) {
 if (keyboard_check(vk_numpad3)) {
     shape_1 = new ColTestPlane(plane);
 }
-
 if (keyboard_check(vk_numpad4)) {
+    shape_1 = new ColTestLine(undefined);
+}
+
+if (keyboard_check(ord("Z"))) {
     shape_2 = new ColTestPoint(point);
 }
-if (keyboard_check(vk_numpad5)) {
+if (keyboard_check(ord("X"))) {
     shape_2 = new ColTestSphere(sphere);
 }
-if (keyboard_check(vk_numpad6)) {
+if (keyboard_check(ord("C"))) {
     shape_2 = new ColTestAABB(aabb);
 }
-if (keyboard_check(vk_numpad7)) {
+if (keyboard_check(ord("V"))) {
     shape_2 = new ColTestPlane(plane);
+}
+if (keyboard_check(ord("B"))) {
+    shape_2 = new ColTestLine(undefined);
 }
 
 shape_1.update();

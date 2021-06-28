@@ -170,6 +170,30 @@ function ColRay(origin, direction) constructor {
     self.origin = origin;                   // Vec3
     self.direction = direction.Normalize(); // Vec3
     
+    static CheckPoint = function(point) {
+        return point.CheckRay(self);
+    };
+    
+    static CheckSphere = function(sphere) {
+        return sphere.CheckRay(self);
+    };
+    
+    static CheckAABB = function(aabb) {
+        return aabb.CheckRay(self);
+    };
+    
+    static CheckPlane = function(plane) {
+        return plane.CheckRay(self);
+    };
+    
+    static CheckRay = function(ray) {
+        return false;
+    };
+    
+    static CheckLine = function(line) {
+        return false;
+    };
+    
     static NearestPoint = function(vec3) {
         var diff = vec3.Sub(self.origin);
         var t = max(diff.Dot(ray.direction), 0);
@@ -181,6 +205,30 @@ function ColRay(origin, direction) constructor {
 function ColLine(start, finish) constructor {
     self.start = start;                     // Vec3
     self.finish = finish;                   // Vec3
+    
+    static CheckPoint = function(point) {
+        return point.CheckLine(self);
+    };
+    
+    static CheckSphere = function(sphere) {
+        return sphere.CheckLine(self);
+    };
+    
+    static CheckAABB = function(aabb) {
+        return aabb.CheckLine(self);
+    };
+    
+    static CheckPlane = function(plane) {
+        return plane.CheckLine(self);
+    };
+    
+    static CheckRay = function(ray) {
+        return false;
+    };
+    
+    static CheckLine = function(line) {
+        return false;
+    };
     
     static Length = function() {
         return self.start.DistanceTo(self.finish);
