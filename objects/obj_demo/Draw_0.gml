@@ -28,14 +28,14 @@ var mouse_vector = screen_to_world(window_mouse_get_x(), window_mouse_get_y(), v
 var ray = new ColRay(new Vector3(xfrom, yfrom, zfrom), new Vector3(mouse_vector.x, mouse_vector.y, mouse_vector.z));
 var hit_info = new RaycastHitInformation();
 if (shape_1.data.CheckRay(ray, hit_info)) {
-    matrix_set(matrix_world, matrix_build(hit_info.x, hit_info.y, hit_info.z, 0, 0, 0, 1, 1, 1));
+    matrix_set(matrix_world, matrix_build(hit_info.point.x, hit_info.point.y, hit_info.point.z, 0, 0, 0, 1, 1, 1));
     vertex_submit(point, pr_trianglelist, -1);
     matrix_set(matrix_world, matrix_build_identity());
 }
 
 hit_info.Clear();
 if (shape_2.data.CheckRay(ray, hit_info)) {
-    matrix_set(matrix_world, matrix_build(hit_info.x, hit_info.y, hit_info.z, 0, 0, 0, 1, 1, 1));
+    matrix_set(matrix_world, matrix_build(hit_info.point.x, hit_info.point.y, hit_info.point.z, 0, 0, 0, 1, 1, 1));
     vertex_submit(point, pr_trianglelist, -1);
     matrix_set(matrix_world, matrix_build_identity());
 }
