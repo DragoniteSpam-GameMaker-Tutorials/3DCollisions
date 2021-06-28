@@ -30,12 +30,16 @@ var hit_info = new RaycastHitInformation();
 if (shape_1.data.CheckRay(ray, hit_info)) {
     matrix_set(matrix_world, matrix_build(hit_info.point.x, hit_info.point.y, hit_info.point.z, 0, 0, 0, 1, 1, 1));
     vertex_submit(point, pr_trianglelist, -1);
+    matrix_set(matrix_world, matrix_build(hit_info.point.x + hit_info.normal.x, hit_info.point.y + hit_info.normal.y, hit_info.point.z + hit_info.normal.z, 0, 0, 0, 1, 1, 1));
+    vertex_submit(point, pr_trianglelist, -1);
     matrix_set(matrix_world, matrix_build_identity());
 }
 
 hit_info.Clear();
 if (shape_2.data.CheckRay(ray, hit_info)) {
     matrix_set(matrix_world, matrix_build(hit_info.point.x, hit_info.point.y, hit_info.point.z, 0, 0, 0, 1, 1, 1));
+    vertex_submit(point, pr_trianglelist, -1);
+    matrix_set(matrix_world, matrix_build(hit_info.point.x + hit_info.normal.x, hit_info.point.y + hit_info.normal.y, hit_info.point.z + hit_info.normal.z, 0, 0, 0, 1, 1, 1));
     vertex_submit(point, pr_trianglelist, -1);
     matrix_set(matrix_world, matrix_build_identity());
 }

@@ -76,7 +76,7 @@ function ColSphere(position, radius) constructor {
         }
         var contact_point = ray.origin.Add(ray.direction.Mul(t));
         
-        hit_info.Update(t, self, contact_point, undefined);
+        hit_info.Update(t, self, contact_point, contact_point.Sub(self.position).Normalize());
         
         return true;
     };
