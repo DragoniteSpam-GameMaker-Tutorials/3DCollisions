@@ -33,7 +33,8 @@ function ColPoint(position) constructor {
     };
     
     static CheckLine = function(line) {
-        
+        var nearest = line.NearestPoint(self.position);
+         return (nearest.DistanceTo(self.position) == 0);
     };
 }
 
@@ -82,7 +83,9 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckLine = function(line) {
-        
+        var nearest = line.NearestPoint(self.position);
+        var dist = nearest.DistanceTo(self.position);
+        return dist <= self.radius;
     };
     
     static NearestPoint = function(vec3) {
@@ -170,7 +173,13 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckLine = function(line) {
-        
+        var dir = line.finish.Sub(line.start).Normalize();
+        var ray = new ColRay(line.start, dir);
+        var hit_info = new RaycastHitInformation();
+        if (self.CheckRay(ray, hit_info)) {
+            return (hit_info.distance <= line.Length());
+        }
+        return false;
     };
     
     static GetMin = function() {
@@ -231,7 +240,13 @@ function ColPlane(normal, distance) constructor {
     };
     
     static CheckLine = function(line) {
+        var dir = line.finish.Sub(line.start);
+        var NdotS = self.normal.Dot(line.start);
+        var NdotD = self.normal.Dot(dir);
         
+        if (NdotD == 0) return false;
+        var t = (self.distance - NdotS) / NdotD;
+        return (t >= 0) && (t <= 1);
     };
     
     static NearestPoint = function(vec3) {
