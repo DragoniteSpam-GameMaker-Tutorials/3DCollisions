@@ -156,7 +156,15 @@ function ColAABB(position, half_extents) constructor {
         
         var contact_point = ray.origin.Add(ray.direction.Mul(t));
         
-        hit_info.Update(t, self, contact_point, undefined);
+        var tnormal;
+        if (t == t1) tnormal = new Vector3(-1, 0, 0);
+        if (t == t2) tnormal = new Vector3(+1, 0, 0);
+        if (t == t3) tnormal = new Vector3(0, -1, 0);
+        if (t == t4) tnormal = new Vector3(0, +1, 0);
+        if (t == t5) tnormal = new Vector3(0, 0, -1);
+        if (t == t6) tnormal = new Vector3(0, 0, +1);
+        
+        hit_info.Update(t, self, contact_point, tnormal);
         
         return true;
     };
