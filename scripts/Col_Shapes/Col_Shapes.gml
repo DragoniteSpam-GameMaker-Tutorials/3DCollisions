@@ -188,7 +188,14 @@ function ColPlane(normal, distance) constructor {
     };
     
     static CheckRay = function(ray) {
+        var DdotN = ray.direction.Dot(self.normal);
+        if (DdotN >= 0) return false;
         
+        var OdotN = ray.origin.Dot(self.normal);
+        var t = (self.distance - OdotN) / DdotN;
+        if (t < 0) return false;
+        
+        return true;
     };
     
     static CheckLine = function(line) {
