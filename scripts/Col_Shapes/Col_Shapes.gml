@@ -24,7 +24,9 @@ function ColPoint(position) constructor {
     };
     
     static CheckRay = function(ray) {
-        
+        var nearest = ray.NearestPoint(self.position);
+        if (nearest.DistanceTo(self.position) == 0) return true;
+        return false;
     };
     
     static CheckLine = function(line) {
@@ -57,7 +59,13 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckRay = function(ray) {
-        
+        var e = self.position.Sub(ray.origin);
+        var mag_squared = power(e.Magnitude(), 2);
+        var r_squared = power(self.radius, 2);
+        var EdotD = e.Dot(ray.direction);
+        var offset = r_squared - (mag_squared - (EdotD * EdotD));
+        if (offset < 0) return false;
+        return true;
     };
     
     static CheckLine = function(line) {
@@ -196,8 +204,8 @@ function ColRay(origin, direction) constructor {
     
     static NearestPoint = function(vec3) {
         var diff = vec3.Sub(self.origin);
-        var t = max(diff.Dot(ray.direction), 0);
-        var scaled_dir = ray.direction.Mul(t);
+        var t = max(diff.Dot(self.direction), 0);
+        var scaled_dir = self.direction.Mul(t);
         return self.origin.Add(scaled_dir);
     };
 }
