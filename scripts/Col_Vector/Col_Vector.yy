@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "3DCollisions",
-    "path": "3DCollisions.yyp",
+    "name": "Collision Stuff",
+    "path": "folders/Collision Stuff.yy",
   },
   "resourceVersion": "1.0",
   "name": "Col_Vector",
