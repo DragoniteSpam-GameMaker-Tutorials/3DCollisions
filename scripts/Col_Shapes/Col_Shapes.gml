@@ -23,14 +23,18 @@ function ColPoint(position) constructor {
         return (ndot == plane.distance);
     };
     
-    static CheckRay = function(ray) {
+    static CheckRay = function(ray, hit_info) {
         var nearest = ray.NearestPoint(self.position);
-        if (nearest.DistanceTo(self.position) == 0) return true;
-        return false;
+        if (nearest.DistanceTo(self.position) != 0) return false;
+        
+        hit_info.Update(self.position.DistanceTo(ray.origin), self, self.position, undefined);
+        
+        return true;
     };
     
     static CheckLine = function(line) {
-        
+        var nearest = line.NearestPoint(self.position);
+         return (nearest.DistanceTo(self.position) == 0);
     };
 }
 
@@ -58,18 +62,30 @@ function ColSphere(position, radius) constructor {
         return dist <= self.radius;
     };
     
-    static CheckRay = function(ray) {
+    static CheckRay = function(ray, hit_info) {
         var e = self.position.Sub(ray.origin);
         var mag_squared = power(e.Magnitude(), 2);
         var r_squared = power(self.radius, 2);
         var EdotD = e.Dot(ray.direction);
         var offset = r_squared - (mag_squared - (EdotD * EdotD));
         if (offset < 0) return false;
+        
+        var f = sqrt(abs(offset));
+        var t = EdotD - f;
+        if (mag_squared < r_squared) {
+            t = EdotD + f;
+        }
+        var contact_point = ray.origin.Add(ray.direction.Mul(t));
+        
+        hit_info.Update(t, self, contact_point, contact_point.Sub(self.position).Normalize());
+        
         return true;
     };
     
     static CheckLine = function(line) {
-        
+        var nearest = line.NearestPoint(self.position);
+        var dist = nearest.DistanceTo(self.position);
+        return dist <= self.radius;
     };
     
     static NearestPoint = function(vec3) {
@@ -107,7 +123,7 @@ function ColAABB(position, half_extents) constructor {
         return (abs(dist) <= plength);
     };
     
-    static CheckRay = function(ray) {
+    static CheckRay = function(ray, hit_info) {
         var box_min = self.GetMin();
         var box_max = self.GetMax();
         
@@ -117,10 +133,8 @@ function ColAABB(position, half_extents) constructor {
         
         var t1 = (box_min.x - ray.origin.x) / ray_x;
         var t2 = (box_max.x - ray.origin.x) / ray_x;
-        
         var t3 = (box_min.y - ray.origin.y) / ray_y;
         var t4 = (box_max.y - ray.origin.y) / ray_y;
-        
         var t5 = (box_min.z - ray.origin.z) / ray_z;
         var t6 = (box_max.z - ray.origin.z) / ray_z;
         
@@ -138,11 +152,34 @@ function ColAABB(position, half_extents) constructor {
         if (tmax < 0) return false;
         if (tmin > tmax) return false;
         
+        var t = tmax;
+        if (tmin > 0) {
+            t = tmin;
+        }
+        
+        var contact_point = ray.origin.Add(ray.direction.Mul(t));
+        
+        var tnormal;
+        if (t == t1) tnormal = new Vector3(-1, 0, 0);
+        if (t == t2) tnormal = new Vector3(+1, 0, 0);
+        if (t == t3) tnormal = new Vector3(0, -1, 0);
+        if (t == t4) tnormal = new Vector3(0, +1, 0);
+        if (t == t5) tnormal = new Vector3(0, 0, -1);
+        if (t == t6) tnormal = new Vector3(0, 0, +1);
+        
+        hit_info.Update(t, self, contact_point, tnormal);
+        
         return true;
     };
     
     static CheckLine = function(line) {
-        
+        var dir = line.finish.Sub(line.start).Normalize();
+        var ray = new ColRay(line.start, dir);
+        var hit_info = new RaycastHitInformation();
+        if (self.CheckRay(ray, hit_info)) {
+            return (hit_info.distance <= line.Length());
+        }
+        return false;
     };
     
     static GetMin = function() {
@@ -187,7 +224,7 @@ function ColPlane(normal, distance) constructor {
         return (cross.Magnitude() > 0) || (self.distance == plane.distance);
     };
     
-    static CheckRay = function(ray) {
+    static CheckRay = function(ray, hit_info) {
         var DdotN = ray.direction.Dot(self.normal);
         if (DdotN >= 0) return false;
         
@@ -195,11 +232,21 @@ function ColPlane(normal, distance) constructor {
         var t = (self.distance - OdotN) / DdotN;
         if (t < 0) return false;
         
+        var contact_point = ray.origin.Add(ray.direction.Mul(t));
+        
+        hit_info.Update(t, self, contact_point, self.normal);
+        
         return true;
     };
     
     static CheckLine = function(line) {
+        var dir = line.finish.Sub(line.start);
+        var NdotS = self.normal.Dot(line.start);
+        var NdotD = self.normal.Dot(dir);
         
+        if (NdotD == 0) return false;
+        var t = (self.distance - NdotS) / NdotD;
+        return (t >= 0) && (t <= 1);
     };
     
     static NearestPoint = function(vec3) {
@@ -215,27 +262,27 @@ function ColRay(origin, direction) constructor {
     self.origin = origin;                   // Vec3
     self.direction = direction.Normalize(); // Vec3
     
-    static CheckPoint = function(point) {
-        return point.CheckRay(self);
+    static CheckPoint = function(point, hit_info) {
+        return point.CheckRay(self, hit_info);
     };
     
-    static CheckSphere = function(sphere) {
-        return sphere.CheckRay(self);
+    static CheckSphere = function(sphere, hit_info) {
+        return sphere.CheckRay(self, hit_info);
     };
     
-    static CheckAABB = function(aabb) {
-        return aabb.CheckRay(self);
+    static CheckAABB = function(aabb, hit_info) {
+        return aabb.CheckRay(self, hit_info);
     };
     
-    static CheckPlane = function(plane) {
-        return plane.CheckRay(self);
+    static CheckPlane = function(plane, hit_info) {
+        return plane.CheckRay(self, hit_info);
     };
     
-    static CheckRay = function(ray) {
+    static CheckRay = function(ray, hit_info) {
         return false;
     };
     
-    static CheckLine = function(line) {
+    static CheckLine = function(line, hit_info) {
         return false;
     };
     
@@ -267,7 +314,7 @@ function ColLine(start, finish) constructor {
         return plane.CheckLine(self);
     };
     
-    static CheckRay = function(ray) {
+    static CheckRay = function(ray, hit_info) {
         return false;
     };
     

@@ -8,3 +8,26 @@ function NewColRayFromPoints(start, finish) {
     var dir = finish.Sub(start).Normalize();
     return new ColRay(start, dir);
 }
+
+function RaycastHitInformation() constructor {
+    self.shape = undefined;
+    self.point = undefined;
+    self.distance = infinity;
+    self.normal = undefined;
+    
+    static Update = function(distance, shape, point, normal) {
+        if (distance < self.distance) {
+            self.distance = distance;
+            self.shape = shape;
+            self.point = point;
+            self.normal = normal;
+        }
+    };
+    
+    static Clear = function() {
+        self.shape = undefined;
+        self.point = undefined;
+        self.distance = infinity;
+        self.normal = undefined;
+    };
+}
