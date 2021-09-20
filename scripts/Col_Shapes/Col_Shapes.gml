@@ -150,7 +150,37 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckTriangle = function(triangle) {
+        var ab = triangle.b.Sub(triangle.a);
+        var bc = triangle.c.Sub(triangle.b);
+        var ca = triangle.a.Sub(triangle.c);
         
+        var nx = new Vector3(1, 0, 0);
+        var ny = new Vector3(0, 1, 0);
+        var nz = new Vector3(0, 0, 1);
+        
+        var axes = [
+            nx,
+            ny,
+            nz,
+            triangle.GetNormal(),
+            nx.Cross(ab),
+            nx.Cross(bc),
+            nx.Cross(ca),
+            ny.Cross(ab),
+            ny.Cross(bc),
+            ny.Cross(ca),
+            nz.Cross(ab),
+            nz.Cross(bc),
+            nz.Cross(ca),
+        ];
+        
+        for (var i = 0; i < 13; i++) {
+            if (!col_overlap_axis(self, triangle, axes[i])) {
+                return false;
+            }
+        }
+        
+        return true;
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -298,7 +328,19 @@ function ColPlane(normal, distance) constructor {
     };
     
     static CheckTriangle = function(triangle) {
+        var side_a = self.PlaneEquation(triangle.a);
+        var side_b = self.PlaneEquation(triangle.b);
+        var side_c = self.PlaneEquation(triangle.c);
         
+        if (side_a == 0 && side_b == 0 && side_c == 0) {
+            return true;
+        }
+        
+        if (sign(side_a) == sign(side_b) && sign(side_a) == sign(side_c)) {
+            return false;
+        }
+        
+        return true;
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -357,11 +399,11 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static CheckAABB = function(aabb) {
-        
+        return aabb.CheckTriangle(self);
     };
     
     static CheckPlane = function(plane) {
-        
+        return plane.CheckTriangle(self);
     };
     
     static CheckTriangle = function(triangle) {
@@ -440,6 +482,12 @@ function ColTriangle(a, b, c) constructor {
         var c = 1 - (v.Dot(pc) / v.Dot(ca));
         
         return new Vector3(a, b, c);
+    };
+    
+    static GetInterval = function(axis) {
+        var imin = min(axis.Dot(self.a), axis.Dot(self.b), axis.Dot(self.c));
+        var imax = max(axis.Dot(self.a), axis.Dot(self.b), axis.Dot(self.c));
+        return new ColInterval(imin, imax);
     };
 }
 
