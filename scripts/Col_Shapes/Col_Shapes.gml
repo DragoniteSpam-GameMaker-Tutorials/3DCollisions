@@ -23,6 +23,10 @@ function ColPoint(position) constructor {
         return (ndot == plane.distance);
     };
     
+    static CheckTriangle = function(triangle) {
+        
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var nearest = ray.NearestPoint(self.position);
         if (nearest.DistanceTo(self.position) != 0) return false;
@@ -60,6 +64,10 @@ function ColSphere(position, radius) constructor {
         var nearest = plane.NearestPoint(self.position);
         var dist = nearest.DistanceTo(self.position);
         return dist <= self.radius;
+    };
+    
+    static CheckTriangle = function(triangle) {
+        
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -121,6 +129,10 @@ function ColAABB(position, half_extents) constructor {
         var ndot = plane.normal.Dot(self.position);
         var dist = ndot - plane.distance;
         return (abs(dist) <= plength);
+    };
+    
+    static CheckTriangle = function(triangle) {
+        
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -224,6 +236,10 @@ function ColPlane(normal, distance) constructor {
         return (cross.Magnitude() > 0) || (self.distance == plane.distance);
     };
     
+    static CheckTriangle = function(triangle) {
+        
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var DdotN = ray.direction.Dot(self.normal);
         if (DdotN >= 0) return false;
@@ -257,6 +273,83 @@ function ColPlane(normal, distance) constructor {
     };
 }
 
+function ColTriangle(a, b, c) constructor {
+    self.a = a;
+    self.b = b;
+    self.c = c;
+    
+    static CheckPoint = function(point) {
+        
+    };
+    
+    static CheckSphere = function(sphere) {
+        
+    };
+    
+    static CheckAABB = function(aabb) {
+        
+    };
+    
+    static CheckPlane = function(plane) {
+        
+    };
+    
+    static CheckTriangle = function(triangle) {
+        
+    };
+    
+    static CheckRay = function(ray, hit_info) {
+        
+    };
+    
+    static CheckLine = function(line) {
+        
+    };
+    
+    static GetNormal = function() {
+        var diffAB = self.b.Sub(self.a);
+        var diffAC = self.c.Sub(self.a);
+        return diffAB.Cross(diffAC).Normalize();
+    };
+    
+    static GetPlane = function() {
+        var norm = self.GetNormal();
+        var dist = norm.Dot(self.a);
+        return new ColPlane(norm, dist);
+    };
+    
+    static NearestPoint = function(vec3) {
+        var plane = self.GetPlane();
+        var nearest_to_plane = plane.NearestPoint(vec3);
+        
+        if (self.CheckPoint(ColPoint(nearest_to_plane))) {
+            return nearest_to_plane;
+        }
+        
+        var lineAB = new ColLine(self.a, self.b);
+        var lineBC = new ColLine(self.b, self.c);
+        var lineCA = new ColLine(self.c, self.a);
+        
+        var nearest_to_ab = lineAB.NearestPoint(vec3);
+        var nearest_to_bc = lineBC.NearestPoint(vec3);
+        var nearest_to_ca = lineCA.NearestPoint(vec3);
+        
+        var dist_ab = vec3.DistanceTo(nearest_to_ab);
+        var dist_bc = vec3.DistanceTo(nearest_to_bc);
+        var dist_ca = vec3.DistanceTo(nearest_to_ca);
+        
+        if (dist_ab < dist_bc && dist_ab < dist_ca) {
+            return nearest_to_ab;
+        }
+        
+        if (dist_bc < dist_ca && dist_bc < dist_ab) {
+            return nearest_to_bc;
+        }
+        
+        return nearest_to_ca;
+    };
+}
+
 // Line "shapes"
 function ColRay(origin, direction) constructor {
     self.origin = origin;                   // Vec3
@@ -276,6 +369,10 @@ function ColRay(origin, direction) constructor {
     
     static CheckPlane = function(plane, hit_info) {
         return plane.CheckRay(self, hit_info);
+    };
+    
+    static CheckTriangle = function(triangle, hit_info) {
+        
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -312,6 +409,10 @@ function ColLine(start, finish) constructor {
     
     static CheckPlane = function(plane) {
         return plane.CheckLine(self);
+    };
+    
+    static CheckTriangle = function(triangle) {
+        
     };
     
     static CheckRay = function(ray, hit_info) {
