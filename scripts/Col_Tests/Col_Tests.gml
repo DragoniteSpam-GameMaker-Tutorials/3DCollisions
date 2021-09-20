@@ -28,7 +28,7 @@ function ColTestPoint(vbuff) constructor {
         matrix_set(matrix_world, matrix_build_identity());
     };
     self.test = function(shape) {
-        return shape.data.CheckPoint(self.data);
+        return shape.data && shape.data.CheckPoint(self.data);
     };
 }
 
@@ -66,7 +66,7 @@ function ColTestSphere(vbuff) constructor {
         matrix_set(matrix_world, matrix_build_identity());
     };
     self.test = function(shape) {
-        return shape.data.CheckSphere(self.data);
+        return shape.data && shape.data.CheckSphere(self.data);
     };
 }
 
@@ -104,7 +104,7 @@ function ColTestAABB(vbuff) constructor {
         matrix_set(matrix_world, matrix_build_identity());
     };
     self.test = function(shape) {
-        return shape.data.CheckAABB(self.data);
+        return shape.data && shape.data.CheckAABB(self.data);
     };
 }
 
@@ -137,7 +137,7 @@ function ColTestPlane(vbuff) constructor {
         matrix_set(matrix_world, matrix_build_identity());
     };
     self.test = function(shape) {
-        return shape.data.CheckPlane(self.data);
+        return shape.data && shape.data.CheckPlane(self.data);
     };
 }
 
@@ -225,6 +225,6 @@ function ColTestLine(vbuff) constructor {
         vertex_delete_buffer(vbuff);
     };
     self.test = function(shape) {
-        return shape.data.CheckLine(self.data);
+        return shape.data && shape.data.CheckLine(self.data);
     };
 }
