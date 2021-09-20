@@ -24,7 +24,23 @@ function ColPoint(position) constructor {
     };
     
     static CheckTriangle = function(triangle) {
+        var pa = triangle.a.Sub(self.position);
+        var pb = triangle.b.Sub(self.position);
+        var pc = triangle.c.Sub(self.position);
         
+        var normPBC = pb.Cross(pc).Normalize();
+        var normPCA = pc.Cross(pa).Normalize();
+        var normPAB = pa.Cross(pb).Normalize();
+        
+        if (normPBC.Dot(normPCA) < 1) {
+            return false;
+        }
+        
+        if (normPBC.Dot(normPAB) < 1) {
+            return false;
+        }
+        
+        return true;
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -67,7 +83,9 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckTriangle = function(triangle) {
-        
+        var nearest = triangle.NearestPoint(self.position);
+        var dist = nearest.DistanceTo(self.position);
+        return dist <= self.radius;
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -279,11 +297,11 @@ function ColTriangle(a, b, c) constructor {
     self.c = c;
     
     static CheckPoint = function(point) {
-        
+        return point.CheckTriangle(self);
     };
     
     static CheckSphere = function(sphere) {
-        
+        return sphere.CheckTriangle(self);
     };
     
     static CheckAABB = function(aabb) {
@@ -322,7 +340,7 @@ function ColTriangle(a, b, c) constructor {
         var plane = self.GetPlane();
         var nearest_to_plane = plane.NearestPoint(vec3);
         
-        if (self.CheckPoint(ColPoint(nearest_to_plane))) {
+        if (self.CheckPoint(new ColPoint(nearest_to_plane))) {
             return nearest_to_plane;
         }
         
