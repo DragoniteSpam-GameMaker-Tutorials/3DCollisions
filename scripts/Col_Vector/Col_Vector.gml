@@ -53,4 +53,10 @@ function Vector3(x, y, z) constructor {
     static Abs = function() {
         return new Vector3(abs(self.x), abs(self.y), abs(self.z));
     };
+    
+    static Project = function(direction) {
+        var dot = self.Dot(direction);
+        var mag = direction.Magnitude();
+        return direction.Mul(dot / (mag * mag));
+    };
 }

@@ -332,6 +332,15 @@ function ColPlane(normal, distance) constructor {
         var scaled_dist = self.normal.Mul(dist);
         return vec3.Sub(scaled_dist);
     };
+    
+    static PlaneEquation = function(vec3) {
+        // much like the dot product, this function will return:
+        // - +1ish if the value is in front of the plane
+        // - 0 if the value is on the plane
+        // - -1ish is the value is behind the plane
+        var dot = vec3.Dot(self.normal);
+        return dot - self.distance;
+    };
 }
 
 function ColTriangle(a, b, c) constructor {
@@ -408,6 +417,29 @@ function ColTriangle(a, b, c) constructor {
         }
         
         return nearest_to_ca;
+    };
+    
+    static Barycentric = function(vec3) {
+        var pa = vec3.Sub(self.a);
+        var pb = vec3.Sub(self.b);
+        var pc = vec3.Sub(self.c);
+        
+        var ab = self.b.Sub(self.a);
+        var ac = self.c.Sub(self.a);
+        var bc = self.c.Sub(self.b);
+        var cb = self.b.Sub(self.c);
+        var ca = self.a.Sub(self.c);
+        
+        var v = ab.Sub(ab.Project(cb));
+        var a = 1 - (v.Dot(pa) / v.Dot(ab));
+        
+        v = bc.Sub(bc.Project(ac));
+        var b = 1 - (v.Dot(pb) / v.Dot(bc));
+        
+        v = ca.Sub(ca.Project(ab));
+        var c = 1 - (v.Dot(pc) / v.Dot(ca));
+        
+        return new Vector3(a, b, c);
     };
 }
 
