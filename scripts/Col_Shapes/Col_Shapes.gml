@@ -231,6 +231,49 @@ function ColAABB(position, half_extents) constructor {
         zz = (zz > box_max.z) ? box_max.z : zz;
         return new Vector3(xx, yy, zz);
     };
+    
+    static CheckAABBSAT = function(aabb) {
+        var axes = [
+            new Vector3(1, 0, 0),
+            new Vector3(0, 1, 0),
+            new Vector3(0, 0, 1),
+        ];
+        
+        for (var i = 0; i < 3; i++) {
+            if (!col_overlap_axis(self, aabb, axes[i])) {
+                return false;
+            }
+        }
+        
+        return true;
+    };
+    
+    static GetInterval = function(axis) {
+        var pmin = self.GetMin();
+        var pmax = self.GetMax();
+        
+        var vertices = [
+            new Vector3(pmin.x, pmin.y, pmin.z),
+            new Vector3(pmin.x, pmin.y, pmax.z),
+            new Vector3(pmin.x, pmax.y, pmin.z),
+            new Vector3(pmin.x, pmax.y, pmax.z),
+            new Vector3(pmax.x, pmin.y, pmin.z),
+            new Vector3(pmax.x, pmin.y, pmax.z),
+            new Vector3(pmax.x, pmax.y, pmin.z),
+            new Vector3(pmax.x, pmax.y, pmax.z),
+        ];
+        
+        var imin = axis.Dot(vertices[0]);
+        var imax = imin;
+        
+        for (var i = 1; i < 8; i++) {
+            var dot = axis.Dot(vertices[i]);
+            imin = min(imin, dot);
+            imax = max(imax, dot);
+        }
+        
+        return new ColInterval(imin, imax);
+    };
 }
 
 function ColPlane(normal, distance) constructor {
