@@ -141,6 +141,47 @@ function ColTestPlane(vbuff) constructor {
     };
 }
 
+function ColTestTriangle() constructor {
+    var p1 = new Vector3(random_range(-20, 0), random_range(-20, 0), 0);
+    var p2 = new Vector3(random_range(-20, 20), random_range(-20, 20), 0);
+    var p3 = new Vector3(random_range(0, 20), random_range(0, 20), 0);
+    
+    self.data = undefined;
+    
+    var nx = 0;
+    var ny = 0;
+    var nz = 1;
+    
+    // this is never deleted so it's technically a memory leak, but it should
+    // be fine as long as you don't try to spawn half a billion of them
+    self.vbuff = vertex_create_buffer();
+    vertex_begin(vbuff, obj_demo.vertex_format);
+    vertex_position_3d(vbuff, p1.x, p1.y, p1.z);
+    vertex_normal(vbuff, nx, ny, nz);
+    vertex_colour(vbuff, 0xEC7D15, 1);
+    vertex_position_3d(vbuff, p2.x, p2.y, p2.z);
+    vertex_normal(vbuff, nx, ny, nz);
+    vertex_colour(vbuff, 0xEC7D15, 1);
+    vertex_position_3d(vbuff, p3.x, p3.y, p3.z);
+    vertex_normal(vbuff, nx, ny, nz);
+    vertex_colour(vbuff, 0xEC7D15, 1);
+    vertex_end(vbuff);
+    
+    self.update = function() {
+        
+    };
+    self.draw = function() {
+        gpu_set_cullmode(cull_noculling);
+        matrix_set(matrix_world, matrix_build_identity());
+        vertex_submit(self.vbuff, pr_trianglelist, -1);
+        gpu_set_cullmode(cull_counterclockwise);
+        matrix_set(matrix_world, matrix_build_identity());
+    };
+    self.test = function(shape) {
+        return false;
+    };
+}
+
 function ColTestLine(vbuff) constructor {
     self.data = new ColLine(new Vector3(0, 100, 0), new Vector3(0, -100, 0));
     self.rotation = 0;

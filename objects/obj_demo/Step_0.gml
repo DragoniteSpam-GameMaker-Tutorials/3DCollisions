@@ -27,9 +27,12 @@ if (keyboard_check(vk_numpad2)) {
     shape_1 = new ColTestAABB(aabb);
 }
 if (keyboard_check(vk_numpad3)) {
-    shape_1 = new ColTestPlane(plane);
+    shape_1 = new ColTestTriangle();
 }
 if (keyboard_check(vk_numpad4)) {
+    shape_1 = new ColTestPlane(plane);
+}
+if (keyboard_check(vk_numpad5)) {
     shape_1 = new ColTestLine(undefined);
 }
 
@@ -43,9 +46,12 @@ if (keyboard_check(ord("C"))) {
     shape_2 = new ColTestAABB(aabb);
 }
 if (keyboard_check(ord("V"))) {
-    shape_2 = new ColTestPlane(plane);
+    shape_2 = new ColTestTriangle();
 }
 if (keyboard_check(ord("B"))) {
+    shape_2 = new ColTestPlane(plane);
+}
+if (keyboard_check(ord("N"))) {
     shape_2 = new ColTestLine(undefined);
 }
 

@@ -11,15 +11,17 @@ var n = 1;
 draw_text_colour(720, n++ * 20, "Numpad 0: Shape 1 Point", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(720, n++ * 20, "Numpad 1: Shape 1 Sphere", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(720, n++ * 20, "Numpad 2: Shape 1 AABB", c_white, c_white, c_white, c_white, 1);
-draw_text_colour(720, n++ * 20, "Numpad 3: Shape 1 Plane", c_white, c_white, c_white, c_white, 1);
-draw_text_colour(720, n++ * 20, "Numpad 4: Shape 1 Line", c_white, c_white, c_white, c_white, 1);
+draw_text_colour(720, n++ * 20, "Numpad 3: Shape 1 Triangle", c_white, c_white, c_white, c_white, 1);
+draw_text_colour(720, n++ * 20, "Numpad 4: Shape 1 Plane", c_white, c_white, c_white, c_white, 1);
+draw_text_colour(720, n++ * 20, "Numpad 5: Shape 1 Line", c_white, c_white, c_white, c_white, 1);
 
 n = 1;
 draw_text_colour(1080, n++ * 20, "Z: Shape 2 Point", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "X: Shape 2 Sphere", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "C: Shape 2 AABB", c_white, c_white, c_white, c_white, 1);
-draw_text_colour(1080, n++ * 20, "V: Shape 2 Plane", c_white, c_white, c_white, c_white, 1);
-draw_text_colour(1080, n++ * 20, "B: Shape 2 Line", c_white, c_white, c_white, c_white, 1);
+draw_text_colour(1080, n++ * 20, "V: Shape 2 Triangle", c_white, c_white, c_white, c_white, 1);
+draw_text_colour(1080, n++ * 20, "B: Shape 2 Plane", c_white, c_white, c_white, c_white, 1);
+draw_text_colour(1080, n++ * 20, "N: Shape 2 Line", c_white, c_white, c_white, c_white, 1);
 
 if (shape_2.test(shape_1)) {
     draw_text_colour(32, 100, "Shapes overlap!", c_red, c_red, c_red, c_red, 1);
