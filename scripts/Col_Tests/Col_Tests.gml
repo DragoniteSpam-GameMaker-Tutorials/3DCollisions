@@ -142,15 +142,15 @@ function ColTestPlane(vbuff) constructor {
 }
 
 function ColTestTriangle() constructor {
-    var p1 = new Vector3(random_range(-20, 0), random_range(-20, 0), 0);
-    var p2 = new Vector3(random_range(-20, 20), random_range(-20, 20), 0);
-    var p3 = new Vector3(random_range(0, 20), random_range(0, 20), 0);
+    var p1 = new Vector3(random_range(-20, 0), random_range(-20, 0), random_range(-20, 20));
+    var p2 = new Vector3(random_range(-20, 20), random_range(-20, 20), random_range(-20, 20));
+    var p3 = new Vector3(random_range(0, 20), random_range(0, 20), random_range(-20, 20));
     
-    self.data = undefined;
-    
-    var nx = 0;
-    var ny = 0;
-    var nz = 1;
+    self.data = new ColTriangle(p1, p2, p3);
+    var norm = self.data.GetNormal();
+    var nx = norm.x;
+    var ny = norm.y;
+    var nz = norm.z;
     
     // this is never deleted so it's technically a memory leak, but it should
     // be fine as long as you don't try to spawn half a billion of them
