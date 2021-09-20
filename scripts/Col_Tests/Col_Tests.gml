@@ -142,9 +142,9 @@ function ColTestPlane(vbuff) constructor {
 }
 
 function ColTestTriangle() constructor {
-    var p1 = new Vector3(random_range(-20, 0), random_range(-20, 0), random_range(-20, 20));
-    var p2 = new Vector3(random_range(-20, 20), random_range(-20, 20), random_range(-20, 20));
-    var p3 = new Vector3(random_range(0, 20), random_range(0, 20), random_range(-20, 20));
+    var p1 = new Vector3(random_range(-20, 0), random_range(-20, 0), 0);
+    var p2 = new Vector3(random_range(-20, 20), random_range(-20, 20), 0);
+    var p3 = new Vector3(random_range(0, 20), random_range(0, 20), 0);
     
     self.data = new ColTriangle(p1, p2, p3);
     var norm = self.data.GetNormal();
@@ -167,18 +167,55 @@ function ColTestTriangle() constructor {
     vertex_colour(vbuff, 0xEC7D15, 1);
     vertex_end(vbuff);
     
+    self.offset = { x: 0, y: 0, z: 0 };
+    
     self.update = function() {
-        
+        if (keyboard_check(vk_left)) {
+            self.data.a.x--;
+            self.data.b.x--;
+            self.data.c.x--;
+            self.offset.x--;
+        }
+        if (keyboard_check(vk_right)) {
+            self.data.a.x++;
+            self.data.b.x++;
+            self.data.c.x++;
+            self.offset.x++;
+        }
+        if (keyboard_check(vk_up)) {
+            self.data.a.y--;
+            self.data.b.y--;
+            self.data.c.y--;
+            self.offset.y--;
+        }
+        if (keyboard_check(vk_down)) {
+            self.data.a.y++;
+            self.data.b.y++;
+            self.data.c.y++;
+            self.offset.y++;
+        }
+        if (keyboard_check(vk_pageup)) {
+            self.data.a.z++;
+            self.data.b.z++;
+            self.data.c.z++;
+            self.offset.z++;
+        }
+        if (keyboard_check(vk_pagedown)) {
+            self.data.a.z--;
+            self.data.b.z--;
+            self.data.c.z--;
+            self.offset.z--;
+        }
     };
     self.draw = function() {
         gpu_set_cullmode(cull_noculling);
-        matrix_set(matrix_world, matrix_build_identity());
+        matrix_set(matrix_world, matrix_build(self.offset.x, self.offset.y, self.offset.z, 0, 0, 0, 1, 1, 1));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         gpu_set_cullmode(cull_counterclockwise);
         matrix_set(matrix_world, matrix_build_identity());
     };
     self.test = function(shape) {
-        return false;
+        return shape.data && shape.data.CheckTriangle(self.data);
     };
 }
 
