@@ -220,8 +220,11 @@ function ColTestTriangle() constructor {
 }
 
 function ColTestLine(vbuff) constructor {
-    self.data = new ColLine(new Vector3(0, 100, 0), new Vector3(0, -100, 0));
-    self.rotation = 0;
+    self.rotation = random(360);
+    self.data = new ColLine(
+        new Vector3(100 * dcos(self.rotation), -100 * dsin(self.rotation), 0),
+        new Vector3(-100 * dcos(self.rotation), 100 * dsin(self.rotation), 0)
+    );
     self.offset = { x: 0, y: 0 };
     
     self.update = function() {

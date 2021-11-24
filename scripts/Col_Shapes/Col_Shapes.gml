@@ -411,11 +411,31 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
+        var plane = self.GetPlane();
+        var plane_hit_info = new RaycastHitInformation();
+        if (!plane.CheckRay(ray, plane_hit_info)) {
+            return false;
+        }
         
+        var result = plane_hit_info.point;
+        var barycentric = self.Barycentric(result);
+        
+        if ((barycentric.x >= 0 && barycentric.x <= 1) && (barycentric.y >= 0 && barycentric.y <= 1) && (barycentric.z >= 0 && barycentric.z <= 1)) {
+            hit_info.Update(plane_hit_info.distance, self, result, plane_hit_info.normal);
+            return true;
+        }
+        
+        return false;
     };
     
     static CheckLine = function(line) {
-        
+        var dir = line.finish.Sub(line.start).Normalize();
+        var ray = new ColRay(line.start, dir);
+        var hit_info = new RaycastHitInformation();
+        if (self.CheckRay(ray, hit_info)) {
+            return (hit_info.distance <= line.Length());
+        }
+        return false;
     };
     
     static GetNormal = function() {
@@ -513,7 +533,7 @@ function ColRay(origin, direction) constructor {
     };
     
     static CheckTriangle = function(triangle, hit_info) {
-        
+        return triangle.CheckRay(self, hit_info);
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -553,7 +573,7 @@ function ColLine(start, finish) constructor {
     };
     
     static CheckTriangle = function(triangle) {
-        
+        return triangle.CheckLine(self);
     };
     
     static CheckRay = function(ray, hit_info) {
