@@ -430,7 +430,41 @@ function ColTriangle(a, b, c) constructor {
         
         // Phase 2: are both triangles coplanar?
         if (plane_a.distance == plane_b.distance && abs(plane_a.normal.Dot(plane_b.normal)) == 1) {
-            return true;
+            if (new ColPoint(self.a).CheckTriangle(triangle)) return true;
+            if (new ColPoint(self.b).CheckTriangle(triangle)) return true;
+            if (new ColPoint(self.c).CheckTriangle(triangle)) return true;
+            if (new ColPoint(triangle.a).CheckTriangle(self)) return true;
+            if (new ColPoint(triangle.b).CheckTriangle(self)) return true;
+            if (new ColPoint(triangle.c).CheckTriangle(self)) return true;
+            
+            var origin = self.a;
+            var norm = self.GetNormal();
+            var e1 = self.b.Sub(self.a);
+            var e2 = e1.Cross(norm);
+            
+            var self_projected = new ColTriangle(
+                col_project_onto_plane(self.a, origin, norm, e1, e2),
+                col_project_onto_plane(self.b, origin, norm, e1, e2),
+                col_project_onto_plane(self.c, origin, norm, e1, e2),
+            );
+            
+            var other_projected = new ColTriangle(
+                col_project_onto_plane(triangle.a, origin, norm, e1, e2),
+                col_project_onto_plane(triangle.b, origin, norm, e1, e2),
+                col_project_onto_plane(triangle.c, origin, norm, e1, e2),
+            );
+            
+            if (col_lines_intersect(self_projected.a, self_projected.b, other_projected.a, other_projected.b)) return true;
+            if (col_lines_intersect(self_projected.a, self_projected.b, other_projected.b, other_projected.c)) return true;
+            if (col_lines_intersect(self_projected.a, self_projected.b, other_projected.c, other_projected.a)) return true;
+            if (col_lines_intersect(self_projected.b, self_projected.c, other_projected.a, other_projected.b)) return true;
+            if (col_lines_intersect(self_projected.b, self_projected.c, other_projected.b, other_projected.c)) return true;
+            if (col_lines_intersect(self_projected.b, self_projected.c, other_projected.c, other_projected.a)) return true;
+            if (col_lines_intersect(self_projected.c, self_projected.a, other_projected.a, other_projected.b)) return true;
+            if (col_lines_intersect(self_projected.c, self_projected.a, other_projected.b, other_projected.c)) return true;
+            if (col_lines_intersect(self_projected.c, self_projected.a, other_projected.c, other_projected.a)) return true;
+            
+            return false;
         }
         
         // Phase 3: the regular SAT
