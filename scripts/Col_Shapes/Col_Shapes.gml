@@ -407,7 +407,28 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static CheckTriangle = function(triangle) {
+        // Phase 1: are each of the points of one triangle on the
+        // same side of the plane of the other triangle?
+        var plane_a = self.GetPlane();
+        var plane_b = triangle.GetPlane();
         
+        var paa = plane_a.PlaneEquation(triangle.a);
+        var pab = plane_a.PlaneEquation(triangle.b);
+        var pac = plane_a.PlaneEquation(triangle.c);
+        
+        var pba = plane_b.PlaneEquation(self.a);
+        var pbb = plane_b.PlaneEquation(self.b);
+        var pbc = plane_b.PlaneEquation(self.c);
+        
+        if ((paa * pab) > 0 && (paa * pac) > 0) {
+            return false;
+        }
+        
+        if ((pba * pbb) > 0 && (pba * pbc) > 0) {
+            return false;
+        }
+        
+        return true;
     };
     
     static CheckRay = function(ray, hit_info) {
