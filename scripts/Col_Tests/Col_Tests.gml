@@ -146,6 +146,12 @@ function ColTestTriangle() constructor {
     var p2 = new Vector3(random_range(-20, 20), random_range(-20, 20), random_range(-20, 20));
     var p3 = new Vector3(random_range(0, 20), random_range(0, 20), random_range(-20, 20));
     
+    if (keyboard_check(vk_tab)) {
+        p1.z = 0;
+        p2.z = 0;
+        p3.z = 0;
+    }
+    
     self.data = new ColTriangle(p1, p2, p3);
     var norm = self.data.GetNormal();
     var nx = norm.x;
