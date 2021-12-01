@@ -428,6 +428,44 @@ function ColTriangle(a, b, c) constructor {
             return false;
         }
         
+        // Phase 2: are both triangles coplanar?
+        if (plane_a.distance == plane_b.distance && abs(plane_a.normal.Dot(plane_b.normal)) == 1) {
+            return true;
+        }
+        
+        // Phase 3: the regular SAT
+        
+        // edges of ourself
+        var selfAB = self.b.Sub(self.a);
+        var selfBC = self.c.Sub(self.b);
+        var selfCA = self.a.Sub(self.c);
+        // edges of the other triangle
+        var otherAB = triangle.b.Sub(triangle.a);
+        var otherBC = triangle.c.Sub(triangle.b);
+        var otherCA = triangle.a.Sub(triangle.c);
+        
+        // The normals of both triangle, plus each of the edges of 
+        // triangle crossed against each of the edges of the other
+        var axes = [
+            self.GetNormal(),
+            triangle.GetNormal(),
+            otherAB.Cross(selfAB),
+            otherBC.Cross(selfAB),
+            otherCA.Cross(selfAB),
+            otherAB.Cross(selfBC),
+            otherBC.Cross(selfBC),
+            otherCA.Cross(selfBC),
+            otherAB.Cross(selfCA),
+            otherBC.Cross(selfCA),
+            otherCA.Cross(selfCA),
+        ];
+        
+        for (var i = 0; i < 11; i++) {
+            if (!col_overlap_axis(self, triangle, axes[i])) {
+                return false;
+            }
+        }
+        
         return true;
     };
     
