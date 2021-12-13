@@ -628,34 +628,58 @@ function ColMesh(triangle_array) constructor {
     self.triangles = triangle_array;
     
     static CheckPoint = function(point) {
+        for (var i = 0, n = array_length(self.triangles); i < n; i++) {
+            if (self.triangles[i].CheckPoint(point)) return true;
+        }
         return false;
     };
     
     static CheckSphere = function(sphere) {
+        for (var i = 0, n = array_length(self.triangles); i < n; i++) {
+            if (self.triangles[i].CheckSphere(sphere)) return true;
+        }
         return false;
     };
     
     static CheckAABB = function(aabb) {
+        for (var i = 0, n = array_length(self.triangles); i < n; i++) {
+            if (self.triangles[i].CheckAABB(aabb)) return true;
+        }
         return false;
     };
     
     static CheckPlane = function(plane) {
+        for (var i = 0, n = array_length(self.triangles); i < n; i++) {
+            if (self.triangles[i].CheckPlane(plane)) return true;
+        }
         return false;
     };
     
     static CheckTriangle = function(triangle) {
+        for (var i = 0, n = array_length(self.triangles); i < n; i++) {
+            if (self.triangles[i].CheckTriangle(triangle)) return true;
+        }
         return false;
     };
     
     static CheckMesh = function(mesh) {
+        for (var i = 0, n = array_length(self.triangles); i < n; i++) {
+            if (self.triangles[i].CheckMesh(mesh)) return true;
+        }
         return false;
     };
     
     static CheckRay = function(ray, hit_info) {
+        for (var i = 0, n = array_length(self.triangles); i < n; i++) {
+            if (self.triangles[i].CheckRay(ray, hit_info)) return true;
+        }
         return false;
     };
     
     static CheckLine = function(line) {
+        for (var i = 0, n = array_length(self.triangles); i < n; i++) {
+            if (self.triangles[i].CheckLine(line)) return true;
+        }
         return false;
     };
 }
@@ -686,7 +710,7 @@ function ColRay(origin, direction) constructor {
     };
     
     static CheckMesh = function(mesh, hit_info) {
-        return mesh.CheckMesh(self, hit_info);
+        return mesh.CheckRay(self, hit_info);
     };
     
     static CheckRay = function(ray, hit_info) {
