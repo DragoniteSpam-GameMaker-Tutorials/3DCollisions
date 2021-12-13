@@ -35,6 +35,9 @@ if (keyboard_check(vk_numpad4)) {
 if (keyboard_check(vk_numpad5)) {
     shape_1 = new ColTestLine(undefined);
 }
+if (keyboard_check(vk_numpad6)) {
+    shape_1 = new ColTestMesh(tree);
+}
 
 if (keyboard_check(ord("Z"))) {
     shape_2 = new ColTestPoint(point);
@@ -53,6 +56,9 @@ if (keyboard_check(ord("B"))) {
 }
 if (keyboard_check(ord("N"))) {
     shape_2 = new ColTestLine(undefined);
+}
+if (keyboard_check(ord("M"))) {
+    shape_2 = new ColTestMesh(tree);
 }
 
 shape_1.update();

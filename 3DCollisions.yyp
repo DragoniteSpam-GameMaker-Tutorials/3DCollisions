@@ -51,6 +51,7 @@
     {"CopyToMask":-1,"filePath":"datafiles/shapes","resourceVersion":"1.0","name":"point.vbuff","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/shapes","resourceVersion":"1.0","name":"sphere.vbuff","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles/shapes","resourceVersion":"1.0","name":"sphere.000.vbuff","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles/meshes","resourceVersion":"1.0","name":"tree.vbuff","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.7.606",

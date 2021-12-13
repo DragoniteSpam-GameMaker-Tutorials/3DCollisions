@@ -43,6 +43,10 @@ function ColPoint(position) constructor {
         return true;
     };
     
+    static CheckMesh = function(mesh) {
+        return mesh.CheckPoint(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var nearest = ray.NearestPoint(self.position);
         if (nearest.DistanceTo(self.position) != 0) return false;
@@ -86,6 +90,10 @@ function ColSphere(position, radius) constructor {
         var nearest = triangle.NearestPoint(self.position);
         var dist = nearest.DistanceTo(self.position);
         return dist <= self.radius;
+    };
+    
+    static CheckMesh = function(mesh) {
+        return mesh.CheckSphere(self);
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -181,6 +189,10 @@ function ColAABB(position, half_extents) constructor {
         }
         
         return true;
+    };
+    
+    static CheckMesh = function(mesh) {
+        return mesh.CheckAABB(self);
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -343,6 +355,10 @@ function ColPlane(normal, distance) constructor {
         return true;
     };
     
+    static CheckMesh = function(mesh) {
+        return mesh.CheckPlane(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var DdotN = ray.direction.Dot(self.normal);
         if (DdotN >= 0) return false;
@@ -503,6 +519,10 @@ function ColTriangle(a, b, c) constructor {
         return true;
     };
     
+    static CheckMesh = function(mesh) {
+        return mesh.CheckTriangle(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var plane = self.GetPlane();
         var plane_hit_info = new RaycastHitInformation();
@@ -604,6 +624,42 @@ function ColTriangle(a, b, c) constructor {
     };
 }
 
+function ColMesh(triangle_array) constructor {
+    self.triangles = triangle_array;
+    
+    static CheckPoint = function(point) {
+        return false;
+    };
+    
+    static CheckSphere = function(sphere) {
+        return false;
+    };
+    
+    static CheckAABB = function(aabb) {
+        return false;
+    };
+    
+    static CheckPlane = function(plane) {
+        return false;
+    };
+    
+    static CheckTriangle = function(triangle) {
+        return false;
+    };
+    
+    static CheckMesh = function(mesh) {
+        return false;
+    };
+    
+    static CheckRay = function(ray, hit_info) {
+        return false;
+    };
+    
+    static CheckLine = function(line) {
+        return false;
+    };
+}
+
 // Line "shapes"
 function ColRay(origin, direction) constructor {
     self.origin = origin;                   // Vec3
@@ -627,6 +683,10 @@ function ColRay(origin, direction) constructor {
     
     static CheckTriangle = function(triangle, hit_info) {
         return triangle.CheckRay(self, hit_info);
+    };
+    
+    static CheckMesh = function(mesh, hit_info) {
+        return mesh.CheckMesh(self, hit_info);
     };
     
     static CheckRay = function(ray, hit_info) {
@@ -667,6 +727,10 @@ function ColLine(start, finish) constructor {
     
     static CheckTriangle = function(triangle) {
         return triangle.CheckLine(self);
+    };
+    
+    static CheckMesh = function(mesh) {
+        return mesh.CheckLine(self);
     };
     
     static CheckRay = function(ray, hit_info) {

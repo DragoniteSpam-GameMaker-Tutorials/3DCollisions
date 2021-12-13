@@ -274,3 +274,87 @@ function ColTestLine(vbuff) constructor {
         return shape.data && shape.data.CheckLine(self.data);
     };
 }
+
+function ColTestMesh(vbuff) constructor {
+    var data = buffer_create_from_vertex_buffer(vbuff, buffer_fixed, 1);
+    var vertex_size = 28;
+    var triangle_array = array_create(buffer_get_size(data) / vertex_size / 3);
+    for (var i = 0, n = array_length(triangle_array); i < n; i++) {
+        triangle_array[i] = new ColTriangle(
+            new Vector3(
+                buffer_peek(data, i * vertex_size * 3 + 0 * vertex_size + 0, buffer_f32),
+                buffer_peek(data, i * vertex_size * 3 + 0 * vertex_size + 4, buffer_f32),
+                buffer_peek(data, i * vertex_size * 3 + 0 * vertex_size + 8, buffer_f32)
+            ),
+            new Vector3(
+                buffer_peek(data, i * vertex_size * 3 + 1 * vertex_size + 0, buffer_f32),
+                buffer_peek(data, i * vertex_size * 3 + 1 * vertex_size + 4, buffer_f32),
+                buffer_peek(data, i * vertex_size * 3 + 1 * vertex_size + 8, buffer_f32)
+            ),
+            new Vector3(
+                buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 0, buffer_f32),
+                buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 4, buffer_f32),
+                buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 8, buffer_f32)
+            ),
+        );
+    }
+    buffer_delete(data);
+    
+    self.data = new ColMesh(triangle_array);
+    self.vbuff = vbuff;
+    
+    self.offset = { x: 0, y: 0, z: 0 };
+    
+    self.update = function() {
+        var dx = 0;
+        var dy = 0;
+        var dz = 0;
+        
+        if (keyboard_check(vk_left)) {
+            dx--;
+        }
+        if (keyboard_check(vk_right)) {
+            dx++;
+        }
+        if (keyboard_check(vk_up)) {
+            dy--;
+        }
+        if (keyboard_check(vk_down)) {
+            dy++;
+        }
+        if (keyboard_check(vk_pageup)) {
+            dz--;
+        }
+        if (keyboard_check(vk_pagedown)) {
+            dz++;
+        }
+        self.offset.x += dx;
+        self.offset.y += dy;
+        self.offset.z += dz;
+        
+        if (point_distance_3d(0, 0, 0, dx, dy, dz) > 0) {
+            for (var i = 0, n = array_length(self.data.triangles); i < n; i++) {
+                var tri = self.data.triangles[i];
+                tri.a.x += dx;
+                tri.a.y += dy;
+                tri.a.z += dz;
+                tri.b.x += dx;
+                tri.b.y += dy;
+                tri.b.z += dz;
+                tri.c.x += dx;
+                tri.c.y += dy;
+                tri.c.z += dz;
+            }
+        }
+    };
+    
+    self.draw = function() {
+        matrix_set(matrix_world, matrix_build(self.offset.x, self.offset.y, self.offset.z, 0, 0, 0, 1, 1, 1));
+        vertex_submit(self.vbuff, pr_trianglelist, -1);
+        matrix_set(matrix_world, matrix_build_identity());
+    };
+    
+    self.test = function(shape) {
+        return shape.data.CheckMesh(self.data);
+    };
+}

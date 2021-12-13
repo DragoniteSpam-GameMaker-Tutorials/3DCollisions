@@ -28,5 +28,9 @@ var buffer = buffer_load("shapes/sphere.vbuff");
 sphere = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
+var buffer = buffer_load("meshes/tree.vbuff");
+tree = vertex_create_buffer_from_buffer(buffer, vertex_format);
+buffer_delete(buffer);
+
 shape_1 = new ColTestPoint(point);
 shape_2 = new ColTestPoint(point);
