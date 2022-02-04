@@ -687,30 +687,55 @@ function ColMesh(triangle_array) constructor {
     
     self.accelerator = new ColOctree(self.bounds, self);
     self.accelerator.triangles = triangle_array;
-    self.accelerator.Split(2);
+    self.accelerator.Split(3);
+    
+    static CheckGeneral = function(shape) {
+        var process_these = [self.accelerator];
+        
+        while (array_length(process_these) > 0) {
+            var tree = process_these[0];
+            array_delete(process_these, 0, 1);
+            
+            if (tree.children == undefined) {
+                for (var i = 0; i < array_length(tree.triangles); i++) {
+                    if (shape.CheckTriangle(tree.triangles[i])) {
+                        return true;
+                    }
+                }
+            } else {
+                for (var i = 0; i < 8; i++) {
+                    if (shape.CheckAABB(tree.children[i].bounds)) {
+                        array_push(process_these, tree.children[i]);
+                    }
+                }
+            }
+        }
+        
+        return false;
+    };
     
     static CheckPoint = function(point) {
-        
+        return self.CheckGeneral(point);
     };
     
     static CheckSphere = function(sphere) {
-        
+        return self.CheckGeneral(sphere);
     };
     
     static CheckAABB = function(aabb) {
-        
+        return self.CheckGeneral(aabb);
     };
     
     static CheckPlane = function(plane) {
-        
+        return self.CheckGeneral(plane);
     };
     
     static CheckTriangle = function(triangle) {
-        
+        return self.CheckGeneral(triangle);
     };
     
     static CheckMesh = function(mesh) {
-        
+        return self.CheckGeneral(mesh);
     };
     
     static CheckRay = function(ray, hit_info) {
