@@ -739,11 +739,40 @@ function ColMesh(triangle_array) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
+        var process_these = [self.accelerator];
+        var dummy_hit_info = new RaycastHitInformation();
+        var hit_detected = false;
         
+        while (array_length(process_these) > 0) {
+            var tree = process_these[0];
+            array_delete(process_these, 0, 1);
+            
+            if (tree.children == undefined) {
+                for (var i = 0; i < array_length(tree.triangles); i++) {
+                    if (ray.CheckTriangle(tree.triangles[i], hit_info)) {
+                        hit_detected = true;
+                    }
+                }
+            } else {
+                for (var i = 0; i < 8; i++) {
+                    if (ray.CheckAABB(tree.children[i].bounds, dummy_hit_info)) {
+                        array_push(process_these, tree.children[i]);
+                    }
+                }
+            }
+        }
+        
+        return hit_detected;
     };
     
     static CheckLine = function(line) {
-        
+        var dir = line.finish.Sub(line.start).Normalize();
+        var ray = new ColRay(line.start, dir);
+        var hit_info = new RaycastHitInformation();
+        if (self.CheckRay(ray, hit_info)) {
+            return (hit_info.distance <= line.Length());
+        }
+        return false;
     };
 }
 
