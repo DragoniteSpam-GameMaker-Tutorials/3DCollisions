@@ -670,6 +670,21 @@ function ColTriangle(a, b, c) constructor {
 function ColMesh(triangle_array) constructor {
     self.triangles = triangle_array;
     
+    var bounds_min = new Vector3(infinity, infinity, infinity);
+    var bounds_max = new Vector3(-infinity, -infinity, -infinity);
+    
+    for (var i = 0; i < array_length(triangle_array); i++) {
+        var tri = triangle_array[i];
+        bounds_min.x = min(bounds_min.x, tri.a.x, tri.b.x, tri.c.x);
+        bounds_min.y = min(bounds_min.y, tri.a.y, tri.b.y, tri.c.y);
+        bounds_min.z = min(bounds_min.z, tri.a.z, tri.b.z, tri.c.z);
+        bounds_max.x = max(bounds_max.x, tri.a.x, tri.b.x, tri.c.x);
+        bounds_max.y = max(bounds_max.y, tri.a.y, tri.b.y, tri.c.y);
+        bounds_max.z = max(bounds_max.z, tri.a.z, tri.b.z, tri.c.z);
+    }
+    
+    self.bounds = NewColAABBFromMinMax(bounds_min, bounds_max);
+    
     static CheckPoint = function(point) {
         
     };
