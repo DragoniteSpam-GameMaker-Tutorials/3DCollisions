@@ -687,7 +687,7 @@ function ColMesh(triangle_array) constructor {
     
     self.accelerator = new ColOctree(self.bounds, self);
     self.accelerator.triangles = triangle_array;
-    self.accelerator.Split(3);
+    self.accelerator.Split(2);
     
     static CheckPoint = function(point) {
         

@@ -354,7 +354,7 @@ function ColTestMesh(vbuff) constructor {
         matrix_set(matrix_world, matrix_build(self.offset.x, self.offset.y, self.offset.z, 0, 0, 0, 1, 1, 1));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         if (keyboard_check(vk_tab)) {
-            self.data.bounds.DebugDraw();
+            self.data.accelerator.DebugDraw();
         }
         matrix_set(matrix_world, matrix_build_identity());
     };

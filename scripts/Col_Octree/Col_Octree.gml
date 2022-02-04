@@ -5,6 +5,15 @@ function ColOctree(bounds, mesh) constructor {
     self.triangles = [];
     self.children = undefined;
     
+    static DebugDraw = function() {
+        self.bounds.DebugDraw();
+        if (self.children != undefined) {
+            for (var i = 0; i < 8; i++) {
+                self.children[i].DebugDraw();
+            }
+        }
+    };
+    
     static Split = function(depth) {
         if (depth == 0) return;
         if (array_length(self.triangles) == 0) return;
