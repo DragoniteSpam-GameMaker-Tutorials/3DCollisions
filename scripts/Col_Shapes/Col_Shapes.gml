@@ -685,6 +685,9 @@ function ColMesh(triangle_array) constructor {
     
     self.bounds = NewColAABBFromMinMax(bounds_min, bounds_max);
     
+    self.accelerator = new ColOctree(self.bounds, self);
+    self.accelerator.triangles = triangle_array;
+    
     static CheckPoint = function(point) {
         
     };

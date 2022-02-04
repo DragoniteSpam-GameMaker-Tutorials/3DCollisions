@@ -8,6 +8,7 @@
     {"id":{"name":"screen_to_world","path":"scripts/screen_to_world/screen_to_world.yy",},"order":24,},
     {"id":{"name":"Col_Vector","path":"scripts/Col_Vector/Col_Vector.yy",},"order":2,},
     {"id":{"name":"fnt_demo","path":"fonts/fnt_demo/fnt_demo.yy",},"order":0,},
+    {"id":{"name":"Col_Octree","path":"scripts/Col_Octree/Col_Octree.yy",},"order":4,},
     {"id":{"name":"Col_Tests","path":"scripts/Col_Tests/Col_Tests.yy",},"order":3,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":14,},
   ],
