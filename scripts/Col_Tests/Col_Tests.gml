@@ -276,6 +276,8 @@ function ColTestLine(vbuff) constructor {
 }
 
 function ColTestMesh(vbuff) constructor {
+    var t_start = get_timer();
+    
     var data = buffer_create_from_vertex_buffer(vbuff, buffer_fixed, 1);
     var vertex_size = 28;
     var triangle_array = array_create(buffer_get_size(data) / vertex_size / 3);
@@ -357,4 +359,7 @@ function ColTestMesh(vbuff) constructor {
     self.test = function(shape) {
         return shape.data.CheckMesh(self.data);
     };
+    
+    var t_end = get_timer();
+    show_debug_message("mesh setup took " + string((t_end - t_start) / 1000) + " ms");
 }
