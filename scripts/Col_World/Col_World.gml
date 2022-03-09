@@ -11,3 +11,29 @@ function ColObject(shape, reference) constructor {
         return self.shape.CheckRay(ray, hit_info);
     };
 }
+
+function ColWorld(bounds_min, bounds_max, max_depth) constructor {
+    self.bounds = NewColAABBFromMinMax(bounds_min, bounds_max);
+    self.accelerator = new ColWorldNode();
+    self.depth = max_depth;
+    
+    static Add = function(object) {
+        
+    };
+    
+    static Remove = function(object) {
+        
+    };
+    
+    static Update = function(object) {
+        self.Remove(object);
+        self.Add(object);
+    };
+    
+    static CheckObject = function(object) {
+        
+    };
+    
+    static CheckRay = function(ray) {
+    };
+}
