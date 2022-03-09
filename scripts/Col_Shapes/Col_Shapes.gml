@@ -2,6 +2,10 @@
 function ColPoint(position) constructor {
     self.position = position;               // Vec3
     
+    static CheckObject = function(object) {
+        return object.shape.CheckPoint(self);
+    };
+    
     static CheckPoint = function(point) {
         return self.position.Equals(point.position);
     };
@@ -65,6 +69,10 @@ function ColPoint(position) constructor {
 function ColSphere(position, radius) constructor {
     self.position = position;               // Vec3
     self.radius = radius;                   // Vec3
+    
+    static CheckObject = function(object) {
+        return object.shape.CheckSphere(self);
+    };
     
     static CheckPoint = function(point) {
         return point.CheckSphere(self);
@@ -174,6 +182,10 @@ function ColAABB(position, half_extents) constructor {
         vertex_end(vbuff);
         vertex_submit(vbuff, pr_linelist, 1);
         vertex_delete_buffer(vbuff);
+    };
+    
+    static CheckObject = function(object) {
+        return object.shape.CheckAABB(self);
     };
     
     static CheckPoint = function(point) {
@@ -365,6 +377,10 @@ function ColPlane(normal, distance) constructor {
     self.normal = normal.Normalize();       // Vec3
     self.distance = distance;               // number
     
+    static CheckObject = function(object) {
+        return object.shape.CheckPlane(self);
+    };
+    
     static CheckPoint = function(point) {
         return point.CheckPlane(self);
     };
@@ -448,6 +464,10 @@ function ColTriangle(a, b, c) constructor {
     self.a = a;
     self.b = b;
     self.c = c;
+    
+    static CheckObject = function(object) {
+        return object.shape.CheckTriangle(self);
+    };
     
     static CheckPoint = function(point) {
         return point.CheckTriangle(self);
@@ -689,6 +709,10 @@ function ColMesh(triangle_array) constructor {
     self.accelerator.triangles = triangle_array;
     self.accelerator.Split(3);
     
+    static CheckObject = function(object) {
+        return object.shape.CheckMesh(self);
+    };
+    
     static CheckGeneral = function(shape) {
         var process_these = [self.accelerator];
         
@@ -824,6 +848,10 @@ function ColRay(origin, direction) constructor {
 function ColLine(start, finish) constructor {
     self.start = start;                     // Vec3
     self.finish = finish;                   // Vec3
+    
+    static CheckObject = function(object) {
+        return object.shape.CheckLine(self);
+    };
     
     static CheckPoint = function(point) {
         return point.CheckLine(self);
