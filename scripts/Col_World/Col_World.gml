@@ -14,15 +14,15 @@ function ColObject(shape, reference) constructor {
 
 function ColWorld(bounds_min, bounds_max, max_depth) constructor {
     self.bounds = NewColAABBFromMinMax(bounds_min, bounds_max);
-    self.accelerator = new ColWorldNode();
+    self.accelerator = new ColWorldOctree(self.bounds, max_depth);
     self.depth = max_depth;
     
     static Add = function(object) {
-        
+        self.accelerator.Add(object);
     };
     
     static Remove = function(object) {
-        
+        self.accelerator.Remove(object);
     };
     
     static Update = function(object) {
@@ -31,10 +31,17 @@ function ColWorld(bounds_min, bounds_max, max_depth) constructor {
     };
     
     static CheckObject = function(object) {
-        
+        return self.accelerator.CheckObject(object);
     };
     
     static CheckRay = function(ray) {
+        var hit_info = new RaycastHitInformation();
+        
+        if (self.accelerator.CheckRay(ray, hit_info)) {
+            return hit_info;
+        }
+        
+        return undefined;
     };
 }
 
