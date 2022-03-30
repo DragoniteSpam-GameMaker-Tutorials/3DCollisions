@@ -1,13 +1,17 @@
-function ColObject(shape, reference) constructor {
+function ColObject(shape, reference, mask = 1, group = 1) constructor {
     self.shape = shape;
     self.reference = reference;
+    self.mask = mask;                                   // what other objects can collide with me
+    self.group = group;                                 // what masks i can detect collisions with
     
     static CheckObject = function(object) {
         if (object == self) return false;
+        if ((self.mask & object.group) == 0) return false;
         return self.shape.CheckObject(object);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info, group = 1) {
+        if ((self.mask & group) == 0) return false;
         return self.shape.CheckRay(ray, hit_info);
     };
 }
@@ -34,10 +38,10 @@ function ColWorld(bounds_min, bounds_max, max_depth) constructor {
         return self.accelerator.CheckObject(object);
     };
     
-    static CheckRay = function(ray) {
+    static CheckRay = function(ray, group = 1) {
         var hit_info = new RaycastHitInformation();
         
-        if (self.accelerator.CheckRay(ray, hit_info)) {
+        if (self.accelerator.CheckRay(ray, hit_info, group)) {
             return hit_info;
         }
         
@@ -129,19 +133,19 @@ function ColWorldOctree(bounds, depth) constructor {
         return false;
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info, group = 1) {
         if (!ray.CheckAABB(self.bounds, new RaycastHitInformation())) return;
         
         var result = false;
         if (self.children == undefined) {
             for (var i = 0; i < array_length(self.contents); i++) {
-                if (self.contents[i].CheckRay(ray, hit_info)) {
+                if (self.contents[i].CheckRay(ray, hit_info, group)) {
                     result = true;
                 }
             }
         } else {
             for (var i = 0; i < array_length(self.children); i++) {
-                if (self.children[i].CheckRay(ray, hit_info)) {
+                if (self.children[i].CheckRay(ray, hit_info, group)) {
                     result = true;
                 }
             }
