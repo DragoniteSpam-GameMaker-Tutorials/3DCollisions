@@ -27,6 +27,15 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
     static AsVectorArray = function() {
         return [self.x, self.y, self.z];
     };
+    
+    static GetRotationMatrix = function() {
+        return new Matrix4(
+            self.x.x, self.y.x, self.z.x, 0,
+            self.x.y, self.y.y, self.z.y, 0,
+            self.x.z, self.y.z, self.z.z, 0,
+            0,        0,        0,        1
+        );
+    };
 }
 
 function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4, z4, w4) constructor {
@@ -61,5 +70,13 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     
     static AsVectorArray = function() {
         return [self.x, self.y, self.z, self.w];
+    };
+    
+    static GetOrientationMatrix = function() {
+        return new Matrix3(
+            self.x.x, self.y.x, self.z.x,
+            self.x.y, self.y.y, self.z.y,
+            self.x.z, self.y.z, self.z.z
+        );
     };
 }
