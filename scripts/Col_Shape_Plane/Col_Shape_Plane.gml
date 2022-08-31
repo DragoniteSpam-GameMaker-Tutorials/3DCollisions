@@ -23,6 +23,14 @@ function ColPlane(normal, distance) constructor {
         return (cross.Magnitude() > 0) || (self.distance == plane.distance);
     };
     
+    static CheckOBB = function(obb) {
+        return obb.CheckPlane(self);
+    };
+    
+    static CheckCapsule = function(capsule) {
+        return capsule.CheckPlane(self);
+    };
+    
     static CheckTriangle = function(triangle) {
         var side_a = self.PlaneEquation(triangle.a);
         var side_b = self.PlaneEquation(triangle.b);

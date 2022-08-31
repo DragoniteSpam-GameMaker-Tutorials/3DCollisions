@@ -26,6 +26,14 @@ function ColPoint(position) constructor {
         return (ndot == plane.distance);
     };
     
+    static CheckOBB = function(obb) {
+        return obb.CheckPoint(self);
+    };
+    
+    static CheckCapsule = function(capsule) {
+        return capsule.CheckPoint(self);
+    };
+    
     static CheckTriangle = function(triangle) {
         var pa = triangle.a.Sub(self.position);
         var pb = triangle.b.Sub(self.position);

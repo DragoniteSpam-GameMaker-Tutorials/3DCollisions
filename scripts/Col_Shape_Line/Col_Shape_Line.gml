@@ -22,6 +22,14 @@ function ColLine(start, finish) constructor {
         return plane.CheckLine(self);
     };
     
+    static CheckOBB = function(obb) {
+        return obb.CheckLine(self);
+    };
+    
+    static CheckCapsule = function(capsule) {
+        return capsule.CheckLine(self);
+    };
+    
     static CheckTriangle = function(triangle) {
         return triangle.CheckLine(self);
     };

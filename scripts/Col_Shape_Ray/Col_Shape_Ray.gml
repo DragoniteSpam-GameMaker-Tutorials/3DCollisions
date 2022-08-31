@@ -18,6 +18,14 @@ function ColRay(origin, direction) constructor {
         return plane.CheckRay(self, hit_info);
     };
     
+    static CheckOBB = function(obb, hit_info) {
+        return obb.CheckRay(self, hit_info);
+    };
+    
+    static CheckCapsule = function(capsule, hit_info) {
+        return capsule.CheckRay(self, hit_info);
+    };
+    
     static CheckTriangle = function(triangle, hit_info) {
         return triangle.CheckRay(self, hit_info);
     };

@@ -23,6 +23,14 @@ function ColTriangle(a, b, c) constructor {
         return plane.CheckTriangle(self);
     };
     
+    static CheckOBB = function(obb) {
+        return obb.CheckTriangle(self);
+    };
+    
+    static CheckCapsule = function(capsule) {
+        return capsule.CheckTriangle(self);
+    };
+    
     static CheckTriangle = function(triangle) {
         // Phase 1: are each of the points of one triangle on the
         // same side of the plane of the other triangle?

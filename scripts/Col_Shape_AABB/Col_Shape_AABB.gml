@@ -73,6 +73,14 @@ function ColAABB(position, half_extents) constructor {
         return (abs(dist) <= plength);
     };
     
+    static CheckOBB = function(obb) {
+        return obb.CheckAABB(self);
+    };
+    
+    static CheckCapsule = function(capsule) {
+        return capsule.CheckAABB(self);
+    };
+    
     static CheckTriangle = function(triangle) {
         var ab = triangle.b.Sub(triangle.a);
         var bc = triangle.c.Sub(triangle.b);

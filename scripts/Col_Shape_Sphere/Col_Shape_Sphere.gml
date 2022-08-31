@@ -26,6 +26,14 @@ function ColSphere(position, radius) constructor {
         return dist <= self.radius;
     };
     
+    static CheckOBB = function(obb) {
+        return obb.CheckSphere(self);
+    };
+    
+    static CheckCapsule = function(capsule) {
+        return capsule.CheckSphere(self);
+    };
+    
     static CheckTriangle = function(triangle) {
         var nearest = triangle.NearestPoint(self.position);
         var dist = nearest.DistanceTo(self.position);

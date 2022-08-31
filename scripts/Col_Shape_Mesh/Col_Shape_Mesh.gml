@@ -73,6 +73,14 @@ function ColMesh(triangle_array) constructor {
         return self.CheckGeneral(mesh);
     };
     
+    static CheckOBB = function(obb) {
+        return self.CheckGeneral(obb);
+    };
+    
+    static CheckCapsule = function(capsule) {
+        return self.CheckGeneral(capsule);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var process_these = [self.accelerator];
         var dummy_hit_info = new RaycastHitInformation();
