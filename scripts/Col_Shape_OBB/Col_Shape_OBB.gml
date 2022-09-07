@@ -85,7 +85,13 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckPlane = function(plane) {
+        var plen = self.size.x * abs(plane.normal.Dot(self.orientation.x)) +
+            self.size.y * abs(plane.normal.Dot(self.orientation.y)) +
+            self.size.z * abs(plane.normal.Dot(self.orientation.z));
         
+        var dist = plane.normal.Dot(self.position) - plane.distance;
+        
+        return abs(dist) < plen;
     };
     
     static CheckCapsule = function(capsule) {
