@@ -25,7 +25,7 @@ draw_text_colour(1080, n++ * 20, "C: Shape 2 AABB", c_white, c_white, c_white, c
 draw_text_colour(1080, n++ * 20, "V: Shape 2 Triangle", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "B: Shape 2 Plane", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "N: Shape 2 Line", c_white, c_white, c_white, c_white, 1);
-draw_text_colour(1080, n++ * 20, "N: Shape 2 Mesh", c_white, c_white, c_white, c_white, 1);
+draw_text_colour(1080, n++ * 20, "M: Shape 2 Mesh", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "O: Shape 2 OBB", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "P: Shape 2 Capsule", c_white, c_white, c_white, c_white, 1);
 

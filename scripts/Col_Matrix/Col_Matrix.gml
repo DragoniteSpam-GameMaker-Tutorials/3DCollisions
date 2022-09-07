@@ -30,9 +30,9 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
     
     static GetRotationMatrix = function() {
         return new Matrix4(
-            self.x.x, self.y.x, self.z.x, 0,
-            self.x.y, self.y.y, self.z.y, 0,
-            self.x.z, self.y.z, self.z.z, 0,
+            self.x.x, self.x.y, self.x.z, 0,
+            self.y.x, self.y.y, self.y.z, 0,
+            self.z.x, self.z.y, self.z.z, 0,
             0,        0,        0,        1
         );
     };
