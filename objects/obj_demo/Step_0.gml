@@ -38,6 +38,12 @@ if (keyboard_check(vk_numpad5)) {
 if (keyboard_check(vk_numpad6)) {
     shape_1 = new ColTestMesh(tree);
 }
+if (keyboard_check(vk_numpad7)) {
+    shape_1 = new ColTestOBB(obb);
+}
+if (keyboard_check(vk_numpad8)) {
+    shape_1 = new ColTestCapsule(capsule_end, capsule_middle);
+}
 
 if (keyboard_check(ord("Z"))) {
     shape_2 = new ColTestPoint(point);
@@ -59,6 +65,12 @@ if (keyboard_check(ord("N"))) {
 }
 if (keyboard_check(ord("M"))) {
     shape_2 = new ColTestMesh(tree);
+}
+if (keyboard_check(ord("O"))) {
+    shape_2 = new ColTestOBB(obb);
+}
+if (keyboard_check(ord("P"))) {
+    shape_2 = new ColTestCapsule(capsule_end, capsule_middle);
 }
 
 shape_1.update();

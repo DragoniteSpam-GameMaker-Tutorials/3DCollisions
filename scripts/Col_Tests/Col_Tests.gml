@@ -225,6 +225,104 @@ function ColTestTriangle() constructor {
     };
 }
 
+function ColTestOBB(vbuff) constructor {
+    var orientation = new Matrix4(matrix_build(0, 0, 0, random(360), random(360), random(360), 1, 1, 1)).GetOrientationMatrix();
+    self.data = new ColOBB(new Vector3(0, 0, 0), new Vector3(irandom_range(2, 4), irandom_range(2, 4), irandom_range(2, 4)), orientation);
+    self.vbuff = vbuff;
+    
+    self.update = function() {
+        var step = 0.1;
+        if (keyboard_check(vk_left)) {
+            self.data.position.x -= step;
+        }
+        if (keyboard_check(vk_right)) {
+            self.data.position.x += step;
+        }
+        if (keyboard_check(vk_up)) {
+            self.data.position.y -= step;
+        }
+        if (keyboard_check(vk_down)) {
+            self.data.position.y += step;
+        }
+        if (keyboard_check(vk_pageup)) {
+            self.data.position.z -= step;
+        }
+        if (keyboard_check(vk_pagedown)) {
+            self.data.position.z += step;
+        }
+    };
+    self.draw = function() {
+        var mat_scale = matrix_build(0, 0, 0, 0, 0, 0, self.data.size.x, self.data.size.y, self.data.size.z);
+        var mat_translation = matrix_build(self.data.position.x, self.data.position.y, self.data.position.z, 0, 0, 0, 1, 1, 1);
+        matrix_set(matrix_world, matrix_multiply(matrix_multiply(mat_scale, self.data.orientation.GetRotationMatrix().AsLinearArray()), mat_translation));
+        vertex_submit(self.vbuff, pr_trianglelist, -1);
+        matrix_set(matrix_world, matrix_build_identity());
+    };
+    self.test = function(shape) {
+        return shape.data.CheckOBB(self.data);
+    };
+}
+
+function ColTestCapsule(vbuff_end, vbuff_middle) constructor {
+    self.data = new ColCapsule(new Vector3(0, 0, -random(4) - 2), new Vector3(0, 0, random(4) + 2), random_range(1, 6));
+    self.vbuff_end = vbuff_end;
+    self.vbuff_middle = vbuff_middle;
+    
+    self.update = function() {
+        var step = 0.1;
+        if (keyboard_check(vk_left)) {
+            self.data.line.start.x -= step;
+            self.data.line.finish.x -= step;
+        }
+        if (keyboard_check(vk_right)) {
+            self.data.line.start.x += step;
+            self.data.line.finish.x += step;
+        }
+        if (keyboard_check(vk_up)) {
+            self.data.line.start.y -= step;
+            self.data.line.finish.y -= step;
+        }
+        if (keyboard_check(vk_down)) {
+            self.data.line.start.y += step;
+            self.data.line.finish.y += step;
+        }
+        if (keyboard_check(vk_pageup)) {
+            self.data.line.start.z -= step;
+            self.data.line.finish.z -= step;
+        }
+        if (keyboard_check(vk_pagedown)) {
+            self.data.line.start.z += step;
+            self.data.line.finish.z += step;
+        }
+    };
+    self.draw = function() {
+        var vbuff = vertex_create_buffer();
+        vertex_begin(vbuff, obj_demo.vertex_format);
+        vertex_position_3d(vbuff, self.data.line.start.x, self.data.line.start.y, self.data.line.start.z);
+        vertex_normal(vbuff, 0, 0, 1);
+        vertex_colour(vbuff, c_lime, 1);
+        vertex_position_3d(vbuff, self.data.line.finish.x, self.data.line.finish.y, self.data.line.finish.z);
+        vertex_normal(vbuff, 0, 0, 1);
+        vertex_colour(vbuff, c_lime, 1);
+        vertex_end(vbuff);
+        vertex_submit(vbuff, pr_linelist, -1);
+        vertex_delete_buffer(vbuff);
+        
+        if (!keyboard_check(vk_tab)) {
+            matrix_set(matrix_world, matrix_build(self.data.line.start.x, self.data.line.start.y, self.data.line.start.z, 0, 0, 0, self.data.radius, self.data.radius, self.data.radius));
+            vertex_submit(self.vbuff_end, pr_trianglelist, -1);
+            matrix_set(matrix_world, matrix_build(self.data.line.finish.x, self.data.line.finish.y, self.data.line.finish.z, 0, 0, 0, self.data.radius, self.data.radius, self.data.radius));
+            vertex_submit(self.vbuff_end, pr_trianglelist, -1);
+            matrix_set(matrix_world, matrix_build(self.data.line.finish.x, self.data.line.finish.y, mean(self.data.line.start.z, self.data.line.finish.z), 0, 0, 0, self.data.radius, self.data.radius, abs(self.data.line.start.z - self.data.line.finish.z)));
+            vertex_submit(self.vbuff_middle, pr_trianglelist, -1);
+            matrix_set(matrix_world, matrix_build_identity());
+        }
+    };
+    self.test = function(shape) {
+        return shape.data.CheckCapsule(self.data);
+    };
+}
+
 function ColTestLine(vbuff) constructor {
     self.rotation = random(360);
     self.data = new ColLine(
