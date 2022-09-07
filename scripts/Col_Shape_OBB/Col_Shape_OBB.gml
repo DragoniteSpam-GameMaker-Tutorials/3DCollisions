@@ -27,7 +27,9 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        
+        var nearest = self.NearestPoint(sphere.position);
+        var dist = nearest.DistanceTo(sphere.position);
+        return dist <= sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
@@ -63,7 +65,22 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static NearestPoint = function(vec3) {
+        var result = self.position;
+        var dir = vec3.Sub(self.position);
         
+        var size_array = self.size.AsLinearArray();
+        var orientation_array = self.orientation.AsVectorArray();
+        
+        for (var i = 0; i < 3; i++) {
+            var axis = orientation_array[i];
+            
+            var dist = dir.Dot(axis);
+            
+            dist = clamp(dist, -size_array[i], size_array[i]);
+            result = result.Add(axis.Mul(dist));
+        }
+        
+        return result;
     };
     
     static GetInterval = function(axis) {
