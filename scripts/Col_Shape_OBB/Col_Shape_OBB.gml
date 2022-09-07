@@ -8,7 +8,22 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckPoint = function(point) {
+        var dir = point.position.Sub(self.position);
         
+        var size_array = self.size.AsLinearArray();
+        var orientation_array = self.orientation.AsVectorArray();
+        
+        for (var i = 0; i < 3; i++) {
+            var axis = orientation_array[i];
+            
+            var dist = dir.Dot(axis);
+            
+            if (abs(dist) > abs(size_array[i])) {
+                return false;
+            }
+        }
+        
+        return true;
     };
     
     static CheckSphere = function(sphere) {
