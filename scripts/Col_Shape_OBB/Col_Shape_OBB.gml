@@ -59,7 +59,29 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckOBB = function(obb) {
+        var axes = [
+            obb.orientation.x,
+            obb.orientation.y,
+            obb.orientation.z,
+            
+            self.orientation.x,
+            self.orientation.y,
+            self.orientation.z,
+        ];
         
+        for (var i = 0; i < 3; i++) {
+            for (var j = 3; j < 6; j++) {
+                array_push(axes, axes[i].Cross(axes[j]));
+            }
+        }
+        
+        for (var i = 0; i < 15; i++) {
+            if (!col_overlap_axis(self, obb, axes[i])) {
+                return false;
+            }
+        }
+        
+        return true;
     };
     
     static CheckPlane = function(plane) {
