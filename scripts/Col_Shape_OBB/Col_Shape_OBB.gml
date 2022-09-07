@@ -99,7 +99,33 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckTriangle = function(triangle) {
+        var edges = [
+            triangle.b.Sub(triangle.a),
+            triangle.c.Sub(triangle.b),
+            triangle.a.Sub(triangle.c),
+        ];
         
+        var axes = [
+            self.orientation.x,
+            self.orientation.y,
+            self.orientation.z,
+            
+            triangle.GetNormal(),
+        ];
+        
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                array_push(axes, axes[i].Cross(edges[j]));
+            }
+        }
+        
+        for (var i = 0; i < 13; i++) {
+            if (!col_overlap_axis(self, triangle, axes[i])) {
+                return false;
+            }
+        }
+        
+        return true;
     };
     
     static CheckMesh = function(mesh) {
