@@ -33,14 +33,36 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckAABB = function(aabb) {
+        var axes = [
+            new Vector3(1, 0, 0),
+            new Vector3(0, 1, 0),
+            new Vector3(0, 0, 1),
+            
+            self.orientation.x,
+            self.orientation.y,
+            self.orientation.z,
+        ];
+        
+        for (var i = 0; i < 3; i++) {
+            for (var j = 3; j < 6; j++) {
+                array_push(axes, axes[i].Cross(axes[j]));
+            }
+        }
+        
+        for (var i = 0; i < 15; i++) {
+            if (!col_overlap_axis(self, aabb, axes[i])) {
+                return false;
+            }
+        }
+        
+        return true;
+    };
+    
+    static CheckOBB = function(obb) {
         
     };
     
     static CheckPlane = function(plane) {
-        
-    };
-    
-    static CheckOBB = function(obb) {
         
     };
     
@@ -84,6 +106,26 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static GetInterval = function(axis) {
+        var vertices = [
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+        ];
         
+        var imin = axis.Dot(vertices[0]);
+        var imax = imin;
+        
+        for (var i = 1; i < 8; i++) {
+            var dot = axis.Dot(vertices[i]);
+            imin = min(imin, dot);
+            imax = max(imax, dot);
+        }
+        
+        return new ColInterval(imin, imax);
     };
 }
