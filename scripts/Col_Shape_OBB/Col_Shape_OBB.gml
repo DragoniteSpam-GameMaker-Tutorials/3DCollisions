@@ -133,7 +133,74 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
+        var size_array = self.size.AsLinearArray();
         
+        var dir = self.position.Sub(ray.origin);
+        
+        var direction_dots = [
+            self.orientation.x.Dot(ray.direction),
+            self.orientation.y.Dot(ray.direction),
+            self.orientation.z.Dot(ray.direction),
+        ];
+        
+        var position_dots = [
+            self.orientation.x.Dot(dir),
+            self.orientation.y.Dot(dir),
+            self.orientation.z.Dot(dir),
+        ];
+        
+        var t = array_create(6, 0);
+        
+        for (var i = 0; i < 3; i++) {
+            if (direction_dots[i] == 0) {
+                if ((-position_dots[i] - size_array[i]) > 0 || (-position_dots[i] + size_array[i]) < 0) {
+                    return false;
+                }
+                direction_dots[i] = 0.0001;
+            }
+            
+            t[i * 2 + 0] = (position_dots[i] + size_array[i]) / direction_dots[i];
+            t[i * 2 + 1] = (position_dots[i] - size_array[i]) / direction_dots[i];
+        }
+        
+        var tmin = max(
+            min(t[0], t[1]),
+            min(t[2], t[3]),
+            min(t[4], t[5])
+        );
+        
+        var tmax = min(
+            max(t[0], t[1]),
+            max(t[2], t[3]),
+            max(t[4], t[5])
+        );
+        
+        if (tmax < 0) return false;
+        if (tmin > tmax) return false;
+        
+        if (hit_info) {
+            var contact_distance = (tmin < 0) ? tmax : tmin;
+            var contact_normal = new Vector3(0, 0, 0);
+            
+            var contact_point = ray.origin.Add(ray.direction.Mul(contact_distance));
+            
+            var possible_normals = [
+                self.orientation.x,
+                self.orientation.x.Mul(-1),
+                self.orientation.y,
+                self.orientation.y.Mul(-1),
+                self.orientation.z,
+                self.orientation.z.Mul(-1),
+            ];
+            
+            for (var i = 0; i < 6; i++) {
+                if (contact_distance == t[i]) contact_normal = possible_normals[i];
+            }
+            
+            hit_info.Update(contact_distance, self, contact_point, contact_normal);
+        }
+        
+        return true;
     };
     
     static CheckLine = function(line) {
