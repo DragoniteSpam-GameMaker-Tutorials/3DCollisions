@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "Col_Tests",
+  "name": "Col_Shape_Triangle",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Test stuff",
-    "path": "folders/Test stuff.yy",
+    "name": "Shapes",
+    "path": "folders/Collision Stuff/Shapes.yy",
   },
 }

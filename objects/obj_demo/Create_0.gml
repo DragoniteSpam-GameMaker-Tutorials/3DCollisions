@@ -28,6 +28,18 @@ var buffer = buffer_load("shapes/sphere.vbuff");
 sphere = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
+var buffer = buffer_load("shapes/obb.vbuff");
+obb = vertex_create_buffer_from_buffer(buffer, vertex_format);
+buffer_delete(buffer);
+
+var buffer = buffer_load("shapes/capsule_middle.vbuff");
+capsule_middle = vertex_create_buffer_from_buffer(buffer, vertex_format);
+buffer_delete(buffer);
+
+var buffer = buffer_load("shapes/capsule_end.vbuff");
+capsule_end = vertex_create_buffer_from_buffer(buffer, vertex_format);
+buffer_delete(buffer);
+
 var buffer = buffer_load("meshes/tree.vbuff");
 tree = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
