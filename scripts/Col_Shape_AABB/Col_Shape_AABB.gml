@@ -215,19 +215,7 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static GetInterval = function(axis) {
-        var pmin = self.GetMin();
-        var pmax = self.GetMax();
-        
-        var vertices = [
-            new Vector3(pmin.x, pmin.y, pmin.z),
-            new Vector3(pmin.x, pmin.y, pmax.z),
-            new Vector3(pmin.x, pmax.y, pmin.z),
-            new Vector3(pmin.x, pmax.y, pmax.z),
-            new Vector3(pmax.x, pmin.y, pmin.z),
-            new Vector3(pmax.x, pmin.y, pmax.z),
-            new Vector3(pmax.x, pmax.y, pmin.z),
-            new Vector3(pmax.x, pmax.y, pmax.z),
-        ];
+        var vertices = self.GetVertices();
         
         var imin = axis.Dot(vertices[0]);
         var imax = imin;
@@ -239,5 +227,40 @@ function ColAABB(position, half_extents) constructor {
         }
         
         return new ColInterval(imin, imax);
+    };
+    
+    static GetVertices = function() {
+        var pmin = self.GetMin();
+        var pmax = self.GetMax();
+        
+        return [
+            new Vector3(pmin.x, pmax.y, pmax.z),
+            new Vector3(pmin.x, pmax.y, pmin.z),
+            new Vector3(pmin.x, pmin.y, pmax.z),
+            new Vector3(pmin.x, pmin.y, pmin.z),
+            new Vector3(pmax.x, pmax.y, pmax.z),
+            new Vector3(pmax.x, pmax.y, pmin.z),
+            new Vector3(pmax.x, pmin.y, pmax.z),
+            new Vector3(pmax.x, pmin.y, pmin.z),
+        ];
+    };
+    
+    static GetEdges = function() {
+        var vertices = self.GetVertices();
+        
+        return [
+            new ColLine(vertices[0], vertices[1]),
+            new ColLine(vertices[0], vertices[2]),
+            new ColLine(vertices[1], vertices[3]),
+            new ColLine(vertices[2], vertices[3]),
+            new ColLine(vertices[4], vertices[5]),
+            new ColLine(vertices[4], vertices[6]),
+            new ColLine(vertices[5], vertices[7]),
+            new ColLine(vertices[6], vertices[7]),
+            new ColLine(vertices[0], vertices[4]),
+            new ColLine(vertices[1], vertices[5]),
+            new ColLine(vertices[2], vertices[6]),
+            new ColLine(vertices[3], vertices[7]),
+        ];
     };
 }

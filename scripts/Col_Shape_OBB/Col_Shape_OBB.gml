@@ -233,16 +233,7 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static GetInterval = function(axis) {
-        var vertices = [
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-        ];
+        var vertices = self.GetVertices();
         
         var imin = axis.Dot(vertices[0]);
         var imax = imin;
@@ -254,5 +245,37 @@ function ColOBB(position, size, orientation) constructor {
         }
         
         return new ColInterval(imin, imax);
+    };
+    
+    static GetVertices = function() {
+        return [
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+        ];
+    };
+    
+    static GetEdges = function() {
+        var vertices = self.GetVertices();
+        
+        return [
+            new ColLine(vertices[1], vertices[6]),
+            new ColLine(vertices[6], vertices[4]),
+            new ColLine(vertices[4], vertices[7]),
+            new ColLine(vertices[7], vertices[1]),
+            new ColLine(vertices[0], vertices[3]),
+            new ColLine(vertices[3], vertices[5]),
+            new ColLine(vertices[5], vertices[1]),
+            new ColLine(vertices[1], vertices[0]),
+            new ColLine(vertices[7], vertices[2]),
+            new ColLine(vertices[1], vertices[0]),
+            new ColLine(vertices[6], vertices[3]),
+            new ColLine(vertices[4], vertices[5]),
+        ];
     };
 }
