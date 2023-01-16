@@ -102,7 +102,48 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
+        var capsule_dir = self.line.finish.Sub(self.line.start);
+        var relative_ray_origin = ray.origin.Sub(self.line.start);
         
+        var baba = capsule_dir.Dot(capsule_dir);
+        var bard = capsule_dir.Dot(ray.direction);
+        var baoa = capsule_dir.Dot(relative_ray_origin);
+        var rdoa = ray.direction.Dot(relative_ray_origin);
+        var oaoa = relative_ray_origin.Dot(relative_ray_origin);
+        
+        var a = baba - sqr(bard);
+        var b = baba * rdoa - baoa * bard;
+        var c = baba * oaoa - sqr(baoa) - sqr(self.radius) * baba;
+        var h = sqr(b) - a * c;
+        
+        if (h > 0) {
+            var t = (-b - sqrt(h)) / a;
+            var why = baoa + t * bard;
+            
+            if (why > 0 && why < baba) {
+                var contact_point = ray.origin.Add(ray.direction.Mul(t));
+                var nearest_inner_point = self.line.NearestPoint(contact_point);
+                var contact_normal = contact_point.Sub(nearest_inner_point).Normalize();
+                hit_info.Update(t, self, contact_point, contact_normal);
+                return true;
+            }
+            
+            var oc = (why <= 0) ? relative_ray_origin : ray.origin.Sub(self.line.finish);
+            b = ray.direction.Dot(oc);
+            c = oc.Dot(oc) - sqr(self.radius);
+            h = sqr(b) - c;
+            
+            if (h > 0) {
+                t = -b - sqrt(h);
+                var contact_point = ray.origin.Add(ray.direction.Mul(t));
+                var nearest_inner_point = self.line.NearestPoint(contact_point);
+                var contact_normal = contact_point.Sub(nearest_inner_point).Normalize();
+                hit_info.Update(t, self, contact_point, contact_normal);
+                return true;
+            }
+        }
+        
+        return false;
     };
     
     static CheckLine = function(line) {
