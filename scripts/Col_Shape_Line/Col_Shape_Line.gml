@@ -99,5 +99,12 @@ function ColLine(start, finish) constructor {
     };
     
     static NearestConnectionToLine = function(line) {
+        var ray = new ColRay(line.start, line.finish.Sub(line.start));
+        var nearest_connection_to_ray = self.NearestConnectionToRay(ray);
+        
+        var starting_point = line.NearestPoint(nearest_connection_to_ray.start);
+        var ending_point = self.NearestPoint(nearest_connection_to_ray.finish);
+        
+        return new ColLine(starting_point, ending_point);
     };
 }
