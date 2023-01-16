@@ -7,7 +7,10 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckPoint = function(point) {
+        var nearest = self.line.NearestPoint(point.position);
+        var dist = nearest.DistanceTo(point.position);
         
+        return dist <= self.radius;
     };
     
     static CheckSphere = function(sphere) {
