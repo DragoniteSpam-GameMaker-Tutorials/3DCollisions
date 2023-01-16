@@ -242,7 +242,7 @@ function ColAABB(position, half_extents) constructor {
             new Vector3(pmax.x, pmax.y, pmin.z),
             new Vector3(pmax.x, pmin.y, pmax.z),
             new Vector3(pmax.x, pmin.y, pmin.z),
-        ];
+        ]
     };
     
     static GetEdges = function() {

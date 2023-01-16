@@ -21,7 +21,27 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckAABB = function(aabb) {
+        var endcap_start = new ColSphere(self.line.start, self.radius);
+        if (endcap_start.CheckAABB(aabb)) return true;
         
+        var endcap_finish = new ColSphere(self.line.finish, self.radius);
+        if (endcap_finish.CheckAABB(aabb)) return true;
+        
+        var edges = aabb.GetEdges();
+        
+        for (var i = 0, n = array_length(edges); i < n; i++) {
+            var nearest_line_to_edge = edges[i].NearestConnectionToLine(self.line);
+            var start_distance = self.line.NearestPoint(nearest_line_to_edge.start).DistanceTo(nearest_line_to_edge.start);
+            if (start_distance == 0) {
+                var test_sphere = new ColSphere(nearest_line_to_edge.start, self.radius);
+                if (test_sphere.CheckAABB(aabb)) return true;
+            } else {
+                var test_sphere = new ColSphere(nearest_line_to_edge.finish, self.radius);
+                if (test_sphere.CheckAABB(aabb)) return true;
+            }
+        }
+        
+        return false;
     };
     
     static CheckPlane = function(plane) {
