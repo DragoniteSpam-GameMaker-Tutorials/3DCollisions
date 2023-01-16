@@ -147,6 +147,7 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckLine = function(line) {
-        
+        var closest_line = self.line.NearestConnectionToLine(line);
+        return closest_line.Length() <= self.radius;
     };
 }
