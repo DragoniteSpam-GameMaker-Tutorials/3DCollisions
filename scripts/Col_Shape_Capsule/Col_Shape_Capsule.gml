@@ -14,7 +14,10 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckSphere = function(sphere) {
+        var nearest = self.line.NearestPoint(sphere.position);
+        var dist = nearest.DistanceTo(sphere.position);
         
+        return dist <= (self.radius + sphere.radius);
     };
     
     static CheckAABB = function(aabb) {
