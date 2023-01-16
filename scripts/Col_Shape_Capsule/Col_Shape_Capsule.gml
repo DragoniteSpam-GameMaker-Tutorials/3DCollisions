@@ -33,7 +33,10 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckCapsule = function(capsule) {
+        var connecting_line = self.line.NearestConnectionToLine(capsule.line);
+        var dist = connecting_line.Length();
         
+        return dist <= (self.radius + capsule.radius);
     };
     
     static CheckTriangle = function(triangle) {
