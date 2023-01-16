@@ -95,7 +95,7 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckCapsule = function(capsule) {
-        
+        return capsule.CheckOBB(self);
     };
     
     static CheckTriangle = function(triangle) {
