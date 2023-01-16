@@ -270,29 +270,47 @@ function ColTestCapsule(vbuff_end, vbuff_middle) constructor {
     
     self.update = function() {
         var step = 0.1;
-        if (keyboard_check(vk_left)) {
-            self.data.line.start.x -= step;
-            self.data.line.finish.x -= step;
+        // capsule start point - hold shift
+        if (!keyboard_check(vk_control) || keyboard_check(vk_shift)) {
+            if (keyboard_check(vk_left)) {
+                self.data.line.start.x -= step;
+            }
+            if (keyboard_check(vk_right)) {
+                self.data.line.start.x += step;
+            }
+            if (keyboard_check(vk_up)) {
+                self.data.line.start.y -= step;
+            }
+            if (keyboard_check(vk_down)) {
+                self.data.line.start.y += step;
+            }
+            if (keyboard_check(vk_pageup)) {
+                self.data.line.start.z -= step;
+            }
+            if (keyboard_check(vk_pagedown)) {
+                self.data.line.start.z += step;
+            }
         }
-        if (keyboard_check(vk_right)) {
-            self.data.line.start.x += step;
-            self.data.line.finish.x += step;
-        }
-        if (keyboard_check(vk_up)) {
-            self.data.line.start.y -= step;
-            self.data.line.finish.y -= step;
-        }
-        if (keyboard_check(vk_down)) {
-            self.data.line.start.y += step;
-            self.data.line.finish.y += step;
-        }
-        if (keyboard_check(vk_pageup)) {
-            self.data.line.start.z -= step;
-            self.data.line.finish.z -= step;
-        }
-        if (keyboard_check(vk_pagedown)) {
-            self.data.line.start.z += step;
-            self.data.line.finish.z += step;
+        // capsule finish point - hold control
+        if (keyboard_check(vk_control) || !keyboard_check(vk_shift)) {
+            if (keyboard_check(vk_left)) {
+                self.data.line.finish.x -= step;
+            }
+            if (keyboard_check(vk_right)) {
+                self.data.line.finish.x += step;
+            }
+            if (keyboard_check(vk_up)) {
+                self.data.line.finish.y -= step;
+            }
+            if (keyboard_check(vk_down)) {
+                self.data.line.finish.y += step;
+            }
+            if (keyboard_check(vk_pageup)) {
+                self.data.line.finish.z -= step;
+            }
+            if (keyboard_check(vk_pagedown)) {
+                self.data.line.finish.z += step;
+            }
         }
     };
     self.draw = function() {
