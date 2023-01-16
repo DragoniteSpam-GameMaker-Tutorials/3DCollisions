@@ -25,7 +25,13 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckPlane = function(plane) {
+        var nearest_start = plane.NearestPoint(self.line.start);
+        if (self.line.start.DistanceTo(nearest_start) <= self.radius) return true;
         
+        var nearest_finish = plane.NearestPoint(self.line.finish);
+        if (self.line.finish.DistanceTo(nearest_finish) <= self.radius) return true;
+        
+        return self.line.CheckPlane(plane);
     };
     
     static CheckOBB = function(obb) {
