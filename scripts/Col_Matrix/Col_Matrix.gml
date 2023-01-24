@@ -36,6 +36,18 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
             0,        0,        0,        1
         );
     };
+    
+    static Mul = function(mat) {
+        var mat1 = self.GetRotationMatrix();
+        var mat2 = mat.GetRotationMatrix();
+        var mat_result = mat1.Mul(mat2);
+        return mat_result.GetOrientationMatrix();
+    };
+    
+    static MulVector = function(vec) {
+        var mat4 = self.GetRotationMatrix();
+        return mat4.MulVector(vec);
+    };
 }
 
 function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4, z4, w4) constructor {
