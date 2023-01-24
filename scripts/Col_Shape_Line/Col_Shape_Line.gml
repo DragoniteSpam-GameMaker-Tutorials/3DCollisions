@@ -38,6 +38,10 @@ function ColLine(start, finish) constructor {
         return mesh.CheckLine(self);
     };
     
+    static CheckModel = function(model) {
+        return model.CheckLine(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         return false;
     };

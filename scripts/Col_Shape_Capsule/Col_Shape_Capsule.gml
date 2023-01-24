@@ -101,6 +101,10 @@ function ColCapsule(start, finish, radius) constructor {
         return mesh.CheckCapsule(self);
     };
     
+    static CheckModel = function(model) {
+        return model.CheckCapsule(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var capsule_dir = self.line.finish.Sub(self.line.start);
         var relative_ray_origin = ray.origin.Sub(self.line.start);

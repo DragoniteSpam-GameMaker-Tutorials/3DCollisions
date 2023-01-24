@@ -24,6 +24,7 @@
     {"id":{"name":"Col_World","path":"scripts/Col_World/Col_World.yy",},"order":5,},
     {"id":{"name":"Col_Shape_Triangle","path":"scripts/Col_Shape_Triangle/Col_Shape_Triangle.yy",},"order":4,},
     {"id":{"name":"Col_Tests","path":"scripts/Col_Tests/Col_Tests.yy",},"order":3,},
+    {"id":{"name":"Col_Transformed_Model","path":"scripts/Col_Transformed_Model/Col_Transformed_Model.yy",},"order":10,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":14,},
   ],
   "Options": [

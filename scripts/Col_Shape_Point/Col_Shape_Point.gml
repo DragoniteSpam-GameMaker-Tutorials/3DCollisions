@@ -58,6 +58,10 @@ function ColPoint(position) constructor {
         return mesh.CheckPoint(self);
     };
     
+    static CheckModel = function(model) {
+        return model.CheckPoint(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var nearest = ray.NearestPoint(self.position);
         if (nearest.DistanceTo(self.position) != 0) return false;

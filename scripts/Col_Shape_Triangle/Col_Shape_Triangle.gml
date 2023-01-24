@@ -132,6 +132,10 @@ function ColTriangle(a, b, c) constructor {
         return mesh.CheckTriangle(self);
     };
     
+    static CheckModel = function(model) {
+        return model.CheckTriangle(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var plane = self.GetPlane();
         var plane_hit_info = new RaycastHitInformation();

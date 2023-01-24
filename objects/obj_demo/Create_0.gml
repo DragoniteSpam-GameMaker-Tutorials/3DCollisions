@@ -41,6 +41,27 @@ capsule_end = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
 var buffer = buffer_load("meshes/tree.vbuff");
+var vertex_size = 28;
+tree_vertices = [];
+for (var i = 0, n = buffer_get_size(buffer); i < n; i += vertex_size * 3) {
+    array_push(tree_vertices, new ColTriangle(
+        new Vector3(
+            buffer_peek(buffer, i + 0 * vertex_size + 0, buffer_f32),
+            buffer_peek(buffer, i + 0 * vertex_size + 4, buffer_f32),
+            buffer_peek(buffer, i + 0 * vertex_size + 8, buffer_f32)
+        ),
+        new Vector3(
+            buffer_peek(buffer, i + 1 * vertex_size + 0, buffer_f32),
+            buffer_peek(buffer, i + 1 * vertex_size + 4, buffer_f32),
+            buffer_peek(buffer, i + 1 * vertex_size + 8, buffer_f32)
+        ),
+        new Vector3(
+            buffer_peek(buffer, i + 2 * vertex_size + 0, buffer_f32),
+            buffer_peek(buffer, i + 2 * vertex_size + 4, buffer_f32),
+            buffer_peek(buffer, i + 2 * vertex_size + 8, buffer_f32)
+        )
+    ));
+}
 tree = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 

@@ -36,7 +36,7 @@ if (keyboard_check(vk_numpad5)) {
     shape_1 = new ColTestLine(undefined);
 }
 if (keyboard_check(vk_numpad6)) {
-    shape_1 = new ColTestMesh(tree);
+    shape_1 = new ColTestMesh(tree, tree_vertices);
 }
 if (keyboard_check(vk_numpad7)) {
     shape_1 = new ColTestOBB(obb);
@@ -44,33 +44,39 @@ if (keyboard_check(vk_numpad7)) {
 if (keyboard_check(vk_numpad8)) {
     shape_1 = new ColTestCapsule(capsule_end, capsule_middle);
 }
+if (keyboard_check(vk_numpad9)) {
+    shape_1 = new ColTestModel(tree, tree_vertices);
+}
 
-if (keyboard_check(ord("Z"))) {
+if (keyboard_check(ord("1"))) {
     shape_2 = new ColTestPoint(point);
 }
-if (keyboard_check(ord("X"))) {
+if (keyboard_check(ord("2"))) {
     shape_2 = new ColTestSphere(sphere);
 }
-if (keyboard_check(ord("C"))) {
+if (keyboard_check(ord("3"))) {
     shape_2 = new ColTestAABB(aabb);
 }
-if (keyboard_check(ord("V"))) {
+if (keyboard_check(ord("4"))) {
     shape_2 = new ColTestTriangle();
 }
-if (keyboard_check(ord("B"))) {
+if (keyboard_check(ord("5"))) {
     shape_2 = new ColTestPlane(plane);
 }
-if (keyboard_check(ord("N"))) {
+if (keyboard_check(ord("6"))) {
     shape_2 = new ColTestLine(undefined);
 }
-if (keyboard_check(ord("M"))) {
-    shape_2 = new ColTestMesh(tree);
+if (keyboard_check(ord("7"))) {
+    shape_2 = new ColTestMesh(tree, tree_vertices);
 }
-if (keyboard_check(ord("O"))) {
+if (keyboard_check(ord("8"))) {
     shape_2 = new ColTestOBB(obb);
 }
-if (keyboard_check(ord("P"))) {
+if (keyboard_check(ord("9"))) {
     shape_2 = new ColTestCapsule(capsule_end, capsule_middle);
+}
+if (keyboard_check(ord("0"))) {
+    shape_2 = new ColTestModel(tree, tree_vertices);
 }
 
 shape_1.update();
