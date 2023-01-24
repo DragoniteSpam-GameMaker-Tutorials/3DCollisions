@@ -94,7 +94,7 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     
     static Mul = function(mat) {
         var mat1_array = self.AsLinearArray();
-        var mat2_array = self.AsLinearArray();
+        var mat2_array = mat.AsLinearArray();
         var mat_result = matrix_multiply(mat1_array, mat2_array);
         return new Matrix4(mat_result);
     };
