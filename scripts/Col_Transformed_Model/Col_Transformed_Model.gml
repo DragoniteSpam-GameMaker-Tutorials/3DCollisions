@@ -14,7 +14,9 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckSphere = function(sphere) {
-        
+        var inverse = self.GetTransformMatrix().Inverse();
+        var untransformed = new ColSphere(inverse.MulPoint(sphere.position), sphere.radius);
+        return self.mesh.CheckSphere(untransformed);
     };
     
     static CheckAABB = function(aabb) {
@@ -46,10 +48,12 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckLine = function(line) {
+        var inverse = self.GetTransformMatrix().Inverse();
         
     };
     
     static CheckRay = function(ray, hit_info) {
+        var inverse = self.GetTransformMatrix().Inverse();
         
     };
 }
