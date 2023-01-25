@@ -68,7 +68,19 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckRay = function(ray, hit_info) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var transform = self.GetTransformMatrix();
+        var inverse = transform.Inverse();
+        var untransformed = new ColRay(inverse.MulPoint(ray.origin), inverse.MulVector(ray.direction));
+        var untransformed_hit_info = new RaycastHitInformation();
         
+        if (self.mesh.CheckRay(untransformed, untransformed_hit_info)) {
+            var point = transform.MulPoint(untransformed_hit_info.point);
+            var normal = transform.MulVector(untransformed_hit_info.normal);
+            var distance = ray.origin.DistanceTo(point);
+            hit_info.Update(distance, self, point, normal);
+            return true;
+        }
+        
+        return false;
     };
 }
