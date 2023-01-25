@@ -45,7 +45,9 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckCapsule = function(capsule) {
-        
+        var inverse = self.GetTransformMatrix().Inverse();
+        var untransformed = new ColCapsule(inverse.MulPoint(capsule.line.start), inverse.MulPoint(capsule.line.finish), capsule.radius);
+        return self.mesh.CheckCapsule(untransformed);
     };
     
     static CheckTriangle = function(triangle) {
