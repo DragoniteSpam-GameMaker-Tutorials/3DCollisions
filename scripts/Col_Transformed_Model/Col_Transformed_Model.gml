@@ -8,7 +8,9 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckPoint = function(point) {
-        
+        var inverse = self.GetTransformMatrix().Inverse();
+        var untransformed = new ColPoint(inverse.MulPoint(point.position));
+        return self.mesh.CheckPoint(untransformed);
     };
     
     static CheckSphere = function(sphere) {
