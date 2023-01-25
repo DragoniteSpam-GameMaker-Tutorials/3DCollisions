@@ -32,7 +32,16 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckPlane = function(plane) {
+        var inverse = self.GetTransformMatrix().Inverse();
         
+        var point = plane.normal.Mul(plane.distance);
+        point = inverse.MulPoint(point);
+        
+        var normal = inverse.MulVector(plane.normal);
+        var distance = point.Dot(normal);
+        
+        var untransformed = new ColPlane(normal, distance);
+        return self.mesh.CheckPlane(untransformed);
     };
     
     static CheckCapsule = function(capsule) {
