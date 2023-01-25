@@ -26,7 +26,9 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckOBB = function(obb) {
-        
+        var inverse = self.GetTransformMatrix().Inverse();
+        var untransformed = new ColOBB(inverse.MulPoint(obb.position), obb.size, obb.orientation.Mul(inverse.GetOrientationMatrix()));
+        return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckPlane = function(plane) {
