@@ -20,7 +20,9 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckAABB = function(aabb) {
-        
+        var inverse = self.GetTransformMatrix().Inverse();
+        var untransformed = new ColOBB(inverse.MulPoint(aabb.position), aabb.half_extents, inverse.GetOrientationMatrix());
+        return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckOBB = function(obb) {
