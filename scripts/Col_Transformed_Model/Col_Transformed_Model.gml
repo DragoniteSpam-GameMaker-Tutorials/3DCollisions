@@ -51,7 +51,8 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckTriangle = function(triangle) {
-        
+        var inverse = self.GetTransformMatrix().Inverse();
+        // "homework"
     };
     
     static CheckMesh = function(mesh) {
@@ -64,7 +65,7 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     
     static CheckLine = function(line) {
         var inverse = self.GetTransformMatrix().Inverse();
-        
+        // "homework"
     };
     
     static CheckRay = function(ray, hit_info) {
