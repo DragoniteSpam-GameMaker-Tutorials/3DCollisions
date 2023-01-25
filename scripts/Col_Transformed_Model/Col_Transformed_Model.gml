@@ -3,6 +3,10 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     self.position = position;
     self.rotation = rotation;
     
+    static GetTransformMatrix = function() {
+        return self.rotation.GetRotationMatrix().Mul(self.position.GetTranslationMatrix());
+    };
+    
     static CheckPoint = function(point) {
         
     };
