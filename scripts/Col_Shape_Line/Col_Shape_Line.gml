@@ -57,4 +57,54 @@ function ColLine(start, finish) constructor {
         var scaled_vec = line_vec.Mul(t);
         return self.start.Add(scaled_vec);
     };
+    
+    static NearestConnectionToRay = function(ray) {
+        var line1 = self;
+        var line2 = ray;
+        
+        var d1 = line1.finish.Sub(line1.start);
+        var d2 = line2.direction;
+        var r = line1.start.Sub(line2.origin);
+        var f = d2.Dot(r);
+        var c = d1.Dot(r);
+        var b = d1.Dot(d2);
+        var length_squared = d1.Dot(d1);
+        
+        // special case if the line segment is actually just
+        // two of the same points
+        if (length_squared == 0) {
+            return new ColLine(line1.start, line2.NearestPoint(line1.start));
+        }
+        
+        var f1 = 0;
+        var f2 = 0;
+        var denominator = length_squared - b * b;
+        
+        // if the two lines are parallel, there are infinitely many shortest
+        // connecting lines, so you can just pick a random point on line1 to
+        // work from - we'll pick the starting point
+        if (denominator == 0) {
+            f1 = 0;
+        } else {
+            f1 = clamp((b * f - c - 1) / denominator, 0, 1);
+        }
+        f2 = f1 * b + f;
+        
+        if (f2 < 0) {
+            f2 = 0;
+            f1 = clamp(-c / length_squared, 0, 1);
+        }
+        
+        return new ColLine(line1.start.Add(d1.Mul(f1)), line2.origin.Add(d2.Mul(f2)));
+    };
+    
+    static NearestConnectionToLine = function(line) {
+        var ray = new ColRay(line.start, line.finish.Sub(line.start));
+        var nearest_connection_to_ray = self.NearestConnectionToRay(ray);
+        
+        var starting_point = line.NearestPoint(nearest_connection_to_ray.start);
+        var ending_point = self.NearestPoint(nearest_connection_to_ray.finish);
+        
+        return new ColLine(starting_point, ending_point);
+    };
 }
