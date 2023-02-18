@@ -73,6 +73,10 @@ function ColMesh(triangle_array) constructor {
         return self.CheckGeneral(mesh);
     };
     
+    static CheckModel = function(model) {
+        return false;
+    };
+    
     static CheckOBB = function(obb) {
         return self.CheckGeneral(obb);
     };

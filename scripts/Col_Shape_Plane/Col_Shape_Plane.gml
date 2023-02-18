@@ -51,6 +51,10 @@ function ColPlane(normal, distance) constructor {
         return mesh.CheckPlane(self);
     };
     
+    static CheckModel = function(model) {
+        return model.CheckPlane(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var DdotN = ray.direction.Dot(self.normal);
         if (DdotN >= 0) return false;

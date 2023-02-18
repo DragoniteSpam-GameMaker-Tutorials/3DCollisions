@@ -34,6 +34,10 @@ function ColRay(origin, direction) constructor {
         return mesh.CheckRay(self, hit_info);
     };
     
+    static CheckModel = function(model, hit_info) {
+        return model.CheckRay(self, hit_info);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         return false;
     };

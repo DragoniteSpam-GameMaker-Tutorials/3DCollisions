@@ -63,6 +63,15 @@ function Vector3(x, y, z) constructor {
         var mag = direction.Magnitude();
         return direction.Mul(dot / (mag * mag));
     };
+    
+    static GetTranslationMatrix = function() {
+        return new Matrix4(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            self.x, self.y, self.z, 1
+        );
+    };
 }
 
 function Vector4(x, y, z, w) constructor {
@@ -126,5 +135,14 @@ function Vector4(x, y, z, w) constructor {
         var dot = self.Dot(direction);
         var mag = direction.Magnitude();
         return direction.Mul(dot / (mag * mag));
+    };
+    
+    static GetTranslationMatrix = function() {
+        return new Matrix4(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            self.x, self.y, self.z, 1
+        );
     };
 }

@@ -44,6 +44,10 @@ function ColSphere(position, radius) constructor {
         return mesh.CheckSphere(self);
     };
     
+    static CheckModel = function(model) {
+        return model.CheckSphere(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var e = self.position.Sub(ray.origin);
         var mag_squared = power(e.Magnitude(), 2);

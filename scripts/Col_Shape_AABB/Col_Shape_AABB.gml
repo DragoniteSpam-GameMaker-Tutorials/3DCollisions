@@ -119,6 +119,10 @@ function ColAABB(position, half_extents) constructor {
         return mesh.CheckAABB(self);
     };
     
+    static CheckModel = function(model) {
+        return model.CheckAABB(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var box_min = self.GetMin();
         var box_max = self.GetMax();

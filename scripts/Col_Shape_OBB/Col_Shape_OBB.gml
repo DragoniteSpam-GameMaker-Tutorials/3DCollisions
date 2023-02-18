@@ -132,6 +132,10 @@ function ColOBB(position, size, orientation) constructor {
         return mesh.CheckOBB(self);
     };
     
+    static CheckModel = function(model) {
+        return model.CheckOBB(self);
+    };
+    
     static CheckRay = function(ray, hit_info) {
         var size_array = self.size.AsLinearArray();
         

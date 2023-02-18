@@ -482,3 +482,90 @@ function ColTestMesh(vbuff) constructor {
     var t_end = get_timer();
     show_debug_message("mesh setup took " + string((t_end - t_start) / 1000) + " ms");
 }
+
+#macro RANDOM_POSITION  (random_range(-32, 32))
+#macro RANDOM_ROTATION  (random(360))
+
+function ColTestModel(vbuff, triangles) constructor {
+    var t0 = get_timer();
+    
+    self.position = new Vector3(RANDOM_POSITION, RANDOM_POSITION, RANDOM_POSITION);
+    self.rotation = new Vector3(RANDOM_ROTATION, RANDOM_ROTATION, RANDOM_ROTATION);
+    
+    var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+    
+    self.data = new ColTransformedModel(new ColMesh(triangles), self.position, rotation_matrix);
+    var t1 = get_timer();
+    show_debug_message("mesh setup took " + string((t1 - t0) / 1000) + " ms");
+    self.vbuff = vbuff;
+    
+    self.update = function() {
+        var step = 0.25;
+        if (keyboard_check(vk_left)) {
+            self.position.x -= step;
+            self.data.position = self.position;
+        }
+        if (keyboard_check(vk_right)) {
+            self.position.x += step;
+            self.data.position = self.position;
+        }
+        if (keyboard_check(vk_up)) {
+            self.position.y -= step;
+            self.data.position = self.position;
+        }
+        if (keyboard_check(vk_down)) {
+            self.position.y += step;
+            self.data.position = self.position;
+        }
+        if (keyboard_check(vk_pageup)) {
+            self.position.z += step;
+            self.data.position = self.position;
+        }
+        if (keyboard_check(vk_pagedown)) {
+            self.position.z -= step;
+            self.data.position = self.position;
+        }
+        step = 5;
+        if (keyboard_check(ord("I"))) {
+            self.rotation.x -= step;
+            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            self.data.rotation = rotation_matrix;
+        }
+        if (keyboard_check(ord("J"))) {
+            self.rotation.x += step;
+            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            self.data.rotation = rotation_matrix;
+        }
+        if (keyboard_check(ord("O"))) {
+            self.rotation.y -= step;
+            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            self.data.rotation = rotation_matrix;
+        }
+        if (keyboard_check(ord("K"))) {
+            self.rotation.y += step;
+            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            self.data.rotation = rotation_matrix;
+        }
+        if (keyboard_check(ord("P"))) {
+            self.rotation.z -= step;
+            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            self.data.rotation = rotation_matrix;
+        }
+        if (keyboard_check(ord("L"))) {
+            self.rotation.z += step;
+            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            self.data.rotation = rotation_matrix;
+        }
+    };
+    
+    self.draw = function() {
+        var transform = self.data.GetTransformMatrix();
+        matrix_set(matrix_world, transform.AsLinearArray());
+        vertex_submit(self.vbuff, pr_trianglelist, -1);
+        matrix_set(matrix_world, matrix_build_identity());
+    };
+    
+    self.test = function(shape) {
+        return shape.data.CheckModel(self.data);
+    };
+}
