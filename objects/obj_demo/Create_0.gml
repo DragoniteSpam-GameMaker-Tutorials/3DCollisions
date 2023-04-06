@@ -65,5 +65,11 @@ for (var i = 0, n = buffer_get_size(buffer); i < n; i += vertex_size * 3) {
 tree = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
+var buffer = buffer_load("meshes/terrain.vbuff");
+terrain = vertex_create_buffer_from_buffer(buffer, vertex_format);
+buffer_delete(buffer);
+
+terrain_heightmap = buffer_load("terrain.hm");
+
 shape_1 = new ColTestPoint(point);
 shape_2 = new ColTestPoint(point);

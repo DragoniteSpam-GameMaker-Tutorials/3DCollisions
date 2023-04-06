@@ -19,6 +19,8 @@ draw_text_colour(720, n++ * 20, "Numpad 7: Shape 1 OBB", c_white, c_white, c_whi
 draw_text_colour(720, n++ * 20, "Numpad 8: Shape 1 Capsule", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(720, n++ * 20, "Numpad 9: Shape 1 Model", c_white, c_white, c_white, c_white, 1);
 
+draw_text_colour(720, n++ * 20, "Tab: Terrain heightmap", c_white, c_white, c_white, c_white, 1);
+
 n = 1;
 draw_text_colour(1080, n++ * 20, "1: Shape 2 Point", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "2: Shape 2 Sphere", c_white, c_white, c_white, c_white, 1);

@@ -569,3 +569,39 @@ function ColTestModel(vbuff, triangles) constructor {
         return shape.data.CheckModel(self.data);
     };
 }
+
+function ColTestHeightmap(vbuff, heightmap) constructor {
+    self.heightmap = new ColHeightmap(heightmap, 64, 64);
+    self.ball = new Vector3(0, 0, 0);
+    self.vbuff = vbuff;
+    
+    self.update = function() {
+        var step = 0.25;
+        if (keyboard_check(vk_left)) {
+            self.ball.x -= step;
+        }
+        if (keyboard_check(vk_right)) {
+            self.ball.x += step;
+        }
+        if (keyboard_check(vk_up)) {
+            self.ball.y -= step;
+        }
+        if (keyboard_check(vk_down)) {
+            self.ball.y += step;
+        }
+        
+        self.ball.z = self.heightmap.GetHeight(self.ball.x, self.ball.y);
+    };
+    
+    self.draw = function() {
+        matrix_set(matrix_world, matrix_build_identity());
+        vertex_submit(self.vbuff, pr_trianglelist, -1);
+        matrix_set(matrix_world, matrix_build(self.ball.x, self.ball.y, self.ball.z, 0, 0, 0, 1, 1, 1));
+        vertex_submit(obj_demo.sphere, pr_trianglelist, -1);
+        matrix_set(matrix_world, matrix_build_identity());
+    };
+    
+    self.test = function(shape) {
+        return false;
+    };
+}

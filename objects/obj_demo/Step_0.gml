@@ -47,6 +47,9 @@ if (keyboard_check(vk_numpad8)) {
 if (keyboard_check(vk_numpad9)) {
     shape_1 = new ColTestModel(tree, tree_vertices);
 }
+if (keyboard_check(vk_tab)) {
+    shape_1 = new ColTestHeightmap(terrain, terrain_heightmap);
+}
 
 if (keyboard_check(ord("1"))) {
     shape_2 = new ColTestPoint(point);

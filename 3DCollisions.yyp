@@ -17,6 +17,7 @@
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"merry.vbuff","CopyToMask":-1,"filePath":"datafiles/meshes",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"terrain.vbuff","CopyToMask":-1,"filePath":"datafiles/meshes",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"tree.vbuff","CopyToMask":-1,"filePath":"datafiles/meshes",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"aabb.vbuff","CopyToMask":-1,"filePath":"datafiles/shapes",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"capsule_end.vbuff","CopyToMask":-1,"filePath":"datafiles/shapes",},
@@ -27,6 +28,7 @@
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"point.vbuff","CopyToMask":-1,"filePath":"datafiles/shapes",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"sphere.000.vbuff","CopyToMask":-1,"filePath":"datafiles/shapes",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"sphere.vbuff","CopyToMask":-1,"filePath":"datafiles/shapes",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"terrain.hm","CopyToMask":-1,"filePath":"datafiles",},
   ],
   "isEcma": false,
   "LibraryEmitters": [],
