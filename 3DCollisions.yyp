@@ -37,6 +37,7 @@
   },
   "resources": [
     {"id":{"name":"Col_Shape_Mesh","path":"scripts/Col_Shape_Mesh/Col_Shape_Mesh.yy",},},
+    {"id":{"name":"Col_Heightmap","path":"scripts/Col_Heightmap/Col_Heightmap.yy",},},
     {"id":{"name":"Col_Shape_Capsule","path":"scripts/Col_Shape_Capsule/Col_Shape_Capsule.yy",},},
     {"id":{"name":"obj_demo","path":"objects/obj_demo/obj_demo.yy",},},
     {"id":{"name":"shd_demo","path":"shaders/shd_demo/shd_demo.yy",},},

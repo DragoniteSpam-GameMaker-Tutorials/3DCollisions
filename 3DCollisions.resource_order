@@ -2,6 +2,7 @@
   "FolderOrderSettings": [],
   "ResourceOrderSettings": [
     {"name":"Col_Shape_Mesh","order":5,"path":"scripts/Col_Shape_Mesh/Col_Shape_Mesh.yy",},
+    {"name":"Col_Heightmap","order":7,"path":"scripts/Col_Heightmap/Col_Heightmap.yy",},
     {"name":"Col_Shape_Capsule","order":9,"path":"scripts/Col_Shape_Capsule/Col_Shape_Capsule.yy",},
     {"name":"obj_demo","order":1,"path":"objects/obj_demo/obj_demo.yy",},
     {"name":"shd_demo","order":2,"path":"shaders/shd_demo/shd_demo.yy",},

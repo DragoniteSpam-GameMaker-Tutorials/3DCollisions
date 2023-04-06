@@ -571,6 +571,8 @@ function ColTestModel(vbuff, triangles) constructor {
 }
 
 function ColTestHeightmap(vbuff, heightmap) constructor {
+    self.data = undefined;
+    
     self.heightmap = new ColHeightmap(heightmap, 64, 64);
     self.ball = new Vector3(0, 0, 0);
     self.vbuff = vbuff;
