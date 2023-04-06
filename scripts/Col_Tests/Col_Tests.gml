@@ -573,7 +573,7 @@ function ColTestModel(vbuff, triangles) constructor {
 function ColTestHeightmap(vbuff, heightmap) constructor {
     self.data = undefined;
     
-    self.heightmap = new ColHeightmap(heightmap, 64, 64);
+    self.heightmap = new ColHeightmap(heightmap, 64, 64, 10);
     self.ball = new Vector3(0, 0, 0);
     self.vbuff = vbuff;
     
@@ -596,7 +596,7 @@ function ColTestHeightmap(vbuff, heightmap) constructor {
     };
     
     self.draw = function() {
-        matrix_set(matrix_world, matrix_build_identity());
+        matrix_set(matrix_world, matrix_build(0, 0, 0, 0, 0, 0, self.heightmap.scale, self.heightmap.scale, self.heightmap.scale));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build(self.ball.x, self.ball.y, self.ball.z, 0, 0, 0, 1, 1, 1));
         vertex_submit(obj_demo.sphere, pr_trianglelist, -1);

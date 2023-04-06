@@ -1,9 +1,13 @@
-function ColHeightmap(buffer, w, h) constructor {
+function ColHeightmap(buffer, w, h, scale) constructor {
     self.buffer = buffer;
     self.w = w;
     self.h = h;
+    self.scale = scale;
     
     static GetHeight = function(x, y) {
+        x /= self.scale;
+        y /= self.scale;
+        
         x = clamp(x, 0, self.w - 1);
         y = clamp(y, 0, self.h - 1);
         
@@ -28,7 +32,7 @@ function ColHeightmap(buffer, w, h) constructor {
         var z_bottom =      lerp(z01, z11, frac(x));
         var z_final =       lerp(z_top, z_bottom, frac(y));
         
-        return z_final;
+        return z_final * self.scale;
     };
     
     static Delete = function() {
