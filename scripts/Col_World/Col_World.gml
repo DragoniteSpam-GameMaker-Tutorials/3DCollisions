@@ -154,3 +154,105 @@ function ColWorldOctree(bounds, depth) constructor {
         return result;
     };
 }
+
+function ColWorldQuadtree(bounds, depth) constructor {
+    self.bounds = bounds;
+    self.depth = depth;
+    
+    self.contents = [];
+    self.children = undefined;
+    
+    static Split = function() {
+        if (array_length(self.contents) == 0) return;
+        if (self.children != undefined) return;
+        
+        var center = self.bounds.position;
+        var sides = self.bounds.half_extents.Mul(new Vector3(0.5, 0.5, 1));
+        
+        self.children = [
+            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y, 0)), sides), self.depth - 1),
+            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y, 0)), sides), self.depth - 1),
+            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y, 0)), sides), self.depth - 1),
+            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, 0)), sides), self.depth - 1),
+        ];
+        
+        for (var i = 0; i < array_length(self.children); i++) {
+            var tree = self.children[i];
+            for (var j = 0; j < array_length(self.contents); j++) {
+                tree.Add(self.contents[j]);
+            }
+        }
+    };
+    
+    static Add = function(object) {
+        if (!object.shape.CheckAABB(self.bounds)) return;
+        for (var i = 0; i < array_length(self.contents); i++) {
+            if (self.contents[i] == object) return;
+        }
+        
+        array_push(self.contents, object);
+        
+        if (self.depth > 0) {
+            self.Split();
+            
+            for (var i = 0; i < array_length(self.children); i++) {
+                self.children[i].Add(object);
+            }
+        }
+    };
+    
+    static Remove = function(object) {
+        for (var i = 0; i < array_length(self.contents); i++) {
+            if (self.contents[i] == object) {
+                array_delete(self.contents, i, 1);
+                if (self.depth > 0) {
+                    for (var j = 0; j < array_length(self.children); j++) {
+                        self.children[j].Remove(object);
+                    }
+                }
+                return;
+            }
+        }
+    };
+    
+    static CheckObject = function(object) {
+        if (!object.shape.CheckAABB(self.bounds)) return;
+        
+        if (self.children == undefined) {
+            for (var i = 0; i < array_length(self.contents); i++) {
+                if (self.contents[i].CheckObject(object)) {
+                    return true;
+                }
+            }
+        } else {
+            for (var i = 0; i < array_length(self.children); i++) {
+                if (self.children[i].CheckObject(object)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    };
+    
+    static CheckRay = function(ray, hit_info, group = 1) {
+        if (!ray.CheckAABB(self.bounds, new RaycastHitInformation())) return;
+        
+        var result = false;
+        if (self.children == undefined) {
+            for (var i = 0; i < array_length(self.contents); i++) {
+                if (self.contents[i].CheckRay(ray, hit_info, group)) {
+                    result = true;
+                }
+            }
+        } else {
+            for (var i = 0; i < array_length(self.children); i++) {
+                if (self.children[i].CheckRay(ray, hit_info, group)) {
+                    result = true;
+                }
+            }
+        }
+        
+        return result;
+    };
+}
