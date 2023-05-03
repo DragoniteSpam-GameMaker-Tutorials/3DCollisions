@@ -100,15 +100,11 @@ function ColWorldOctree(bounds, depth) constructor {
     };
     
     static Remove = function(object) {
-        for (var i = 0; i < array_length(self.contents); i++) {
-            if (self.contents[i] == object) {
-                array_delete(self.contents, i, 1);
-                if (self.depth > 0) {
-                    for (var j = 0; j < array_length(self.children); j++) {
-                        self.children[j].Remove(object);
-                    }
-                }
-                return;
+        var index = array_get_index(self.contents, object);
+        if (index != -1) {
+            array_delete(self.contents, index, 1);
+            for (var j = 0; j < array_length(self.children); j++) {
+                self.children[j].Remove(object);
             }
         }
     };
@@ -202,15 +198,11 @@ function ColWorldQuadtree(bounds, depth) constructor {
     };
     
     static Remove = function(object) {
-        for (var i = 0; i < array_length(self.contents); i++) {
-            if (self.contents[i] == object) {
-                array_delete(self.contents, i, 1);
-                if (self.depth > 0) {
-                    for (var j = 0; j < array_length(self.children); j++) {
-                        self.children[j].Remove(object);
-                    }
-                }
-                return;
+        var index = array_get_index(self.contents, object);
+        if (index != -1) {
+            array_delete(self.contents, index, 1);
+            for (var j = 0; j < array_length(self.children); j++) {
+                self.children[j].Remove(object);
             }
         }
     };
