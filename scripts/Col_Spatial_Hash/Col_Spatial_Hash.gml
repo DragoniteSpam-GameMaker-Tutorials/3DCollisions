@@ -39,3 +39,27 @@ function ColWorldSpatialHash(chunk_size) constructor {
         
     };
 }
+
+function ColSpatialHashNode(bounds) constructor {
+    self.bounds = bounds;
+    self.objects = [];
+    
+    static DebugDraw = function() {
+    };
+    
+    static Add = function(object) {
+        
+    };
+    
+    static Remove = function(object) {
+        
+    };
+    
+    static CheckObject = function(object, group = 1) {
+        
+    };
+    
+    static CheckRay = function(ray, hit_info, group = 1) {
+        
+    };
+}
