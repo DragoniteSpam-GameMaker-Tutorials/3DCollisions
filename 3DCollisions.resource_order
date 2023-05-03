@@ -11,6 +11,7 @@
     {"name":"Col_Shape_Ray","order":6,"path":"scripts/Col_Shape_Ray/Col_Shape_Ray.yy",},
     {"name":"screen_to_world","order":24,"path":"scripts/screen_to_world/screen_to_world.yy",},
     {"name":"Col_Shape_OBB","order":8,"path":"scripts/Col_Shape_OBB/Col_Shape_OBB.yy",},
+    {"name":"Col_Spatial_Hash","order":8,"path":"scripts/Col_Spatial_Hash/Col_Spatial_Hash.yy",},
     {"name":"Col_Matrix","order":6,"path":"scripts/Col_Matrix/Col_Matrix.yy",},
     {"name":"Col_Vector","order":2,"path":"scripts/Col_Vector/Col_Vector.yy",},
     {"name":"Col_Shape_AABB","order":2,"path":"scripts/Col_Shape_AABB/Col_Shape_AABB.yy",},
