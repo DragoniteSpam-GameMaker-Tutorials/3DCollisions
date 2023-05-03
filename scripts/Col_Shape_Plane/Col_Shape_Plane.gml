@@ -95,4 +95,12 @@ function ColPlane(normal, distance) constructor {
         var dot = vec3.Dot(self.normal);
         return dot - self.distance;
     };
+    
+    static GetMin = function() {
+        return undefined;
+    };
+    
+    static GetMax = function() {
+        return undefined;
+    };
 }

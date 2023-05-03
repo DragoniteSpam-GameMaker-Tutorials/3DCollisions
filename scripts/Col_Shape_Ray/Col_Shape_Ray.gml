@@ -52,4 +52,12 @@ function ColRay(origin, direction) constructor {
         var scaled_dir = self.direction.Mul(t);
         return self.origin.Add(scaled_dir);
     };
+    
+    static GetMin = function() {
+        return undefined;
+    };
+    
+    static GetMax = function() {
+        return undefined;
+    };
 }

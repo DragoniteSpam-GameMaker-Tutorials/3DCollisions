@@ -75,4 +75,12 @@ function ColPoint(position) constructor {
         var nearest = line.NearestPoint(self.position);
          return (nearest.DistanceTo(self.position) == 0);
     };
+    
+    static GetMin = function() {
+        return self.position;
+    };
+    
+    static GetMax = function() {
+        return self.position;
+    };
 }

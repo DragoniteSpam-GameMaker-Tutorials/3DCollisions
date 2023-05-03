@@ -84,4 +84,16 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
         
         return false;
     };
+    
+    static GetMin = function() {
+        var transform = self.GetTransformMatrix();
+        var obb = new ColOBB(transform.MulPoint(self.mesh.bounds.position), self.mesh.bounds.size, transform.GetOrientationMatrix());
+        return obb.GetMin();
+    };
+    
+    static GetMax = function() {
+        var transform = self.GetTransformMatrix();
+        var obb = new ColOBB(transform.MulPoint(self.mesh.bounds.position), self.mesh.bounds.size, transform.GetOrientationMatrix());
+        return obb.GetMax();
+    };
 }

@@ -235,4 +235,12 @@ function ColTriangle(a, b, c) constructor {
         var imax = max(axis.Dot(self.a), axis.Dot(self.b), axis.Dot(self.c));
         return new ColInterval(imin, imax);
     };
+    
+    static GetMin = function() {
+        return new Vector3(min(self.a.x, self.b.x, self.c.x), min(self.a.y, self.b.y, self.c.y), min(self.a.z, self.b.z, self.c.z));
+    };
+    
+    static GetMax = function() {
+        return new Vector3(max(self.a.x, self.b.x, self.c.x), max(self.a.y, self.b.y, self.c.y), max(self.a.z, self.b.z, self.c.z));
+    };
 }

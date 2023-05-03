@@ -79,4 +79,12 @@ function ColSphere(position, radius) constructor {
         var scaled_dist = dist.Mul(self.radius);
         return scaled_dist.Add(self.position);
     };
+    
+    static GetMin = function() {
+        return self.position.Sub(self.radius);
+    };
+    
+    static GetMax = function() {
+        return self.position.Add(self.radius);
+    };
 }

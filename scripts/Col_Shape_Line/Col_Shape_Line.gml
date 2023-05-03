@@ -111,4 +111,12 @@ function ColLine(start, finish) constructor {
         
         return new ColLine(starting_point, ending_point);
     };
+    
+    static GetMin = function() {
+        return new Vector3(min(self.start.x, self.finish.x), min(self.start.y, self.finish.y), min(self.start.z, self.finish.z));
+    };
+    
+    static GetMax = function() {
+        return new Vector3(max(self.start.x, self.finish.x), max(self.start.y, self.finish.y), max(self.start.z, self.finish.z));
+    };
 }

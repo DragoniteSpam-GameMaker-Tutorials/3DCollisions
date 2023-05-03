@@ -154,4 +154,12 @@ function ColCapsule(start, finish, radius) constructor {
         var closest_line = self.line.NearestConnectionToLine(line);
         return closest_line.Length() <= self.radius;
     };
+    
+    static GetMin = function() {
+        return self.line.GetMin().Sub(self.radius);
+    };
+    
+    static GetMax = function() {
+        return self.line.GetMin().Add(self.radius);
+    };
 }

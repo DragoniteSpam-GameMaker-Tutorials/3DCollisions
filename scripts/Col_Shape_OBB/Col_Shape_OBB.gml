@@ -282,4 +282,30 @@ function ColOBB(position, size, orientation) constructor {
             new ColLine(vertices[4], vertices[5]),
         ];
     };
+    
+    static GetMin = function() {
+        var vertices = self.GetVertices();
+        
+        var point_min = new Vector3(infinity, infinity, infinity);
+        for (var i = 0; i < array_length(vertices); i++) {
+            point_min.x = min(point_min.x, vertices[i].x);
+            point_min.y = min(point_min.y, vertices[i].y);
+            point_min.z = min(point_min.z, vertices[i].z);
+        }
+        
+        return point_min;
+    };
+    
+    static GetMax = function() {
+        var vertices = self.GetVertices();
+        
+        var point_max = new Vector3(-infinity, -infinity, -infinity);
+        for (var i = 0; i < array_length(vertices); i++) {
+            point_max.x = max(point_max.x, vertices[i].x);
+            point_max.y = max(point_max.y, vertices[i].y);
+            point_max.z = max(point_max.z, vertices[i].z);
+        }
+        
+        return point_max;
+    };
 }
