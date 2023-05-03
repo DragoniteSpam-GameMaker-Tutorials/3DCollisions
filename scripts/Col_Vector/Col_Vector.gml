@@ -94,14 +94,14 @@ function Vector4(x, y, z, w) constructor {
     
     static Mul = function(val) {
         if (is_numeric(val)) {
-            return new Vector4(self.x * val, self.y * val, self.z * val, self.w * val.w);
+            return new Vector4(self.x * val, self.y * val, self.z * val, self.w * val);
         }
         return new Vector4(self.x * val.x, self.y * val.y, self.z * val.z, self.w * val.w);
     };
     
     static Div = function(val) {
         if (is_numeric(val)) {
-            return new Vector4(self.x / val, self.y / val, self.z / val, self.w / val.w);
+            return new Vector4(self.x / val, self.y / val, self.z / val, self.w / val);
         }
         return new Vector4(self.x / val.x, self.y / val.y, self.z / val.z, self.w / val.w);
     };
