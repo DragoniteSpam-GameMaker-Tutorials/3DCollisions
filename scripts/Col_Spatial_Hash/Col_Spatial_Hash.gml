@@ -8,7 +8,10 @@ function ColWorldSpatialHash(chunk_size) constructor {
     self.planes = [];
     
     static DebugDraw = function() {
-        
+        self.bounds.DebugDraw();
+        struct_foreach(self.chunks, function(chunk) {
+            self.chunks[$ chunk].DebugDraw();
+        });
     };
     
     static HashFunction = function(x, y, z) {
@@ -45,6 +48,11 @@ function ColSpatialHashNode(bounds) constructor {
     self.objects = [];
     
     static DebugDraw = function() {
+        self.bounds.DebugDraw();
+        array_foreach(self.objects, function(object) {
+            if (object.shape[$ "DebugDraw"])
+                object.shape.DebugDraw();
+        });
     };
     
     static Add = function(object) {
