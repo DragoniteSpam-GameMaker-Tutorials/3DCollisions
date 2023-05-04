@@ -56,11 +56,12 @@ function ColSpatialHashNode(bounds) constructor {
     };
     
     static Add = function(object) {
-        
+        array_push(self.objects, object);
     };
     
     static Remove = function(object) {
-        
+        var index = array_get_index(self.objects, object);
+        array_delete(self.objects, index, 1);
     };
     
     static CheckObject = function(object, group = 1) {
