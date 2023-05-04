@@ -36,8 +36,57 @@ function ColWorldSpatialHash(chunk_size) constructor {
         return self.chunks[$ self.HashFunction(x, y, z)];
     };
     
+    static AddChunk = function(x, y, z, chunk) {
+        self.chunks[$ self.HashFunction(x, y, z)] = chunk;
+    };
+    
+    static RemoveChunk = function(x, y, z) {
+        variable_struct_remove(self.chunks, self.HashFunction(x, y, z));
+    };
+    
     static Add = function(object) {
+        var bounds = self.GetBoundingChunk(object);
         
+        if (bounds == undefined) {
+        }
+        
+        var bounds_min = bounds.GetMin();
+        var bounds_max = bounds.GetMax();
+        
+        //if (the object already exists in the spatial hash) {
+        //}
+        
+        for (var i = bounds_min.x; i <= bounds_max.x; i++) {
+            for (var j = bounds_min.y; j <= bounds_max.y; j++) {
+                for (var k = bounds_min.z; k <= bounds_max.z; k++) {
+                    var chunk = self.GetChunk(i, j, k);
+                    
+                    if (chunk == undefined) {
+                        var coords = new Vector3(i, j, k);
+                        var coords_min = coords.Mul(self.chunk_size);
+                        var coords_max = coords.Mul(self.chunk_size).Add(self.chunk_size);
+                        
+                        var chunk_bounds = NewColAABBFromMinMax(coords_min, coords_max);
+                        chunk = new ColSpatialHashNode(chunk_bounds);
+                        self.AddChunk(i, j, k, chunk);
+                        
+                        if (self.bounds == undefined) {
+                            self.bounds = NewColAABBFromMinMax(coords_min, coords_max);
+                        } else {
+                            self.bounds = NewColAABBFromMinMax(
+                                self.bounds.GetMin().Min(coords_min),
+                                self.bounds.GetMax().Max(coords_max)
+                            );
+                        }
+                    }
+                    
+                    chunk.Add(object);
+                    
+                    var object_id = string(ptr(object));
+                    self.object_record[$ object_id] = bounds;
+                }
+            }
+        }
     };
     
     static Remove = function(object) {
