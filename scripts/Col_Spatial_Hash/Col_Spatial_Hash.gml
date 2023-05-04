@@ -52,6 +52,10 @@ function ColWorldSpatialHash(chunk_size) constructor {
         var bounds = self.GetBoundingChunk(object);
         
         if (bounds == undefined) {
+            if (array_get_index(self.planes, object) == -1) {
+                array_push(self.planes, object);
+            }
+            return;
         }
         
         var bounds_min = bounds.GetMin();
