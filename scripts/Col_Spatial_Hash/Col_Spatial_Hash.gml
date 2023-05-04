@@ -44,6 +44,10 @@ function ColWorldSpatialHash(chunk_size) constructor {
         variable_struct_remove(self.chunks, self.HashFunction(x, y, z));
     };
     
+    static Contains = function(object) {
+        return self.object_record[$ string(ptr(object))] != undefined;
+    };
+    
     static Add = function(object) {
         var bounds = self.GetBoundingChunk(object);
         
@@ -53,8 +57,16 @@ function ColWorldSpatialHash(chunk_size) constructor {
         var bounds_min = bounds.GetMin();
         var bounds_max = bounds.GetMax();
         
-        //if (the object already exists in the spatial hash) {
-        //}
+        // is the object already in the spatial hash?
+        if (self.Contains(object)) {
+            var location = self.object_record[$ string(ptr(object))];
+            if (location.GetMin().Equals(bounds_min) && location.GetMax().Equals(bounds_max)) {
+                // object's position is the same, there's no point
+                return;
+            } else {
+                self.Remove(object);
+            }
+        }
         
         for (var i = bounds_min.x; i <= bounds_max.x; i++) {
             for (var j = bounds_min.y; j <= bounds_max.y; j++) {
