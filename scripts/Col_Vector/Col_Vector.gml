@@ -64,6 +64,26 @@ function Vector3(x, y, z) constructor {
         return direction.Mul(dot / (mag * mag));
     };
     
+    static Min = function(vec3) {
+        return new Vector3(min(self.x, vec3.x), min(self.y, vec3.y), min(self.z, vec3.z));
+    };
+    
+    static Max = function(vec3) {
+        return new Vector3(max(self.x, vec3.x), max(self.y, vec3.y), max(self.z, vec3.z));
+    };
+    
+    static Floor = function() {
+        return new Vector3(floor(self.x), floor(self.y), floor(self.z));
+    };
+    
+    static Ceil = function() {
+        return new Vector3(ceil(self.x), ceil(self.y), ceil(self.z));
+    };
+    
+    static Round = function() {
+        return new Vector3(round(self.x), round(self.y), round(self.z));
+    };
+    
     static GetTranslationMatrix = function() {
         return new Matrix4(
             1, 0, 0, 0,
@@ -135,6 +155,26 @@ function Vector4(x, y, z, w) constructor {
         var dot = self.Dot(direction);
         var mag = direction.Magnitude();
         return direction.Mul(dot / (mag * mag));
+    };
+    
+    static Min = function(vec4) {
+        return new Vector4(min(self.x, vec4.x), min(self.y, vec4.y), min(self.z, vec4.z), min(self.w, vec4.w));
+    };
+    
+    static Max = function(vec4) {
+        return new Vector4(max(self.x, vec4.x), max(self.y, vec4.y), max(self.z, vec4.z), max(self.w, vec4.w));
+    };
+    
+    static Floor = function() {
+        return new Vector4(floor(self.x), floor(self.y), floor(self.z), floor(self.w));
+    };
+    
+    static Ceil = function() {
+        return new Vector4(ceil(self.x), ceil(self.y), ceil(self.z), ceil(self.w));
+    };
+    
+    static Round = function() {
+        return new Vector4(round(self.x), round(self.y), round(self.z), round(self.w));
     };
     
     static GetTranslationMatrix = function() {
