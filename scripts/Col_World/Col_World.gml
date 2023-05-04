@@ -14,6 +14,14 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
         if ((self.mask & group) == 0) return false;
         return self.shape.CheckRay(ray, hit_info);
     };
+    
+    static GetMin = function() {
+        return self.shape.GetMin();
+    };
+    
+    static GetMax = function() {
+        return self.shape.GetMax();
+    };
 }
 
 function ColWorld(bounds_min, bounds_max, max_depth) constructor {

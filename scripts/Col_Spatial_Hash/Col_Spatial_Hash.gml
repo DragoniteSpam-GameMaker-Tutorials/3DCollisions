@@ -15,15 +15,25 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static HashFunction = function(x, y, z) {
-        
+        return $"{x}{y}{z}";
     };
     
     static GetBoundingChunk = function(object) {
+        var object_min = object.GetMin();
+        var object_max = object.GetMax();
         
+        if (object_min == undefined) {
+            return undefined;
+        }
+        
+        return NewColAABBFromMinMax(
+            new Vector3(floor(object_min.x / self.chunk_size), floor(object_min.y / self.chunk_size), floor(object_min.z / self.chunk_size)),
+            new Vector3(floor(object_max.x / self.chunk_size), floor(object_max.y / self.chunk_size), floor(object_max.z / self.chunk_size))
+        );
     };
     
     static GetChunk = function(x, y, z) {
-        
+        return self.chunks[$ self.HashFunction(x, y, z)];
     };
     
     static Add = function(object) {
