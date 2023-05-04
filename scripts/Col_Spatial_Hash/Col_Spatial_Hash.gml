@@ -45,7 +45,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static Contains = function(object) {
-        return self.object_record[$ string(ptr(object))] != undefined;
+        return self.object_record[$ string(ptr(object))];
     };
     
     static Add = function(object) {
@@ -62,8 +62,8 @@ function ColWorldSpatialHash(chunk_size) constructor {
         var bounds_max = bounds.GetMax();
         
         // is the object already in the spatial hash?
-        if (self.Contains(object)) {
-            var location = self.object_record[$ string(ptr(object))];
+        var location = self.Contains(object);
+        if (location != undefined) {
             if (location.GetMin().Equals(bounds_min) && location.GetMax().Equals(bounds_max)) {
                 // object's position is the same, there's no point
                 return;
@@ -106,7 +106,40 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static Remove = function(object) {
+        var plane_index = array_get_index(self.planes, object);
+        if (plane_index != -1) {
+            array_delete(self.planes, plane_index, 1);
+            return;
+        }
         
+        var location = self.Contains(object);
+        if (location == undefined) {
+            return;
+        }
+        
+        var bounds_min = location.GetMin();
+        var bounds_max = location.GetMax();
+        
+        for (var i = bounds_min.x; i <= bounds_max.x; i++) {
+            for (var j = bounds_min.y; j <= bounds_max.y; j++) {
+                for (var k = bounds_min.z; k <= bounds_max.z; k++) {
+                    var chunk = self.GetChunk(i, j, k);
+                    chunk.Remove(object);
+                    
+                    if (chunk.Size() == 0) {
+                        self.RemoveChunk(i, j, k);
+                        
+                        // you may want to resize the bounds of the spatial hash
+                        // after removing an empty chunk, but i dont know if a nice
+                        // way to do that besides looping over every chunk from
+                        // scratch so I won't be doing that here
+                    }
+                }
+            }
+        }
+        
+        var object_id = string(ptr(object));
+        variable_struct_remove(self.object_record, object_id);
     };
     
     static CheckObject = function(object, group = 1) {
@@ -137,6 +170,10 @@ function ColSpatialHashNode(bounds) constructor {
     static Remove = function(object) {
         var index = array_get_index(self.objects, object);
         array_delete(self.objects, index, 1);
+    };
+    
+    static Size = function() {
+        return array_length(self.objects);
     };
     
     static CheckObject = function(object, group = 1) {
