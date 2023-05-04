@@ -142,7 +142,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
         variable_struct_remove(self.object_record, object_id);
     };
     
-    static CheckObject = function(object, group = 1) {
+    static CheckObject = function(object) {
         
     };
     
@@ -176,11 +176,20 @@ function ColSpatialHashNode(bounds) constructor {
         return array_length(self.objects);
     };
     
-    static CheckObject = function(object, group = 1) {
-        
+    static CheckObject = function(object) {
+        for (var i = 0; i < array_length(self.objects); i++) {
+            if (self.objects[i].CheckObject(object))
+                return true;
+        }
+        return false;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
-        
+        var hit_detected = false;
+        for (var i = 0; i < array_length(self.objects); i++) {
+            if (self.objects[i].CheckRay(ray, hit_info, group))
+                hit_detected = true;
+        }
+        return hit_detected;
     };
 }
