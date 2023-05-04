@@ -143,7 +143,29 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static CheckObject = function(object) {
+        for (var i = 0; i < array_length(self.planes); i++) {
+            if (self.planes[i].CheckObject(object))
+                return true;
+        }
         
+        var bounds = self.GetBoundingChunk(object);
+        var bounds_min = bounds.GetMin();
+        var bounds_max = bounds.GetMax();
+        
+        for (var i = bounds_min.x; i <= bounds_max.x; i++) {
+            for (var j = bounds_min.y; j <= bounds_max.y; j++) {
+                for (var k = bounds_min.z; k <= bounds_max.z; k++) {
+                    var chunk = self.GetChunk(i, j, k);
+                    
+                    if (chunk != undefined) {
+                        if (chunk.CheckObject(object))
+                            return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
     };
     
     static CheckRay = function(ray, group = 1) {
