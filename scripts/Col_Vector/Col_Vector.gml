@@ -8,10 +8,16 @@ function Vector3(x, y, z) constructor {
     };
     
     static Add = function(val) {
+        if (is_numeric(val)) {
+            return new Vector3(self.x + val, self.y + val, self.z + val);
+        }
         return new Vector3(self.x + val.x, self.y + val.y, self.z + val.z);
     };
     
     static Sub = function(val) {
+        if (is_numeric(val)) {
+            return new Vector3(self.x - val, self.y - val, self.z - val);
+        }
         return new Vector3(self.x - val.x, self.y - val.y, self.z - val.z);
     };
     
@@ -105,10 +111,16 @@ function Vector4(x, y, z, w) constructor {
     };
     
     static Add = function(val) {
+        if (is_numeric(val)) {
+            return new Vector4(self.x + val, self.y + val, self.z + val, self.w + val);
+        }
         return new Vector4(self.x + val.x, self.y + val.y, self.z + val.z, self.w + val.w);
     };
     
     static Sub = function(val) {
+        if (is_numeric(val)) {
+            return new Vector4(self.x - val, self.y - val, self.z - val, self.w - val);
+        }
         return new Vector4(self.x - val.x, self.y - val.y, self.z - val.z, self.w - val.w);
     };
     
