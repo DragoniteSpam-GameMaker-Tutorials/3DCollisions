@@ -83,4 +83,14 @@ function ColPoint(position) constructor {
     static GetMax = function() {
         return self.position;
     };
+    
+    static CheckFrustum = function(frustum) {
+        var planes = frustum.AsArray();
+        for (var i = 0, n = array_length(planes); i < n; i++) {
+            var dist = planes[i].normal.Dot(self.position) + planes[i].distance;
+            if (dist < 0)
+                return EFrustumResults.OUTSIDE;
+        }
+        return EFrustumResults.INSIDE;
+    };
 }

@@ -26,7 +26,7 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
 
 function ColWorld(bounds_min, bounds_max, max_depth) constructor {
     self.bounds = NewColAABBFromMinMax(bounds_min, bounds_max);
-    self.accelerator = new ColWorldOctree(self.bounds, max_depth);
+    self.accelerator = new ColWorldQuadtree(self.bounds, max_depth);
     self.depth = max_depth;
     
     static Add = function(object) {
@@ -54,6 +54,13 @@ function ColWorld(bounds_min, bounds_max, max_depth) constructor {
         }
         
         return undefined;
+    };
+    
+    static GetObjectsInFrustum = function(frustum) {
+        var output = [];
+        self.accelerator.GetObjectsInFrustum(frustum, output);
+        // if gamemaker ever fixes array_unique, use that here for a minor performance gain
+        return output;
     };
 }
 
@@ -157,6 +164,25 @@ function ColWorldOctree(bounds, depth) constructor {
         
         return result;
     };
+    
+    static GetObjectsInFrustum = function(frustum, output) {
+        var status = self.bounds.CheckFrustum(frustum);
+        
+        if (status == EFrustumResults.OUTSIDE)
+            return;
+        
+        if (status == EFrustumResults.INSIDE || self.children == undefined) {
+            var output_length = array_length(output);
+            var contents_length = array_length(self.contents);
+            array_resize(output, output_length + contents_length);
+            array_copy(output, output_length, self.contents, 0, contents_length);
+            return;
+        }
+        
+        for (var i = 0, n = array_length(self.children); i < n; i++) {
+            self.children[i].GetObjectsInFrustum(frustum, output);
+        }
+    };
 }
 
 function ColWorldQuadtree(bounds, depth) constructor {
@@ -254,5 +280,24 @@ function ColWorldQuadtree(bounds, depth) constructor {
         }
         
         return result;
+    };
+    
+    static GetObjectsInFrustum = function(frustum, output) {
+        var status = self.bounds.CheckFrustum(frustum);
+        
+        if (status == EFrustumResults.OUTSIDE)
+            return;
+        
+        if (status == EFrustumResults.INSIDE || self.children == undefined) {
+            var output_length = array_length(output);
+            var contents_length = array_length(self.contents);
+            array_resize(output, output_length + contents_length);
+            array_copy(output, output_length, self.contents, 0, contents_length);
+            return;
+        }
+        
+        for (var i = 0, n = array_length(self.children); i < n; i++) {
+            self.children[i].GetObjectsInFrustum(frustum, output);
+        }
     };
 }

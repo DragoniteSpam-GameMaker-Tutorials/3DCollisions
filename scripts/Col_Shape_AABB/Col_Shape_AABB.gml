@@ -6,11 +6,12 @@ function ColAABB(position, half_extents) constructor {
         static vertex_add_point = function(vbuff, x, y, z, colour) {
             vertex_position_3d(vbuff, x, y, z);
             vertex_normal(vbuff, 0, 0, 1);
+            vertex_texcoord(vbuff, 0, 0);
             vertex_colour(vbuff, colour, 1);
         };
         
         var vbuff = vertex_create_buffer();
-        vertex_begin(vbuff, obj_demo.vertex_format);
+        vertex_begin(vbuff, obj_camera.format);
         
         vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y - self.half_extents.y, self.position.z - self.half_extents.z, c_red);
         vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y - self.half_extents.y, self.position.z + self.half_extents.z, c_red);
@@ -266,5 +267,22 @@ function ColAABB(position, half_extents) constructor {
             new ColLine(vertices[2], vertices[6]),
             new ColLine(vertices[3], vertices[7]),
         ];
+    };
+    
+    static CheckFrustum = function(frustum) {
+        var planes = frustum.AsArray();
+        var is_intersecting_anything = false;
+        for (var i = 0, n = array_length(planes); i < n; i++) {
+            var r = self.half_extents.Magnitude();
+            
+            var dist = planes[i].normal.Dot(self.position) + planes[i].distance;
+            
+            if (dist < -r)
+                return EFrustumResults.OUTSIDE;
+            
+            if (abs(dist) < r)
+                is_intersecting_anything = true;
+        }
+        return is_intersecting_anything ? EFrustumResults.INTERSECTING : EFrustumResults.INSIDE;
     };
 }

@@ -87,4 +87,18 @@ function ColSphere(position, radius) constructor {
     static GetMax = function() {
         return self.position.Add(self.radius);
     };
+    
+    static CheckFrustum = function(frustum) {
+        var planes = frustum.AsArray();
+        var is_intersecting_anything = false;
+        for (var i = 0, n = array_length(planes); i < n; i++) {
+            var dist = planes[i].normal.Dot(self.position) + planes[i].distance;
+            if (dist < -self.radius)
+                return EFrustumResults.OUTSIDE;
+            
+            if (abs(dist) < self.radius)
+                is_intersecting_anything = true;
+        }
+        return is_intersecting_anything ? EFrustumResults.INTERSECTING : EFrustumResults.INSIDE;
+    };
 }

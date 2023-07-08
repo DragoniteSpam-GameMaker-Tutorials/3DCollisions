@@ -168,6 +168,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
         return false;
     };
     
+    // https://github.com/prime31/Nez/blob/master/Nez.Portable/Physics/SpatialHash.cs
     static CheckRay = function(ray, group = 1) {
         var hit_info = new RaycastHitInformation();
         
@@ -263,10 +264,10 @@ function ColSpatialHashNode(bounds) constructor {
     
     static DebugDraw = function() {
         self.bounds.DebugDraw();
-        array_foreach(self.objects, function(object) {
+        /*array_foreach(self.objects, function(object) {
             if (object.shape[$ "DebugDraw"])
                 object.shape.DebugDraw();
-        });
+        });*/
     };
     
     static Add = function(object) {

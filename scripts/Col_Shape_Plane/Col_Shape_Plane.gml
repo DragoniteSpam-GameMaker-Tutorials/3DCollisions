@@ -1,5 +1,5 @@
 function ColPlane(normal, distance) constructor {
-    self.normal = normal.Normalize();       // Vec3
+    self.normal = normal;                   // Vec3
     self.distance = distance;               // number
     
     static CheckObject = function(object) {
@@ -102,5 +102,10 @@ function ColPlane(normal, distance) constructor {
     
     static GetMax = function() {
         return undefined;
+    };
+    
+    static Normalize = function() {
+        var mag = self.normal.Magnitude();
+        return new ColPlane(self.normal.Div(mag), self.distance / mag);
     };
 }
