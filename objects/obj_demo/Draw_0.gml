@@ -21,8 +21,20 @@ camera_apply(camera);
 
 vertex_submit(grid, pr_linelist, -1);
 
-shape_1.draw();
+if (!keyboard_check(vk_shift)) {
+    shape_1.draw();
+}
 shape_2.draw();
+
+if (is_instanceof(shape_1, ColTestSphere)) {
+    var displacement = shape_2.data.DisplaceSphere(shape_1.data);
+    if (displacement != undefined) {
+        var r = shape_1.data.radius;
+        matrix_set(matrix_world, matrix_build(displacement.x, displacement.y, displacement.z, 0, 0, 0, r, r, r));
+        vertex_submit(self.point, pr_trianglelist, -1);
+        matrix_set(matrix_world, matrix_build_identity());
+    }
+}
 
 var mouse_vector = screen_to_world(window_mouse_get_x(), window_mouse_get_y(), view_mat, proj_mat);
 var ray = new ColRay(new Vector3(xfrom, yfrom, zfrom), new Vector3(mouse_vector.x, mouse_vector.y, mouse_vector.z));
