@@ -15,7 +15,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static HashFunction = function(x, y, z) {
-        return $"{x}{y}{z}";
+        return $"{x},{y},{z}";
     };
     
     static GetBoundingChunk = function(object) {
