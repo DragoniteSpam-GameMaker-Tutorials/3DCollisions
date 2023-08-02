@@ -76,6 +76,17 @@ function ColPoint(position) constructor {
          return (nearest.DistanceTo(self.position) == 0);
     };
     
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        
+        var dir = sphere.position.Sub(self.position).Normalize();
+        var offset = dir.Mul(sphere.radius);
+        
+        return self.position.Add(offset);
+    };
+    
     static GetMin = function() {
         return self.position;
     };
