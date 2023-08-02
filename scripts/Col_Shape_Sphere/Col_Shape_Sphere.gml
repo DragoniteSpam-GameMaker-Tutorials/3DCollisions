@@ -74,6 +74,17 @@ function ColSphere(position, radius) constructor {
         return dist < self.radius;
     };
     
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        
+        var dir = sphere.position.Sub(self.position).Normalize();
+        var offset = dir.Mul(sphere.radius + self.radius);
+        
+        return self.position.Add(offset);
+    };
+    
     static NearestPoint = function(vec3) {
         var dist = vec3.Sub(self.position).Normalize();
         var scaled_dist = dist.Mul(self.radius);
