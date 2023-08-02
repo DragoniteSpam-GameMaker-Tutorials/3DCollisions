@@ -46,6 +46,10 @@ function ColRay(origin, direction) constructor {
         return false;
     };
     
+    static DisplaceSphere = function(sphere) {
+        return undefined;
+    };
+    
     static NearestPoint = function(vec3) {
         var diff = vec3.Sub(self.origin);
         var t = max(diff.Dot(self.direction), 0);

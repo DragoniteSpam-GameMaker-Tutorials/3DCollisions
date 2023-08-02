@@ -50,6 +50,10 @@ function ColLine(start, finish) constructor {
         return false;
     };
     
+    static DisplaceSphere = function(sphere) {
+        return undefined;
+    };
+    
     static Length = function() {
         return self.start.DistanceTo(self.finish);
     };

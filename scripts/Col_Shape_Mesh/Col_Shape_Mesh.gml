@@ -122,6 +122,10 @@ function ColMesh(triangle_array) constructor {
         return false;
     };
     
+    static DisplaceSphere = function(sphere) {
+        return undefined;
+    };
+    
     static GetMin = function() {
         return self.bounds_min;
     };
