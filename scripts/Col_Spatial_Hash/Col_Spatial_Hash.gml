@@ -158,14 +158,14 @@ function ColWorldSpatialHash(chunk_size) constructor {
                     var chunk = self.GetChunk(i, j, k);
                     
                     if (chunk != undefined) {
-                        if (chunk.CheckObject(object))
-                            return true;
+                        var result = chunk.CheckObject(object);
+                        if (result != undefined) return result;
                     }
                 }
             }
         }
         
-        return false;
+        return undefined;
     };
     
     // https://github.com/prime31/Nez/blob/master/Nez.Portable/Physics/SpatialHash.cs
@@ -286,9 +286,9 @@ function ColSpatialHashNode(bounds) constructor {
     static CheckObject = function(object) {
         for (var i = 0; i < array_length(self.objects); i++) {
             if (self.objects[i].CheckObject(object))
-                return true;
+                return self.objects[i];
         }
-        return false;
+        return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {

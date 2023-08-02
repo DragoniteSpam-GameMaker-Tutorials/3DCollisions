@@ -130,18 +130,17 @@ function ColWorldOctree(bounds, depth) constructor {
         if (self.children == undefined) {
             for (var i = 0; i < array_length(self.contents); i++) {
                 if (self.contents[i].CheckObject(object)) {
-                    return true;
+                    return self.contents[i];
                 }
             }
         } else {
             for (var i = 0; i < array_length(self.children); i++) {
-                if (self.children[i].CheckObject(object)) {
-                    return true;
-                }
+                var recursive_result = self.children[i].CheckObject(object);
+                if (recursive_result != undefined) return recursive_result;
             }
         }
         
-        return false;
+        return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
@@ -247,18 +246,17 @@ function ColWorldQuadtree(bounds, depth) constructor {
         if (self.children == undefined) {
             for (var i = 0; i < array_length(self.contents); i++) {
                 if (self.contents[i].CheckObject(object)) {
-                    return true;
+                    return self.contents[i];
                 }
             }
         } else {
             for (var i = 0; i < array_length(self.children); i++) {
-                if (self.children[i].CheckObject(object)) {
-                    return true;
-                }
+                var recursive_result = self.children[i].CheckObject(object);
+                if (recursive_result != undefined) return recursive_result;
             }
         }
         
-        return false;
+        return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
