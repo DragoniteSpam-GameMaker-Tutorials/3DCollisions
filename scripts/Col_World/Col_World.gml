@@ -15,6 +15,10 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
         return self.shape.CheckRay(ray, hit_info);
     };
     
+    static DisplaceSphere = function(sphere) {
+        return self.shape.DisplaceSphere(sphere);
+    };
+    
     static GetMin = function() {
         return self.shape.GetMin();
     };
