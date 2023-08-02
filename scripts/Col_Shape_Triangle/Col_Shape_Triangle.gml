@@ -164,6 +164,29 @@ function ColTriangle(a, b, c) constructor {
         return false;
     };
     
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        var nearest = self.NearestPoint(sphere.position);
+        
+        // you may wish to just use the normal of the triangle in this case
+        if (nearest.DistanceTo(sphere.position) == 0) return undefined;
+        
+        var dir = sphere.position.Sub(nearest).Normalize();
+        var offset = dir.Mul(sphere.radius);
+        
+        return nearest.Add(offset);
+    };
+    /*
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        var nearest = self.NearestPoint(sphere.position);
+        var offset = self.GetNormal().Mul(sphere.radius);
+        
+        return nearest.Add(offset);
+    };
+    */
     static GetNormal = function() {
         var diffAB = self.b.Sub(self.a);
         var diffAC = self.c.Sub(self.a);
