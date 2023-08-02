@@ -80,6 +80,15 @@ function ColPlane(normal, distance) constructor {
         return (t >= 0) && (t <= 1);
     };
     
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        var nearest = self.NearestPoint(sphere.position);
+        var offset = self.normal.Mul(sphere.radius);
+        
+        return nearest.Add(offset);
+    };
+    
     static NearestPoint = function(vec3) {
         var ndot = self.normal.Dot(vec3);
         var dist = ndot - self.distance;
