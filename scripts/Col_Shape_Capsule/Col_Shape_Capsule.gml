@@ -155,6 +155,19 @@ function ColCapsule(start, finish, radius) constructor {
         return closest_line.Length() < self.radius;
     };
     
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        var nearest = self.line.NearestPoint(sphere.position);
+        
+        if (nearest.DistanceTo(sphere.position) == 0) return undefined;
+        
+        var dir = sphere.position.Sub(nearest).Normalize();
+        var offset = dir.Mul(sphere.radius + self.radius);
+        
+        return nearest.Add(offset);
+    };
+    
     static GetMin = function() {
         return self.line.GetMin().Sub(self.radius);
     };
