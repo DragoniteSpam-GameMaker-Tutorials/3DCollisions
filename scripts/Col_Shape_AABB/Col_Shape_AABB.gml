@@ -183,6 +183,29 @@ function ColAABB(position, half_extents) constructor {
         return false;
     };
     
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        
+        var nearest = self.NearestPoint(sphere.position);
+        
+        if (nearest.DistanceTo(sphere.position) == 0) {
+            return undefined;
+            /*
+            var dir_to_center = sphere.position.Sub(self.position).Normalize();
+            var new_point = dir_to_center.Mul(self.half_extents.Magnitude());
+            
+            nearest = self.NearestPoint(new_point);
+            var dir = nearest.Sub(sphere.position).Normalize();
+            */
+        } else {
+            var dir = sphere.position.Sub(nearest).Normalize();
+        }
+        
+        return nearest.Add(dir.Mul(sphere.radius));
+    };
+    
     static GetMin = function() {
         return self.position.Sub(self.half_extents);
     };
