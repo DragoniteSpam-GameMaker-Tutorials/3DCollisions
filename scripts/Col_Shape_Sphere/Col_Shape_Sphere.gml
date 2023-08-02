@@ -11,19 +11,19 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        return self.position.DistanceTo(sphere.position) <= (self.radius + sphere.radius);
+        return self.position.DistanceTo(sphere.position) < (self.radius + sphere.radius);
     };
     
     static CheckAABB = function(aabb) {
         var nearest = aabb.NearestPoint(self.position);
         var dist = nearest.DistanceTo(self.position);
-        return dist <= self.radius;
+        return dist < self.radius;
     };
     
     static CheckPlane = function(plane) {
         var nearest = plane.NearestPoint(self.position);
         var dist = nearest.DistanceTo(self.position);
-        return dist <= self.radius;
+        return dist < self.radius;
     };
     
     static CheckOBB = function(obb) {
@@ -37,7 +37,7 @@ function ColSphere(position, radius) constructor {
     static CheckTriangle = function(triangle) {
         var nearest = triangle.NearestPoint(self.position);
         var dist = nearest.DistanceTo(self.position);
-        return dist <= self.radius;
+        return dist < self.radius;
     };
     
     static CheckMesh = function(mesh) {
@@ -71,7 +71,7 @@ function ColSphere(position, radius) constructor {
     static CheckLine = function(line) {
         var nearest = line.NearestPoint(self.position);
         var dist = nearest.DistanceTo(self.position);
-        return dist <= self.radius;
+        return dist < self.radius;
     };
     
     static NearestPoint = function(vec3) {

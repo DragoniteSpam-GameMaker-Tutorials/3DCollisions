@@ -10,14 +10,14 @@ function ColCapsule(start, finish, radius) constructor {
         var nearest = self.line.NearestPoint(point.position);
         var dist = nearest.DistanceTo(point.position);
         
-        return dist <= self.radius;
+        return dist < self.radius;
     };
     
     static CheckSphere = function(sphere) {
         var nearest = self.line.NearestPoint(sphere.position);
         var dist = nearest.DistanceTo(sphere.position);
         
-        return dist <= (self.radius + sphere.radius);
+        return dist < (self.radius + sphere.radius);
     };
     
     static CheckAABB = function(aabb) {
@@ -46,10 +46,10 @@ function ColCapsule(start, finish, radius) constructor {
     
     static CheckPlane = function(plane) {
         var nearest_start = plane.NearestPoint(self.line.start);
-        if (self.line.start.DistanceTo(nearest_start) <= self.radius) return true;
+        if (self.line.start.DistanceTo(nearest_start) < self.radius) return true;
         
         var nearest_finish = plane.NearestPoint(self.line.finish);
-        if (self.line.finish.DistanceTo(nearest_finish) <= self.radius) return true;
+        if (self.line.finish.DistanceTo(nearest_finish) < self.radius) return true;
         
         return self.line.CheckPlane(plane);
     };
@@ -82,17 +82,17 @@ function ColCapsule(start, finish, radius) constructor {
         var connecting_line = self.line.NearestConnectionToLine(capsule.line);
         var dist = connecting_line.Length();
         
-        return dist <= (self.radius + capsule.radius);
+        return dist < (self.radius + capsule.radius);
     };
     
     static CheckTriangle = function(triangle) {
         var nearest_point_start = triangle.NearestPoint(self.line.start);
         var capsule_line_nearest_point_start = self.line.NearestPoint(nearest_point_start);
-        if (capsule_line_nearest_point_start.DistanceTo(nearest_point_start) <= self.radius) return true;
+        if (capsule_line_nearest_point_start.DistanceTo(nearest_point_start) < self.radius) return true;
         
         var nearest_point_finish = triangle.NearestPoint(self.line.finish);
         var capsule_line_nearest_point_finish = self.line.NearestPoint(nearest_point_finish);
-        if (capsule_line_nearest_point_finish.DistanceTo(nearest_point_finish) <= self.radius) return true;
+        if (capsule_line_nearest_point_finish.DistanceTo(nearest_point_finish) < self.radius) return true;
         
         return false;
     };
@@ -152,7 +152,7 @@ function ColCapsule(start, finish, radius) constructor {
     
     static CheckLine = function(line) {
         var closest_line = self.line.NearestConnectionToLine(line);
-        return closest_line.Length() <= self.radius;
+        return closest_line.Length() < self.radius;
     };
     
     static GetMin = function() {

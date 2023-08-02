@@ -10,7 +10,7 @@ function ColPoint(position) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        return self.position.DistanceTo(sphere.position) <= sphere.radius;
+        return self.position.DistanceTo(sphere.position) < sphere.radius;
     };
     
     static CheckAABB = function(aabb) {

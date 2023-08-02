@@ -29,7 +29,7 @@ function ColOBB(position, size, orientation) constructor {
     static CheckSphere = function(sphere) {
         var nearest = self.NearestPoint(sphere.position);
         var dist = nearest.DistanceTo(sphere.position);
-        return dist <= sphere.radius;
+        return dist < sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
