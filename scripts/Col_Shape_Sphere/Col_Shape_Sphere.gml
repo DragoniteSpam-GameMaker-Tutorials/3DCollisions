@@ -15,6 +15,11 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckAABB = function(aabb) {
+        var distance = aabb.position.DistanceTo(self.position);
+        var aabb_radius = aabb.half_extents.Magnitude();
+        
+        if (distance > aabb_radius + self.radius) return false;
+        
         var nearest = aabb.NearestPoint(self.position);
         var dist = nearest.DistanceTo(self.position);
         return dist < self.radius;

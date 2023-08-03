@@ -27,6 +27,11 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckSphere = function(sphere) {
+        var distance = self.position.DistanceTo(sphere.position);
+        var obb_radius = self.size.Magnitude();
+        
+        if (distance > obb_radius + sphere.radius) return false;
+        
         var nearest = self.NearestPoint(sphere.position);
         var dist = nearest.DistanceTo(sphere.position);
         return dist < sphere.radius;
@@ -59,6 +64,13 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckOBB = function(obb) {
+        var my_radius = self.size.Magnitude();
+        var other_radius = obb.size.Magnitude();
+        
+        var distance = self.position.DistanceTo(obb.position);
+        if (distance > my_radius + other_radius) return false;
+        
+        
         var axes = [
             obb.orientation.x,
             obb.orientation.y,

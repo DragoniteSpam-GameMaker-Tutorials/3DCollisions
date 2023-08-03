@@ -33,6 +33,8 @@ draw_text_colour(1080, n++ * 20, "8: Shape 2 OBB", c_white, c_white, c_white, c_
 draw_text_colour(1080, n++ * 20, "9: Shape 2 Capsule", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "0: Shape 2 Model", c_white, c_white, c_white, c_white, 1);
 
-if (shape_2.test(shape_1)) {
-    draw_text_colour(32, 100, "Shapes overlap!", c_red, c_red, c_red, c_red, 1);
+repeat (100) {
+    if (shape_2.test(shape_1)) {
+        draw_text_colour(32, 100, "Shapes overlap!", c_red, c_red, c_red, c_red, 1);
+    }
 }
