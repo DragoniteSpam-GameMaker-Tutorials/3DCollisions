@@ -88,12 +88,14 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        var distance = self.position.DistanceTo(sphere.position);
+        //var distance = self.position.DistanceTo(sphere.position);
+        var distance = point_distance_3d(self.position.x, self.position.y, self.position.z, sphere.position.x, sphere.position.y, sphere.position.z);
         
         if (distance > self.imaginary_radius + sphere.radius) return false;
         
         var nearest = self.NearestPoint(sphere.position);
-        var dist = nearest.DistanceTo(sphere.position);
+        //var dist = nearest.DistanceTo(sphere.position);
+        var dist = point_distance_3d(nearest.x, nearest.y, nearest.z, sphere.position.x, sphere.position.y, sphere.position.z);
         return dist < sphere.radius;
     };
     
@@ -334,11 +336,16 @@ function ColOBB(position, size, orientation) constructor {
     static GetInterval = function(axis) {
         var vertices = self.GetVertices();
         
-        var imin = axis.Dot(vertices[0]);
-        var imax = imin;
+        var xx = axis.x;
+        var yy = axis.y;
+        var zz = axis.z;
         
-        for (var i = 1; i < 8; i++) {
-            var dot = axis.Dot(vertices[i]);
+        var imin = infinity;
+        var imax = -infinity;
+        
+        for (var i = 0; i < 8; i++) {
+            var vertex = vertices[i];
+            var dot = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
             imin = min(imin, dot);
             imax = max(imax, dot);
         }
