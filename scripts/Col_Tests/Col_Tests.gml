@@ -233,22 +233,22 @@ function ColTestOBB(vbuff) constructor {
     self.update = function() {
         var step = 0.1;
         if (keyboard_check(vk_left)) {
-            self.data.position.x -= step;
+            self.data.SetPosition(new Vector3(self.data.position.x - step, self.data.position.y, self.data.position.z));
         }
         if (keyboard_check(vk_right)) {
-            self.data.position.x += step;
+            self.data.SetPosition(new Vector3(self.data.position.x + step, self.data.position.y, self.data.position.z));
         }
         if (keyboard_check(vk_up)) {
-            self.data.position.y -= step;
+            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y - step, self.data.position.z));
         }
         if (keyboard_check(vk_down)) {
-            self.data.position.y += step;
+            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y + step, self.data.position.z));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.position.z -= step;
+            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y, self.data.position.z - step));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.position.z += step;
+            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y, self.data.position.z + step));
         }
     };
     self.draw = function() {

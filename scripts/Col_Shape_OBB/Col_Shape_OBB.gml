@@ -1,7 +1,68 @@
 function ColOBB(position, size, orientation) constructor {
     self.position = position;               // Vec3
     self.size = size;                       // Vec3
-    self.orientation = orientation;         // mat4
+    self.orientation = orientation;         // mat3
+    
+    self.RecalculateProperties();
+    
+    static SetPosition = function(position) {
+        self.position = position;
+        self.RecalculateProperties();
+    };
+    
+    static SetSize = function(size) {
+        self.size = size;
+        self.RecalculateProperties();
+    };
+    
+    static SetOrientation = function(orientation) {
+        self.orientation = orientation;
+        self.RecalculateProperties();
+    };
+    
+    static RecalculateProperties = function() {
+        self.vertices = [
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
+            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+        ];
+        
+        self.edges = [
+            new ColLine(vertices[1], vertices[6]),
+            new ColLine(vertices[6], vertices[4]),
+            new ColLine(vertices[4], vertices[7]),
+            new ColLine(vertices[7], vertices[1]),
+            new ColLine(vertices[0], vertices[3]),
+            new ColLine(vertices[3], vertices[5]),
+            new ColLine(vertices[5], vertices[1]),
+            new ColLine(vertices[1], vertices[0]),
+            new ColLine(vertices[7], vertices[2]),
+            new ColLine(vertices[1], vertices[0]),
+            new ColLine(vertices[6], vertices[3]),
+            new ColLine(vertices[4], vertices[5]),
+        ];
+        
+        self.point_min = new Vector3(infinity, infinity, infinity);
+        for (var i = 0; i < array_length(self.vertices); i++) {
+            self.point_min.x = min(self.point_min.x, self.vertices[i].x);
+            self.point_min.y = min(self.point_min.y, self.vertices[i].y);
+            self.point_min.z = min(self.point_min.z, self.vertices[i].z);
+        }
+        
+        self.point_max = new Vector3(infinity, infinity, infinity);
+        for (var i = 0; i < array_length(self.vertices); i++) {
+            self.point_max.x = min(self.point_max.x, self.vertices[i].x);
+            self.point_max.y = min(self.point_max.y, self.vertices[i].y);
+            self.point_max.z = min(self.point_max.z, self.vertices[i].z);
+        }
+        
+        self.imaginary_radius = self.size.Magnitude();
+    };
     
     static CheckObject = function(object) {
         return object.shape.CheckOBB(self);
@@ -28,9 +89,8 @@ function ColOBB(position, size, orientation) constructor {
     
     static CheckSphere = function(sphere) {
         var distance = self.position.DistanceTo(sphere.position);
-        var obb_radius = self.size.Magnitude();
         
-        if (distance > obb_radius + sphere.radius) return false;
+        if (distance > self.imaginary_radius + sphere.radius) return false;
         
         var nearest = self.NearestPoint(sphere.position);
         var dist = nearest.DistanceTo(sphere.position);
@@ -287,60 +347,18 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static GetVertices = function() {
-        return [
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-        ];
+        return self.vertices;
     };
     
     static GetEdges = function() {
-        var vertices = self.GetVertices();
-        
-        return [
-            new ColLine(vertices[1], vertices[6]),
-            new ColLine(vertices[6], vertices[4]),
-            new ColLine(vertices[4], vertices[7]),
-            new ColLine(vertices[7], vertices[1]),
-            new ColLine(vertices[0], vertices[3]),
-            new ColLine(vertices[3], vertices[5]),
-            new ColLine(vertices[5], vertices[1]),
-            new ColLine(vertices[1], vertices[0]),
-            new ColLine(vertices[7], vertices[2]),
-            new ColLine(vertices[1], vertices[0]),
-            new ColLine(vertices[6], vertices[3]),
-            new ColLine(vertices[4], vertices[5]),
-        ];
+        return self.edges;
     };
     
     static GetMin = function() {
-        var vertices = self.GetVertices();
-        
-        var point_min = new Vector3(infinity, infinity, infinity);
-        for (var i = 0; i < array_length(vertices); i++) {
-            point_min.x = min(point_min.x, vertices[i].x);
-            point_min.y = min(point_min.y, vertices[i].y);
-            point_min.z = min(point_min.z, vertices[i].z);
-        }
-        
-        return point_min;
+        return self.point_min;
     };
     
     static GetMax = function() {
-        var vertices = self.GetVertices();
-        
-        var point_max = new Vector3(-infinity, -infinity, -infinity);
-        for (var i = 0; i < array_length(vertices); i++) {
-            point_max.x = max(point_max.x, vertices[i].x);
-            point_max.y = max(point_max.y, vertices[i].y);
-            point_max.z = max(point_max.z, vertices[i].z);
-        }
-        
-        return point_max;
+        return self.point_max;
     };
 }
