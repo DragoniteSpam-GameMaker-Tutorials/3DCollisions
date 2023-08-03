@@ -200,16 +200,26 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static NearestPoint = function(vec3) {
+        static test_point = new ColPoint(new Vector3(0, 0, 0));
+        static lineAB = new ColLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+        static lineBC = new ColLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+        static lineCA = new ColLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+        
         var plane = self.GetPlane();
         var nearest_to_plane = plane.NearestPoint(vec3);
         
-        if (self.CheckPoint(new ColPoint(nearest_to_plane))) {
+        test_point.position = nearest_to_plane;
+        
+        if (self.CheckPoint(test_point)) {
             return nearest_to_plane;
         }
         
-        var lineAB = new ColLine(self.a, self.b);
-        var lineBC = new ColLine(self.b, self.c);
-        var lineCA = new ColLine(self.c, self.a);
+        lineAB.start = self.a;
+        lineAB.finish = self.b;
+        lineBC.start = self.b;
+        lineBC.finish = self.c;
+        lineCA.start = self.c;
+        lineCA.finish = self.a;
         
         var nearest_to_ab = lineAB.NearestPoint(vec3);
         var nearest_to_bc = lineBC.NearestPoint(vec3);
