@@ -20,11 +20,11 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     };
     
     static GetMin = function() {
-        return self.shape.GetMin();
+        return self.shape.point_min;
     };
     
     static GetMax = function() {
-        return self.shape.GetMax();
+        return self.shape.point_max;
     };
 }
 

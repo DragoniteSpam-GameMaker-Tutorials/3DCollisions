@@ -19,8 +19,8 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static GetBoundingChunk = function(object) {
-        var object_min = object.GetMin();
-        var object_max = object.GetMax();
+        var object_min = object.shape.property_min;
+        var object_max = object.shape.property_max;
         
         if (object_min == undefined) {
             return undefined;
@@ -58,13 +58,13 @@ function ColWorldSpatialHash(chunk_size) constructor {
             return;
         }
         
-        var bounds_min = bounds.GetMin();
-        var bounds_max = bounds.GetMax();
+        var bounds_min = bounds.property_min;
+        var bounds_max = bounds.property_max;
         
         // is the object already in the spatial hash?
         var location = self.Contains(object);
         if (location != undefined) {
-            if (location.GetMin().Equals(bounds_min) && location.GetMax().Equals(bounds_max)) {
+            if (location.property_min.Equals(bounds_min) && location.property_max.Equals(bounds_max)) {
                 // object's position is the same, there's no point
                 return;
             } else {
@@ -90,8 +90,8 @@ function ColWorldSpatialHash(chunk_size) constructor {
                             self.bounds = NewColAABBFromMinMax(coords_min, coords_max);
                         } else {
                             self.bounds = NewColAABBFromMinMax(
-                                self.bounds.GetMin().Min(coords_min),
-                                self.bounds.GetMax().Max(coords_max)
+                                self.bounds.property_min.Min(coords_min),
+                                self.bounds.property_max.Max(coords_max)
                             );
                         }
                     }
@@ -117,8 +117,8 @@ function ColWorldSpatialHash(chunk_size) constructor {
             return;
         }
         
-        var bounds_min = location.GetMin();
-        var bounds_max = location.GetMax();
+        var bounds_min = location.property_min;
+        var bounds_max = location.property_max;
         
         for (var i = bounds_min.x; i <= bounds_max.x; i++) {
             for (var j = bounds_min.y; j <= bounds_max.y; j++) {
@@ -149,8 +149,8 @@ function ColWorldSpatialHash(chunk_size) constructor {
         }
         
         var bounds = self.GetBoundingChunk(object);
-        var bounds_min = bounds.GetMin();
-        var bounds_max = bounds.GetMax();
+        var bounds_min = bounds.property_min;
+        var bounds_max = bounds.property_max;
         
         for (var i = bounds_min.x; i <= bounds_max.x; i++) {
             for (var j = bounds_min.y; j <= bounds_max.y; j++) {

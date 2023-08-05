@@ -27,7 +27,7 @@ function ColCapsule(start, finish, radius) constructor {
         var endcap_finish = new ColSphere(self.line.finish, self.radius);
         if (endcap_finish.CheckAABB(aabb)) return true;
         
-        var edges = aabb.GetEdges();
+        var edges = aabb.property_edges;
         
         for (var i = 0, n = array_length(edges); i < n; i++) {
             var nearest_line_to_edge = edges[i].NearestConnectionToLine(self.line);
@@ -61,7 +61,7 @@ function ColCapsule(start, finish, radius) constructor {
         var endcap_finish = new ColSphere(self.line.finish, self.radius);
         if (endcap_finish.CheckOBB(obb)) return true;
         
-        var edges = obb.GetEdges();
+        var edges = obb.property_edges;
         
         for (var i = 0, n = array_length(edges); i < n; i++) {
             var nearest_line_to_edge = edges[i].NearestConnectionToLine(self.line);
@@ -169,10 +169,10 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static GetMin = function() {
-        return self.line.GetMin().Sub(self.radius);
+        return self.line.property_min.Sub(self.radius);
     };
     
     static GetMax = function() {
-        return self.line.GetMin().Add(self.radius);
+        return self.line.property_max.Add(self.radius);
     };
 }
