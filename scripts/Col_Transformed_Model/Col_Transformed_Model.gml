@@ -3,36 +3,65 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     self.position = position;
     self.rotation = rotation;
     
+    self.RecalculateProperties();
+    
+    static SetMesh = function(mesh) {
+        self.mesh = mesh;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static SetPosition = function(position) {
+        self.position = position;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static SetRotation = function(rotation) {
+        self.rotation = rotation;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static RecalculateProperties = function() {
+        self.property_transform = self.rotation.GetRotationMatrix().Mul(self.position.GetTranslationMatrix());
+        self.property_inverse = self.property_transform.Inverse();
+        
+        var obb = new ColOBB(transform.MulPoint(self.mesh.bounds.position), self.mesh.bounds.size, transform.GetOrientationMatrix());
+        self.property_min = obb.GetMin();
+        self.property_max = obb.GetMax();
+    };
+    
     static GetTransformMatrix = function() {
-        return self.rotation.GetRotationMatrix().Mul(self.position.GetTranslationMatrix());
+        return self.property_transform;
     };
     
     static CheckPoint = function(point) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var inverse = self.property_inverse;
         var untransformed = new ColPoint(inverse.MulPoint(point.position));
         return self.mesh.CheckPoint(untransformed);
     };
     
     static CheckSphere = function(sphere) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var inverse = self.property_inverse;
         var untransformed = new ColSphere(inverse.MulPoint(sphere.position), sphere.radius);
         return self.mesh.CheckSphere(untransformed);
     };
     
     static CheckAABB = function(aabb) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var inverse = self.property_inverse;
         var untransformed = new ColOBB(inverse.MulPoint(aabb.position), aabb.half_extents, inverse.GetOrientationMatrix());
         return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckOBB = function(obb) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var inverse = self.property_inverse;
         var untransformed = new ColOBB(inverse.MulPoint(obb.position), obb.size, obb.orientation.Mul(inverse.GetOrientationMatrix()));
         return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckPlane = function(plane) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var inverse = self.property_inverse;
         
         var point = plane.normal.Mul(plane.distance);
         point = inverse.MulPoint(point);
@@ -45,13 +74,13 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckCapsule = function(capsule) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var inverse = self.property_inverse;
         var untransformed = new ColCapsule(inverse.MulPoint(capsule.line.start), inverse.MulPoint(capsule.line.finish), capsule.radius);
         return self.mesh.CheckCapsule(untransformed);
     };
     
     static CheckTriangle = function(triangle) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var inverse = self.property_inverse;
         // "homework"
     };
     
@@ -64,13 +93,13 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckLine = function(line) {
-        var inverse = self.GetTransformMatrix().Inverse();
+        var inverse = self.property_inverse;
         // "homework"
     };
     
     static CheckRay = function(ray, hit_info) {
-        var transform = self.GetTransformMatrix();
-        var inverse = transform.Inverse();
+        var transform = self.property_transform;
+        var inverse = self.property_inverse;
         var untransformed = new ColRay(inverse.MulPoint(ray.origin), inverse.MulVector(ray.direction));
         var untransformed_hit_info = new RaycastHitInformation();
         
@@ -90,14 +119,10 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static GetMin = function() {
-        var transform = self.GetTransformMatrix();
-        var obb = new ColOBB(transform.MulPoint(self.mesh.bounds.position), self.mesh.bounds.size, transform.GetOrientationMatrix());
-        return obb.GetMin();
+        return self.property_min;
     };
     
     static GetMax = function() {
-        var transform = self.GetTransformMatrix();
-        var obb = new ColOBB(transform.MulPoint(self.mesh.bounds.position), self.mesh.bounds.size, transform.GetOrientationMatrix());
-        return obb.GetMax();
+        return self.property_max;
     };
 }
