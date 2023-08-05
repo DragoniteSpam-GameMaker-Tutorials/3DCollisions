@@ -284,7 +284,9 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckLine = function(line) {
-        var hit_info = new RaycastHitInformation();
+        static hit_info = new RaycastHitInformation();
+        hit_info.Clear();
+        
         if (self.CheckRay(line.property_ray, hit_info)) {
             return (hit_info.distance <= line.property_length);
         }

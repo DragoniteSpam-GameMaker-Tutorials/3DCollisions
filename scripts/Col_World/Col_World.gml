@@ -169,7 +169,7 @@ function ColWorldOctree(bounds, depth) constructor {
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
-        if (!ray.CheckAABB(self.bounds, new RaycastHitInformation())) return;
+        if (!ray.CheckAABB(self.bounds)) return;
         
         var result = false;
         if (self.children == undefined) {
@@ -285,7 +285,7 @@ function ColWorldQuadtree(bounds, depth) constructor {
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
-        if (!ray.CheckAABB(self.bounds, new RaycastHitInformation())) return;
+        if (!ray.CheckAABB(self.bounds)) return;
         
         var result = false;
         if (self.children == undefined) {

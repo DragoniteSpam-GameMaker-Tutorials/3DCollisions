@@ -98,10 +98,12 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckRay = function(ray, hit_info) {
+        static untransformed_hit_info = new RaycastHitInformation();
+        untransformed_hit_info.Clear();
+        
         var transform = self.property_transform;
         var inverse = self.property_inverse;
         var untransformed = new ColRay(inverse.MulPoint(ray.origin), inverse.MulVector(ray.direction));
-        var untransformed_hit_info = new RaycastHitInformation();
         
         if (self.mesh.CheckRay(untransformed, untransformed_hit_info)) {
             var point = transform.MulPoint(untransformed_hit_info.point);

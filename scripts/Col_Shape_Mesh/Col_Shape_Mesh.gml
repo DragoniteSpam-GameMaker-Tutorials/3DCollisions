@@ -87,7 +87,9 @@ function ColMesh(triangle_array) constructor {
     
     static CheckRay = function(ray, hit_info) {
         var process_these = [self.accelerator];
-        var dummy_hit_info = new RaycastHitInformation();
+        static dummy_hit_info = new RaycastHitInformation();
+        dummy_hit_info.Clear();
+        
         var hit_detected = false;
         
         while (array_length(process_these) > 0) {
@@ -113,7 +115,9 @@ function ColMesh(triangle_array) constructor {
     };
     
     static CheckLine = function(line) {
-        var hit_info = new RaycastHitInformation();
+        static hit_info = new RaycastHitInformation();
+        hit_info.Clear();
+        
         if (self.CheckRay(line.property_ray, hit_info)) {
             return (hit_info.distance <= line.property_length);
         }

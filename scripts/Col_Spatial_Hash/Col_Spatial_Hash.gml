@@ -170,13 +170,15 @@ function ColWorldSpatialHash(chunk_size) constructor {
     
     // https://github.com/prime31/Nez/blob/master/Nez.Portable/Physics/SpatialHash.cs
     static CheckRay = function(ray, group = 1) {
+        static bounds_hit_info = new RaycastHitInformation();
+        bounds_hit_info.Clear();
+        
         var hit_info = new RaycastHitInformation();
         
         for (var i = 0; i < array_length(self.planes); i++) {
             self.planes[i].CheckRay(ray, hit_info, group);
         }
         
-        var bounds_hit_info = new RaycastHitInformation();
         self.bounds.CheckRay(ray, bounds_hit_info);
         
         // if the ray does not pass through the spatial hash at all, you can
