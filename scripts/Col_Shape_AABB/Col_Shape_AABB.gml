@@ -2,6 +2,54 @@ function ColAABB(position, half_extents) constructor {
     self.position = position;               // Vec3
     self.half_extents = half_extents;       // Vec3
     
+    static SetPosition = function(position) {
+        self.position = position;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static SetHalfExtents = function(half_extents) {
+        self.half_extents = half_extents;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static RecalculateProperties = function() {
+        self.property_min = self.position.Sub(self.half_extents);
+        self.property_max = self.position.Add(self.half_extents);
+        
+        var pmin = self.property_min;
+        var pmax = self.property_max;
+        
+        self.property_vertices = [
+            new Vector3(pmin.x, pmax.y, pmax.z),
+            new Vector3(pmin.x, pmax.y, pmin.z),
+            new Vector3(pmin.x, pmin.y, pmax.z),
+            new Vector3(pmin.x, pmin.y, pmin.z),
+            new Vector3(pmax.x, pmax.y, pmax.z),
+            new Vector3(pmax.x, pmax.y, pmin.z),
+            new Vector3(pmax.x, pmin.y, pmax.z),
+            new Vector3(pmax.x, pmin.y, pmin.z),
+        ];
+        
+        var vertices = self.property_vertices;
+        
+        self.property_edges = [
+            new ColLine(vertices[0], vertices[1]),
+            new ColLine(vertices[0], vertices[2]),
+            new ColLine(vertices[1], vertices[3]),
+            new ColLine(vertices[2], vertices[3]),
+            new ColLine(vertices[4], vertices[5]),
+            new ColLine(vertices[4], vertices[6]),
+            new ColLine(vertices[5], vertices[7]),
+            new ColLine(vertices[6], vertices[7]),
+            new ColLine(vertices[0], vertices[4]),
+            new ColLine(vertices[1], vertices[5]),
+            new ColLine(vertices[2], vertices[6]),
+            new ColLine(vertices[3], vertices[7]),
+        ];
+    };
+    
     static DebugDraw = function() {
         static vertex_add_point = function(vbuff, x, y, z, colour) {
             vertex_position_3d(vbuff, x, y, z);
@@ -59,10 +107,10 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckAABB = function(aabb) {
-        var box_min = self.GetMin();
-        var box_max = self.GetMax();
-        var other_min = aabb.GetMin();
-        var other_max = aabb.GetMax();
+        var box_min = self.property_min;
+        var box_max = self.property_max;
+        var other_min = aabb.property_min;
+        var other_max = aabb.property_max;
         return ((box_min.x <= other_max.x) && (box_max.x >= other_min.x) && (box_min.y <= other_max.y) && (box_max.y >= other_min.y) && (box_min.z <= other_max.z) && (box_max.z >= other_min.z));
     };
     
@@ -125,8 +173,8 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
-        var box_min = self.GetMin();
-        var box_max = self.GetMax();
+        var box_min = self.property_min;
+        var box_max = self.property_max;
         
         var ray_x = (ray.direction.x == 0) ? 0.0001 : ray.direction.x;
         var ray_y = (ray.direction.y == 0) ? 0.0001 : ray.direction.y;
@@ -206,17 +254,9 @@ function ColAABB(position, half_extents) constructor {
         return nearest.Add(dir.Mul(sphere.radius));
     };
     
-    static GetMin = function() {
-        return self.position.Sub(self.half_extents);
-    };
-    
-    static GetMax = function() {
-        return self.position.Add(self.half_extents);
-    };
-    
     static NearestPoint = function(vec3) {
-        var box_min = self.GetMin();
-        var box_max = self.GetMax();
+        var box_min = self.property_min;
+        var box_max = self.property_max;
         var xx = (vec3.x < box_min.x) ? box_min.x : vec3.x;
         var yy = (vec3.y < box_min.y) ? box_min.y : vec3.y;
         var zz = (vec3.z < box_min.z) ? box_min.z : vec3.z;
@@ -243,7 +283,7 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static GetInterval = function(axis) {
-        var vertices = self.GetVertices();
+        var vertices = self.property_vertices;
         
         var imin = axis.Dot(vertices[0]);
         var imax = imin;
@@ -258,38 +298,19 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static GetVertices = function() {
-        var pmin = self.GetMin();
-        var pmax = self.GetMax();
-        
-        return [
-            new Vector3(pmin.x, pmax.y, pmax.z),
-            new Vector3(pmin.x, pmax.y, pmin.z),
-            new Vector3(pmin.x, pmin.y, pmax.z),
-            new Vector3(pmin.x, pmin.y, pmin.z),
-            new Vector3(pmax.x, pmax.y, pmax.z),
-            new Vector3(pmax.x, pmax.y, pmin.z),
-            new Vector3(pmax.x, pmin.y, pmax.z),
-            new Vector3(pmax.x, pmin.y, pmin.z),
-        ]
+        return self.property_vertices;
     };
     
     static GetEdges = function() {
-        var vertices = self.GetVertices();
-        
-        return [
-            new ColLine(vertices[0], vertices[1]),
-            new ColLine(vertices[0], vertices[2]),
-            new ColLine(vertices[1], vertices[3]),
-            new ColLine(vertices[2], vertices[3]),
-            new ColLine(vertices[4], vertices[5]),
-            new ColLine(vertices[4], vertices[6]),
-            new ColLine(vertices[5], vertices[7]),
-            new ColLine(vertices[6], vertices[7]),
-            new ColLine(vertices[0], vertices[4]),
-            new ColLine(vertices[1], vertices[5]),
-            new ColLine(vertices[2], vertices[6]),
-            new ColLine(vertices[3], vertices[7]),
-        ];
+        return self.property_edges;
+    };
+    
+    static GetMin = function() {
+        return self.property_min;
+    };
+    
+    static GetMax = function() {
+        return self.property_max;
     };
     
     static CheckFrustum = function(frustum) {
