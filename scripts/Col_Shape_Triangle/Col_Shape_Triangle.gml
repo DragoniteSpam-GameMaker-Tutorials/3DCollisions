@@ -3,6 +3,24 @@ function ColTriangle(a, b, c) constructor {
     self.b = b;
     self.c = c;
     
+    self.RecalculateProperties();
+    
+    static SetVertices = function(a, b, c) {
+        self.a = a;
+        self.b = b;
+        self.c = c;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static RecalculateProperties = function() {
+        var diffAB = self.b.Sub(self.a);
+        var diffAC = self.c.Sub(self.a);
+        self.property_normal = diffAB.Cross(diffAC).Normalize();
+        var dist = self.property_normal.Dot(self.a);
+        self.property_plane = new ColPlane(self.property_normal, dist);
+    };
+    
     static CheckObject = function(object) {
         return object.shape.CheckTriangle(self);
     };
@@ -34,8 +52,8 @@ function ColTriangle(a, b, c) constructor {
     static CheckTriangle = function(triangle) {
         // Phase 1: are each of the points of one triangle on the
         // same side of the plane of the other triangle?
-        var plane_a = self.GetPlane();
-        var plane_b = triangle.GetPlane();
+        var plane_a = self.property_plane;
+        var plane_b = triangle.property_plane;
         
         var paa = plane_a.PlaneEquation(triangle.a);
         var pab = plane_a.PlaneEquation(triangle.b);
@@ -63,7 +81,7 @@ function ColTriangle(a, b, c) constructor {
             if (new ColPoint(triangle.c).CheckTriangle(self)) return true;
             
             var origin = self.a;
-            var norm = self.GetNormal();
+            var norm = self.property_normal;
             var e1 = self.b.Sub(self.a);
             var e2 = e1.Cross(norm);
             
@@ -106,8 +124,8 @@ function ColTriangle(a, b, c) constructor {
         // The normals of both triangle, plus each of the edges of 
         // triangle crossed against each of the edges of the other
         var axes = [
-            self.GetNormal(),
-            triangle.GetNormal(),
+            self.property_normal,
+            triangle.property_normal,
             otherAB.Cross(selfAB),
             otherBC.Cross(selfAB),
             otherCA.Cross(selfAB),
@@ -137,7 +155,7 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
-        var plane = self.GetPlane();
+        var plane = self.property_plane;
         var plane_hit_info = new RaycastHitInformation();
         if (!plane.CheckRay(ray, plane_hit_info)) {
             return false;
@@ -182,21 +200,17 @@ function ColTriangle(a, b, c) constructor {
         if (!self.CheckSphere(sphere)) return undefined;
         
         var nearest = self.NearestPoint(sphere.position);
-        var offset = self.GetNormal().Mul(sphere.radius);
+        var offset = self.property_normal.Mul(sphere.radius);
         
         return nearest.Add(offset);
     };
     */
     static GetNormal = function() {
-        var diffAB = self.b.Sub(self.a);
-        var diffAC = self.c.Sub(self.a);
-        return diffAB.Cross(diffAC).Normalize();
+        return self.property_normal;
     };
     
     static GetPlane = function() {
-        var norm = self.GetNormal();
-        var dist = norm.Dot(self.a);
-        return new ColPlane(norm, dist);
+        return self.property_plane;
     };
     
     static NearestPoint = function(vec3) {
@@ -205,8 +219,7 @@ function ColTriangle(a, b, c) constructor {
         static lineBC = new ColLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
         static lineCA = new ColLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
         
-        var plane = self.GetPlane();
-        var nearest_to_plane = plane.NearestPoint(vec3);
+        var nearest_to_plane = self.property_plane.NearestPoint(vec3);
         
         test_point.position = nearest_to_plane;
         

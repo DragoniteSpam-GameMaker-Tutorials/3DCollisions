@@ -2,6 +2,8 @@ function ColAABB(position, half_extents) constructor {
     self.position = position;               // Vec3
     self.half_extents = half_extents;       // Vec3
     
+    self.RecalculateProperties();
+    
     static SetPosition = function(position) {
         self.position = position;
         self.RecalculateProperties();
@@ -143,7 +145,7 @@ function ColAABB(position, half_extents) constructor {
             nx,
             ny,
             nz,
-            triangle.GetNormal(),
+            triangle.property_normal,
             nx.Cross(ab),
             nx.Cross(bc),
             nx.Cross(ca),

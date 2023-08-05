@@ -56,11 +56,11 @@ function ColOBB(position, size, orientation) constructor {
             self.property_min.z = min(self.property_min.z, vertices[i].z);
         }
         
-        self.point_max = new Vector3(infinity, infinity, infinity);
+        self.property_max = new Vector3(infinity, infinity, infinity);
         for (var i = 0; i < array_length(vertices); i++) {
-            self.point_max.x = min(self.point_max.x, vertices[i].x);
-            self.point_max.y = min(self.point_max.y, vertices[i].y);
-            self.point_max.z = min(self.point_max.z, vertices[i].z);
+            self.property_max.x = min(self.property_max.x, vertices[i].x);
+            self.property_max.y = min(self.property_max.y, vertices[i].y);
+            self.property_max.z = min(self.property_max.z, vertices[i].z);
         }
         
         self.imaginary_radius = self.size.Magnitude();
@@ -186,7 +186,7 @@ function ColOBB(position, size, orientation) constructor {
             self.orientation.y,
             self.orientation.z,
             
-            triangle.GetNormal(),
+            triangle.property_normal,
         ];
         
         for (var i = 0; i < 3; i++) {
@@ -368,6 +368,6 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static GetMax = function() {
-        return self.point_max;
+        return self.property_max;
     };
 }
