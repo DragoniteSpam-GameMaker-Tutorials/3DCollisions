@@ -52,7 +52,10 @@ function ColRay(origin, direction) constructor {
     
     static NearestPoint = function(vec3) {
         var diff = vec3.Sub(self.origin);
-        var t = max(diff.Dot(self.direction), 0);
+        var vx = self.origin.x - vec3.x;
+        var vy = self.origin.y - vec3.y;
+        var vz = self.origin.z - vec3.z;
+        var t = max(dot_product_3d(vx, vy, vz, self.direction.x, self.direction.y, self.direction.z), 0);
         var scaled_dir = self.direction.Mul(t);
         return self.origin.Add(scaled_dir);
     };
