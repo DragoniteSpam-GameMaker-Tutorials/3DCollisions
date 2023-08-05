@@ -368,10 +368,10 @@ function ColTestLine(vbuff) constructor {
         if (keyboard_check(vk_pagedown)) {
             self.rotation--;
         }
-        self.data.start.x = 100 * dcos(self.rotation) + self.offset.x;
-        self.data.start.y = 100 * dsin(self.rotation) + self.offset.y;
-        self.data.finish.x = -100 * dcos(self.rotation) + self.offset.x;
-        self.data.finish.y = -100 * dsin(self.rotation) + self.offset.y;
+        self.data.SetEnds(
+            new Vector3(100 * dcos(self.rotation) + self.offset.x, 100 * dsin(self.rotation) + self.offset.y, self.data.start.z),
+            new Vector3(-100 * dcos(self.rotation) + self.offset.x, -100 * dsin(self.rotation) + self.offset.y, self.data.finish.z)
+        );
     };
     self.draw = function() {
         var vbuff = vertex_create_buffer();
