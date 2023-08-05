@@ -28,8 +28,8 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
         self.property_inverse = self.property_transform.Inverse();
         
         var obb = new ColOBB(transform.MulPoint(self.mesh.bounds.position), self.mesh.bounds.size, transform.GetOrientationMatrix());
-        self.property_min = obb.GetMin();
-        self.property_max = obb.GetMax();
+        self.property_min = obb.property_min;
+        self.property_max = obb.point_max;
     };
     
     static GetTransformMatrix = function() {

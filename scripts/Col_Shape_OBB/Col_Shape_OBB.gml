@@ -21,7 +21,7 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static RecalculateProperties = function() {
-        self.vertices = [
+        self.property_vertices = [
             self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
             self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
             self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
@@ -32,7 +32,9 @@ function ColOBB(position, size, orientation) constructor {
             self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
         ];
         
-        self.edges = [
+        var vertices = self.property_vertices;
+        
+        self.property_edges = [
             new ColLine(vertices[1], vertices[6]),
             new ColLine(vertices[6], vertices[4]),
             new ColLine(vertices[4], vertices[7]),
@@ -47,18 +49,18 @@ function ColOBB(position, size, orientation) constructor {
             new ColLine(vertices[4], vertices[5]),
         ];
         
-        self.point_min = new Vector3(infinity, infinity, infinity);
-        for (var i = 0; i < array_length(self.vertices); i++) {
-            self.point_min.x = min(self.point_min.x, self.vertices[i].x);
-            self.point_min.y = min(self.point_min.y, self.vertices[i].y);
-            self.point_min.z = min(self.point_min.z, self.vertices[i].z);
+        self.property_min = new Vector3(infinity, infinity, infinity);
+        for (var i = 0; i < array_length(vertices); i++) {
+            self.property_min.x = min(self.property_min.x, vertices[i].x);
+            self.property_min.y = min(self.property_min.y, vertices[i].y);
+            self.property_min.z = min(self.property_min.z, vertices[i].z);
         }
         
         self.point_max = new Vector3(infinity, infinity, infinity);
-        for (var i = 0; i < array_length(self.vertices); i++) {
-            self.point_max.x = min(self.point_max.x, self.vertices[i].x);
-            self.point_max.y = min(self.point_max.y, self.vertices[i].y);
-            self.point_max.z = min(self.point_max.z, self.vertices[i].z);
+        for (var i = 0; i < array_length(vertices); i++) {
+            self.point_max.x = min(self.point_max.x, vertices[i].x);
+            self.point_max.y = min(self.point_max.y, vertices[i].y);
+            self.point_max.z = min(self.point_max.z, vertices[i].z);
         }
         
         self.imaginary_radius = self.size.Magnitude();
@@ -334,7 +336,7 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static GetInterval = function(axis) {
-        var vertices = self.GetVertices();
+        var vertices = self.property_vertices;
         
         var xx = axis.x;
         var yy = axis.y;
@@ -354,15 +356,15 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static GetVertices = function() {
-        return self.vertices;
+        return self.property_vertices;
     };
     
     static GetEdges = function() {
-        return self.edges;
+        return self.property_edges;
     };
     
     static GetMin = function() {
-        return self.point_min;
+        return self.property_min;
     };
     
     static GetMax = function() {
