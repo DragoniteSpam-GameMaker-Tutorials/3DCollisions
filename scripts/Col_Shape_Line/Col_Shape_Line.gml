@@ -14,6 +14,7 @@ function ColLine(start, finish) constructor {
     static RecalculateProperties = function() {
         self.property_min = self.start.Min(self.finish);
         self.property_max = self.start.Max(self.finish);
+        self.property_ray = new ColRay(self.start, self.finish.Sub(self.start));
     };
     
     static CheckObject = function(object) {
@@ -121,8 +122,7 @@ function ColLine(start, finish) constructor {
     };
     
     static NearestConnectionToLine = function(line) {
-        var ray = new ColRay(line.start, line.finish.Sub(line.start));
-        var nearest_connection_to_ray = self.NearestConnectionToRay(ray);
+        var nearest_connection_to_ray = self.NearestConnectionToRay(line.property_ray);
         
         var starting_point = line.NearestPoint(nearest_connection_to_ray.start);
         var ending_point = self.NearestPoint(nearest_connection_to_ray.finish);

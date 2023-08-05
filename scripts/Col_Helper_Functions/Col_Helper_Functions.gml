@@ -5,8 +5,7 @@ function NewColAABBFromMinMax(point_min, point_max) {
 }
 
 function NewColRayFromPoints(start, finish) {
-    var dir = finish.Sub(start).Normalize();
-    return new ColRay(start, dir);
+    return new ColRay(start, finish.Sub(start));
 }
 
 function RaycastHitInformation() constructor {
