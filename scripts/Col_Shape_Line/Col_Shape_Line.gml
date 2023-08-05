@@ -2,6 +2,20 @@ function ColLine(start, finish) constructor {
     self.start = start;                     // Vec3
     self.finish = finish;                   // Vec3
     
+    self.RecalculateProperties();
+    
+    static SetEnds = function(start, finish) {
+        self.start = start;
+        self.finish = finish;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static RecalculateProperties = function() {
+        self.property_min = self.start.Min(self.finish);
+        self.property_max = self.start.Max(self.finish);
+    };
+    
     static CheckObject = function(object) {
         return object.shape.CheckLine(self);
     };
@@ -117,10 +131,10 @@ function ColLine(start, finish) constructor {
     };
     
     static GetMin = function() {
-        return new Vector3(min(self.start.x, self.finish.x), min(self.start.y, self.finish.y), min(self.start.z, self.finish.z));
+        return self.property_min;
     };
     
     static GetMax = function() {
-        return new Vector3(max(self.start.x, self.finish.x), max(self.start.y, self.finish.y), max(self.start.z, self.finish.z));
+        return self.property_max;
     };
 }
