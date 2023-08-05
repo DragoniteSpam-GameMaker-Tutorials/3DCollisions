@@ -15,6 +15,7 @@ function ColLine(start, finish) constructor {
         self.property_min = self.start.Min(self.finish);
         self.property_max = self.start.Max(self.finish);
         self.property_ray = new ColRay(self.start, self.finish.Sub(self.start));
+        self.property_length = self.start.DistanceTo(self.finish);
     };
     
     static CheckObject = function(object) {
@@ -70,7 +71,7 @@ function ColLine(start, finish) constructor {
     };
     
     static Length = function() {
-        return self.start.DistanceTo(self.finish);
+        return self.property_length;
     };
     
     static NearestPoint = function(vec3) {

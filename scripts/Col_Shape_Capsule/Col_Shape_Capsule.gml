@@ -80,9 +80,7 @@ function ColCapsule(start, finish, radius) constructor {
     
     static CheckCapsule = function(capsule) {
         var connecting_line = self.line.NearestConnectionToLine(capsule.line);
-        var dist = connecting_line.Length();
-        
-        return dist < (self.radius + capsule.radius);
+        return connecting_line.property_length < (self.radius + capsule.radius);
     };
     
     static CheckTriangle = function(triangle) {
@@ -152,7 +150,7 @@ function ColCapsule(start, finish, radius) constructor {
     
     static CheckLine = function(line) {
         var closest_line = self.line.NearestConnectionToLine(line);
-        return closest_line.Length() < self.radius;
+        return closest_line.property_length < self.radius;
     };
     
     static DisplaceSphere = function(sphere) {

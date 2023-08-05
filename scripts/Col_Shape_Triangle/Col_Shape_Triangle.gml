@@ -175,11 +175,11 @@ function ColTriangle(a, b, c) constructor {
     static CheckLine = function(line) {
         var hit_info = new RaycastHitInformation();
         if (self.CheckRay(line.property_ray, hit_info)) {
-            return (hit_info.distance <= line.Length());
+            return (hit_info.distance <= line.property_length);
         }
         var reverse = new ColLine(line.finish, line.start.Sub(line.finish));
         if (self.CheckRay(reverse.property_ray, hit_info)) {
-            return (hit_info.distance <= reverse.Length());
+            return (hit_info.distance <= reverse.property_length);
         }
         return false;
     };

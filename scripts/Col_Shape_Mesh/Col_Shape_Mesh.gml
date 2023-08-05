@@ -115,7 +115,7 @@ function ColMesh(triangle_array) constructor {
     static CheckLine = function(line) {
         var hit_info = new RaycastHitInformation();
         if (self.CheckRay(line.property_ray, hit_info)) {
-            return (hit_info.distance <= line.Length());
+            return (hit_info.distance <= line.property_length);
         }
         return false;
     };
