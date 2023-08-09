@@ -34,14 +34,12 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckAABB = function(aabb) {
-        var distance = aabb.position.DistanceTo(self.position);
-        var aabb_radius = aabb.half_extents.Magnitude();
+        var pa = aabb.position;
+        var ps = self.position;
+        if (point_distance_3d(pa.x, pa.y, pa.z, ps.x, ps.y, ps.z) > aabb.property_radius + self.radius) return false;
         
-        if (distance > aabb_radius + self.radius) return false;
-        
-        var nearest = aabb.NearestPoint(self.position);
-        var dist = nearest.DistanceTo(self.position);
-        return dist < self.radius;
+        var nearest = aabb.NearestPoint(ps);
+        return point_distance_3d(nearest.x, nearest.y, nearest.z, ps.x, ps.y, ps.z) < self.radius;
     };
     
     static CheckPlane = function(plane) {
