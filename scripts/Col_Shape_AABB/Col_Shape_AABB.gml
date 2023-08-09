@@ -254,25 +254,18 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static DisplaceSphere = function(sphere) {
-        if (!self.CheckSphere(sphere)) return undefined;
+        if (!sphere.CheckAABB(self)) return undefined;
+        var ps = sphere.position;
+        var pa = self.position;
+        if (ps.x == pa.x && ps.y == pa.y && ps.z == pa.z) return undefined;
         
-        if (self.position.Equals(sphere.position)) return undefined;
+        var nearest = self.NearestPoint(ps);
         
-        var nearest = self.NearestPoint(sphere.position);
-        
-        if (nearest.DistanceTo(sphere.position) == 0) {
+        if (ps.x == nearest.x && nearest.y == pa.y && nearest.z == pa.z) {
             return undefined;
-            /*
-            var dir_to_center = sphere.position.Sub(self.position).Normalize();
-            var new_point = dir_to_center.Mul(self.half_extents.Magnitude());
-            
-            nearest = self.NearestPoint(new_point);
-            var dir = nearest.Sub(sphere.position).Normalize();
-            */
-        } else {
-            var dir = sphere.position.Sub(nearest).Normalize();
         }
         
+        var dir = ps.Sub(nearest).Normalize();
         return nearest.Add(dir.Mul(sphere.radius));
     };
     
