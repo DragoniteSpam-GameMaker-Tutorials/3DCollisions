@@ -295,12 +295,17 @@ function ColAABB(position, half_extents) constructor {
     
     static GetInterval = function(axis) {
         var vertices = self.property_vertices;
+        var ax = axis.x;
+        var ay = axis.y;
+        var az = axis.z;
         
         var imin = infinity;
         var imax = -infinity;
         
-        for (var i = 0; i < 8; i++) {
-            var dot = axis.Dot(vertices[i]);
+        var i = 0;
+        repeat (8) {
+            var vertex = vertices[i++];
+            var dot = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
             imin = min(imin, dot);
             imax = max(imax, dot);
         }
