@@ -3,8 +3,10 @@ function Vector3(x, y, z) constructor {
     self.y = y;
     self.z = z;
     
+    self.as_array = [x, y, z];
+    
     static AsLinearArray = function() {
-        return [self.x, self.y, self.z];
+        return self.as_array;
     };
     
     static Add = function(val) {
@@ -56,7 +58,7 @@ function Vector3(x, y, z) constructor {
     };
     
     static Normalize = function() {
-        var mag = self.Magnitude();
+        var mag = point_distance_3d(0, 0, 0, self.x, self.y, self.z);
         return new Vector3(self.x / mag, self.y / mag, self.z / mag);
     };
     
@@ -65,9 +67,9 @@ function Vector3(x, y, z) constructor {
     };
     
     static Project = function(direction) {
-        var dot = self.Dot(direction);
-        var mag = direction.Magnitude();
-        return direction.Mul(dot / (mag * mag));
+        var dot = dot_product_3d(self.x, self.y, self.z, direction.x, direction.y, direction.z);
+        var mag2 = dot_product_3d(direction.x, direction.y, direction.z, direction.x, direction.y, direction.z);
+        return direction.Mul(dot / mag2);
     };
     
     static Min = function(vec3) {
@@ -106,8 +108,10 @@ function Vector4(x, y, z, w) constructor {
     self.z = z;
     self.w = w;
     
+    self.as_array = [x, y, z, w];
+    
     static AsLinearArray = function() {
-        return [self.x, self.y, self.z, self.w];
+        return self.as_array;
     };
     
     static Add = function(val) {
@@ -139,11 +143,11 @@ function Vector4(x, y, z, w) constructor {
     };
     
     static Magnitude = function() {
-        return sqrt(self.Dot(self));
+        return sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w);
     };
     
     static DistanceTo = function(val) {
-        return sqrt(sqrt(self.x - val.x) + sqr(self.y - val.y) + sqrt(self.z - val.z) + sqr(self.w - val.w));
+        return sqrt(sqr(self.x - val.x) + sqr(self.y - val.y) + sqrt(self.z - val.z) + sqr(self.w - val.w));
     };
     
     static Dot = function(val) {
@@ -155,7 +159,7 @@ function Vector4(x, y, z, w) constructor {
     };
     
     static Normalize = function() {
-        var mag = self.Magnitude();
+        var mag = sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w);
         return new Vector4(self.x / mag, self.y / mag, self.z / mag, self.w / mag);
     };
     
@@ -164,9 +168,9 @@ function Vector4(x, y, z, w) constructor {
     };
     
     static Project = function(direction) {
-        var dot = self.Dot(direction);
-        var mag = direction.Magnitude();
-        return direction.Mul(dot / (mag * mag));
+        var dot = self.x * direction.x + self.y * direction.y + self.z * direction.z + self.w * direction.w;
+        var mag2 = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z + direction.w * direction.w;
+        return direction.Mul(dot / mag2);
     };
     
     static Min = function(vec4) {
