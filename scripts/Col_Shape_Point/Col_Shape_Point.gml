@@ -64,9 +64,11 @@ function ColPoint(position) constructor {
     
     static CheckRay = function(ray, hit_info) {
         var nearest = ray.NearestPoint(self.position);
-        if (nearest.DistanceTo(self.position) != 0) return false;
+        var dist = point_distance_3d(nearest.x, nearest.y, nearest.z, self.position.x, self.position.y, self.position.z);
+        if (dist > 0) return false;
         
-        hit_info.Update(self.position.DistanceTo(ray.origin), self, self.position, undefined);
+        dist = point_distance_3d(self.position.x, self.position.y, self.position.z, ray.origin.x, ray.origin.x, ray.origin.z);
+        hit_info.Update(dist, self, self.position, undefined);
         
         return true;
     };
