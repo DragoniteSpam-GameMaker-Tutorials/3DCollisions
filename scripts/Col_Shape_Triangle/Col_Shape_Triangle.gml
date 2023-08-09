@@ -29,6 +29,7 @@ function ColTriangle(a, b, c) constructor {
             (self.a.y + self.b.y + self.c.y) / 3,
             (self.a.z + self.b.z + self.c.z) / 3
         );
+        self.property_radius = self.property_center.DistanceTo(self.a);
     };
     
     static CheckObject = function(object) {
@@ -60,6 +61,10 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static CheckTriangle = function(triangle) {
+        var p1 = self.property_center;
+        var p2 = triangle.property_center;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) >= (self.property_radius + triangle.property_radius)) return false;
+        
         // Phase 1: are each of the points of one triangle on the
         // same side of the plane of the other triangle?
         var plane_a = self.property_plane;
