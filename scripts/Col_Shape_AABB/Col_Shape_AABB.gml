@@ -117,10 +117,13 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckPlane = function(plane) {
-        var anorm = plane.normal.Abs();
-        var plength = self.half_extents.Dot(anorm);
-        var ndot = plane.normal.Dot(self.position);
-        return (abs(ndot - plane.distance) <= plength);
+        var size = self.half_extents;
+        var normal = plane.normal;
+        var pos = self.position;
+        var anorm = normal.Abs();
+        var plength = dot_product_3d(anorm.x, anorm.y, anorm.z, size.x, size.y, size.z);
+        var ndot = dot_product_3d(normal.x, normal.y, normal.z, pos.x, pos.y, pos.z);
+        return (abs(ndot - plane.distance) < plength);
     };
     
     static CheckOBB = function(obb) {
