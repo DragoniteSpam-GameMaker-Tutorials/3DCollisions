@@ -360,15 +360,16 @@ function ColOBB(position, size, orientation) constructor {
     static NearestPoint = function(vec3) {
         var result = self.position;
         var dir = vec3.Sub(self.position);
+        var dx = dir.x;
+        var dy = dir.y;
+        var dz = dir.z;
         
         var size_array = self.size.linear_array;
         var orientation_array = self.orientation.vector_array;
         
         for (var i = 0; i < 3; i++) {
             var axis = orientation_array[i];
-            
-            var dist = dir.Dot(axis);
-            
+            var dist = point_distance_3d(dx, dy, dz, axis.x, axis.y, axis.z);
             dist = clamp(dist, -size_array[i], size_array[i]);
             result = result.Add(axis.Mul(dist));
         }
