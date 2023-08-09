@@ -90,15 +90,14 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        //var distance = self.position.DistanceTo(sphere.position);
-        var distance = point_distance_3d(self.position.x, self.position.y, self.position.z, sphere.position.x, sphere.position.y, sphere.position.z);
+        var ps = sphere.position;
+        var po = self.position;
+        var distance = point_distance_3d(po.x, po.y, po.z, ps.x, ps.y, ps.z);
         
         if (distance > self.imaginary_radius + sphere.radius) return false;
         
-        var nearest = self.NearestPoint(sphere.position);
-        //var dist = nearest.DistanceTo(sphere.position);
-        var dist = point_distance_3d(nearest.x, nearest.y, nearest.z, sphere.position.x, sphere.position.y, sphere.position.z);
-        return dist < sphere.radius;
+        var nearest = self.NearestPoint(ps);
+        return point_distance_3d(nearest.x, nearest.y, nearest.z, ps.x, ps.y, ps.z) < sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
