@@ -196,7 +196,8 @@ function ColTriangle(a, b, c) constructor {
         if (self.CheckRay(line.property_ray, hit_info)) {
             return (hit_info.distance <= line.property_length);
         }
-        var reverse = new ColLine(line.finish, line.start.Sub(line.finish));
+        static reverse = new ColLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+        reverse.SetEnds(line.finish, line.start.Sub(line.finish));
         if (self.CheckRay(reverse.property_ray, hit_info)) {
             return (hit_info.distance <= reverse.property_length);
         }
