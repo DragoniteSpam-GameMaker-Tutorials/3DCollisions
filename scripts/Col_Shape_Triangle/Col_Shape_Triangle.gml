@@ -19,6 +19,10 @@ function ColTriangle(a, b, c) constructor {
         self.property_normal = diffAB.Cross(diffAC).Normalize();
         var dist = self.property_normal.Dot(self.a);
         self.property_plane = new ColPlane(self.property_normal, dist);
+        
+        self.property_edge_ab = diffAB;
+        self.property_edge_bc = self.c.Sub(self.b);
+        self.property_edge_ca = self.a.Sub(self.c);
     };
     
     static CheckObject = function(object) {
@@ -82,7 +86,7 @@ function ColTriangle(a, b, c) constructor {
             
             var origin = self.a;
             var norm = self.property_normal;
-            var e1 = self.b.Sub(self.a);
+            var e1 = self.property_edge_ab;
             var e2 = e1.Cross(norm);
             
             var self_projected = new ColTriangle(
@@ -113,32 +117,33 @@ function ColTriangle(a, b, c) constructor {
         // Phase 3: the regular SAT
         
         // edges of ourself
-        var selfAB = self.b.Sub(self.a);
-        var selfBC = self.c.Sub(self.b);
-        var selfCA = self.a.Sub(self.c);
+        var selfAB = self.property_edge_ab;
+        var selfBC = self.property_edge_bc;
+        var selfCA = self.property_edge_ca;
         // edges of the other triangle
-        var otherAB = triangle.b.Sub(triangle.a);
-        var otherBC = triangle.c.Sub(triangle.b);
-        var otherCA = triangle.a.Sub(triangle.c);
+        var otherAB = triangle.property_edge_ab;
+        var otherBC = triangle.property_edge_bc;
+        var otherCA = triangle.property_edge_ca;
+        
+        static axes = array_create(11);
         
         // The normals of both triangle, plus each of the edges of 
         // triangle crossed against each of the edges of the other
-        var axes = [
-            self.property_normal,
-            triangle.property_normal,
-            otherAB.Cross(selfAB),
-            otherBC.Cross(selfAB),
-            otherCA.Cross(selfAB),
-            otherAB.Cross(selfBC),
-            otherBC.Cross(selfBC),
-            otherCA.Cross(selfBC),
-            otherAB.Cross(selfCA),
-            otherBC.Cross(selfCA),
-            otherCA.Cross(selfCA),
-        ];
+        axes[0] = self.property_normal;
+        axes[1] = triangle.property_normal;
+        axes[2] = otherAB.Cross(selfAB);
+        axes[3] = otherBC.Cross(selfAB);
+        axes[4] = otherCA.Cross(selfAB);
+        axes[5] = otherAB.Cross(selfBC);
+        axes[6] = otherBC.Cross(selfBC);
+        axes[7] = otherCA.Cross(selfBC);
+        axes[8] = otherAB.Cross(selfCA);
+        axes[9] = otherBC.Cross(selfCA);
+        axes[10] = otherCA.Cross(selfCA);
         
-        for (var i = 0; i < 11; i++) {
-            if (!col_overlap_axis(self, triangle, axes[i])) {
+        var i = 0;
+        repeat (11) {
+            if (!col_overlap_axis(self, triangle, axes[i++])) {
                 return false;
             }
         }
@@ -263,11 +268,11 @@ function ColTriangle(a, b, c) constructor {
         var pb = vec3.Sub(self.b);
         var pc = vec3.Sub(self.c);
         
-        var ab = self.b.Sub(self.a);
+        var ab = self.property_edge_ab;
         var ac = self.c.Sub(self.a);
-        var bc = self.c.Sub(self.b);
+        var bc = self.property_edge_bc;
         var cb = self.b.Sub(self.c);
-        var ca = self.a.Sub(self.c);
+        var ca = self.property_edge_ca;
         
         var v = ab.Sub(ab.Project(cb));
         var a = 1 - (v.Dot(pa) / v.Dot(ab));
