@@ -92,9 +92,9 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckLine = function(line) {
-        var nearest = line.NearestPoint(self.position);
-        var dist = nearest.DistanceTo(self.position);
-        return dist < self.radius;
+        var p = self.position;
+        var nearest = line.NearestPoint(p);
+        return point_distance_3d(nearest.x, nearest.y, nearest.z, p.x, p.y, p.z) < self.radius;
     };
     
     static DisplaceSphere = function(sphere) {
