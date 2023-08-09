@@ -207,26 +207,18 @@ function ColTriangle(a, b, c) constructor {
     static DisplaceSphere = function(sphere) {
         if (!self.CheckSphere(sphere)) return undefined;
         
-        var nearest = self.NearestPoint(sphere.position);
+        var pt = self.property_center;
+        var ps = sphere.position;
+        var nearest = self.NearestPoint(ps);
+        // you may also wish to just use the normal of the triangle in this case
+        if (point_distance_3d(pt.x, pt.y, pt.z, ps.x, ps.y, ps.z) == 0) return undefined;
         
-        // you may wish to just use the normal of the triangle in this case
-        if (nearest.DistanceTo(sphere.position) == 0) return undefined;
-        
-        var dir = sphere.position.Sub(nearest).Normalize();
+        var dir = ps.Sub(nearest).Normalize();
         var offset = dir.Mul(sphere.radius);
         
         return nearest.Add(offset);
     };
-    /*
-    static DisplaceSphere = function(sphere) {
-        if (!self.CheckSphere(sphere)) return undefined;
-        
-        var nearest = self.NearestPoint(sphere.position);
-        var offset = self.property_normal.Mul(sphere.radius);
-        
-        return nearest.Add(offset);
-    };
-    */
+    
     static GetNormal = function() {
         return self.property_normal;
     };
