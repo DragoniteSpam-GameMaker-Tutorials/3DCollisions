@@ -237,7 +237,7 @@ function ColTriangle(a, b, c) constructor {
         
         test_point.position = nearest_to_plane;
         
-        if (self.CheckPoint(test_point)) {
+        if (test_point.CheckTriangle(self)) {
             return nearest_to_plane;
         }
         
@@ -252,9 +252,11 @@ function ColTriangle(a, b, c) constructor {
         var nearest_to_bc = lineBC.NearestPoint(vec3);
         var nearest_to_ca = lineCA.NearestPoint(vec3);
         
-        var dist_ab = vec3.DistanceTo(nearest_to_ab);
-        var dist_bc = vec3.DistanceTo(nearest_to_bc);
-        var dist_ca = vec3.DistanceTo(nearest_to_ca);
+        var vx = vec3.x, vy = vec3.y, vz = vec3.z;
+        
+        var dist_ab = point_distance_3d(vx, vy, vz, nearest_to_ab.x, nearest_to_ab.y, nearest_to_ab.z);
+        var dist_bc = point_distance_3d(vx, vy, vz, nearest_to_bc.x, nearest_to_bc.y, nearest_to_bc.z);
+        var dist_ca = point_distance_3d(vx, vy, vz, nearest_to_ca.x, nearest_to_ca.y, nearest_to_ca.z);
         
         if (dist_ab < dist_bc && dist_ab < dist_ca) {
             return nearest_to_ab;
