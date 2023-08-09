@@ -120,8 +120,7 @@ function ColAABB(position, half_extents) constructor {
         var anorm = plane.normal.Abs();
         var plength = self.half_extents.Dot(anorm);
         var ndot = plane.normal.Dot(self.position);
-        var dist = ndot - plane.distance;
-        return (abs(dist) <= plength);
+        return (abs(ndot - plane.distance) <= plength);
     };
     
     static CheckOBB = function(obb) {
@@ -269,10 +268,10 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckAABBSAT = function(aabb) {
-        var axes = [
+        static axes = [
             new Vector3(1, 0, 0),
             new Vector3(0, 1, 0),
-            new Vector3(0, 0, 1),
+            new Vector3(0, 0, 1)
         ];
         
         for (var i = 0; i < 3; i++) {
@@ -287,10 +286,10 @@ function ColAABB(position, half_extents) constructor {
     static GetInterval = function(axis) {
         var vertices = self.property_vertices;
         
-        var imin = axis.Dot(vertices[0]);
-        var imax = imin;
+        var imin = infinity;
+        var imax = -infinity;
         
-        for (var i = 1; i < 8; i++) {
+        for (var i = 0; i < 8; i++) {
             var dot = axis.Dot(vertices[i]);
             imin = min(imin, dot);
             imax = max(imax, dot);
