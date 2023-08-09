@@ -198,9 +198,9 @@ function ColAABB(position, half_extents) constructor {
         var dir = ray.direction;
         var p = ray.origin;
         
-        var ray_x = (dir.x == 0) ? 0.0001 : dir;
-        var ray_y = (dir.y == 0) ? 0.0001 : dir;
-        var ray_z = (dir.z == 0) ? 0.0001 : dir;
+        var ray_x = (dir.x == 0) ? 0.0001 : dir.x;
+        var ray_y = (dir.y == 0) ? 0.0001 : dir.y;
+        var ray_z = (dir.z == 0) ? 0.0001 : dir.z;
         
         var t1 = (box_min.x - p.x) / ray_x;
         var t2 = (box_max.x - p.x) / ray_x;
