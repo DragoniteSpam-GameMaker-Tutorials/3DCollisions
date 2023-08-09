@@ -72,8 +72,8 @@ function ColSphere(position, radius) constructor {
     
     static CheckRay = function(ray, hit_info) {
         var e = self.position.Sub(ray.origin);
-        var mag_squared = power(e.Magnitude(), 2);
-        var r_squared = power(self.radius, 2);
+        var mag_squared = sqr(e.Magnitude());
+        var r_squared = sqr(self.radius);
         var EdotD = e.Dot(ray.direction);
         var offset = r_squared - (mag_squared - (EdotD * EdotD));
         if (offset < 0) return false;
