@@ -208,28 +208,35 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckTriangle = function(triangle) {
-        var edges = [
-            triangle.b.Sub(triangle.a),
-            triangle.c.Sub(triangle.b),
-            triangle.a.Sub(triangle.c),
-        ];
+        static axes = array_create(13);
         
-        var axes = [
-            self.orientation.x,
-            self.orientation.y,
-            self.orientation.z,
-            
-            triangle.property_normal,
-        ];
+        var ab = triangle.property_edge_ab;
+        var bc = triangle.property_edge_bc;
+        var ca = triangle.property_edge_ca;
         
-        for (var i = 0; i < 3; i++) {
-            for (var j = 0; j < 3; j++) {
-                array_push(axes, axes[i].Cross(edges[j]));
-            }
-        }
+        var ox = self.orientation.x;
+        var oy = self.orientation.y;
+        var oz = self.orientation.z;
+        var tn = triangle.property_normal;
         
-        for (var i = 0; i < 13; i++) {
-            if (!col_overlap_axis(self, triangle, axes[i])) {
+        axes[0] = ox;
+        axes[1] = oy;
+        axes[2] = oz;
+        axes[3] = tn;
+        
+        axes[4] = ox.Cross(ab);
+        axes[5] = ox.Cross(bc);
+        axes[6] = ox.Cross(ca);
+        axes[7] = oy.Cross(ab);
+        axes[8] = oy.Cross(bc);
+        axes[9] = oy.Cross(ca);
+        axes[10] = oz.Cross(ab);
+        axes[11] = oz.Cross(bc);
+        axes[12] = oz.Cross(ca);
+        
+        var i = 0;
+        repeat (13) {
+            if (!col_overlap_axis(self, triangle, axes[i++])) {
                 return false;
             }
         }
