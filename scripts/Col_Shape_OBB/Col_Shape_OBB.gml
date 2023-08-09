@@ -74,7 +74,7 @@ function ColOBB(position, size, orientation) constructor {
         var dir = point.position.Sub(self.position);
         
         var size_array = self.size.AsLinearArray();
-        var orientation_array = self.orientation.AsVectorArray();
+        var orientation_array = self.orientation.vector_array;
         
         for (var i = 0; i < 3; i++) {
             var axis = orientation_array[i];
@@ -321,7 +321,7 @@ function ColOBB(position, size, orientation) constructor {
         var dir = vec3.Sub(self.position);
         
         var size_array = self.size.AsLinearArray();
-        var orientation_array = self.orientation.AsVectorArray();
+        var orientation_array = self.orientation.vector_array;
         
         for (var i = 0; i < 3; i++) {
             var axis = orientation_array[i];
