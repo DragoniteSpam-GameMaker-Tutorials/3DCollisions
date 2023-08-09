@@ -75,13 +75,14 @@ function ColPoint(position) constructor {
     
     static CheckLine = function(line) {
         var nearest = line.NearestPoint(self.position);
-         return (nearest.DistanceTo(self.position) == 0);
+        var dist = point_distance_3d(nearest.x, nearest.y, nearest.z, self.position.x, self.position.y, self.position.z);
+         return (dist == 0);
     };
     
     static DisplaceSphere = function(sphere) {
         if (!self.CheckSphere(sphere)) return undefined;
         
-        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        if (self.position.Equals(sphere.position)) return undefined;
         
         var dir = sphere.position.Sub(self.position).Normalize();
         var offset = dir.Mul(sphere.radius);
