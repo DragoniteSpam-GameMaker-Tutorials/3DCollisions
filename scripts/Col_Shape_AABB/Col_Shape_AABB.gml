@@ -132,32 +132,42 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckTriangle = function(triangle) {
-        var ab = triangle.b.Sub(triangle.a);
-        var bc = triangle.c.Sub(triangle.b);
-        var ca = triangle.a.Sub(triangle.c);
+        var ab = triangle.property_edge_ab;
+        var bc = triangle.property_edge_bc;
+        var ca = triangle.property_edge_ca;
+         
+        static nx = new Vector3(1, 0, 0);
+        static ny = new Vector3(0, 1, 0);
+        static nz = new Vector3(0, 0, 1);
         
-        var nx = new Vector3(1, 0, 0);
-        var ny = new Vector3(0, 1, 0);
-        var nz = new Vector3(0, 0, 1);
-        
-        var axes = [
-            nx,
-            ny,
-            nz,
-            triangle.property_normal,
-            nx.Cross(ab),
-            nx.Cross(bc),
-            nx.Cross(ca),
-            ny.Cross(ab),
-            ny.Cross(bc),
-            ny.Cross(ca),
-            nz.Cross(ab),
-            nz.Cross(bc),
-            nz.Cross(ca),
+        static axes = [
+            nx, ny, nz,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined
         ];
         
-        for (var i = 0; i < 13; i++) {
-            if (!col_overlap_axis(self, triangle, axes[i])) {
+        axes[3] = triangle.property_normal;
+        axes[4] = nx.Cross(ab);
+        axes[5] = nx.Cross(bc);
+        axes[6] = nx.Cross(ca);
+        axes[7] = ny.Cross(ab);
+        axes[8] = ny.Cross(bc);
+        axes[9] = ny.Cross(ca);
+        axes[10] = nz.Cross(ab);
+        axes[11] = nz.Cross(bc);
+        axes[12] = nz.Cross(ca);
+        
+        var i = 0;
+        repeat (13) {
+            if (!col_overlap_axis(self, triangle, axes[i++])) {
                 return false;
             }
         }
