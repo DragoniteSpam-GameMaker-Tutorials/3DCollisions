@@ -30,6 +30,8 @@ function ColTriangle(a, b, c) constructor {
             (self.a.z + self.b.z + self.c.z) / 3
         );
         self.property_radius = self.property_center.DistanceTo(self.a);
+        self.property_min = new Vector3(min(self.a.x, self.b.x, self.c.x), min(self.a.y, self.b.y, self.c.y), min(self.a.z, self.b.z, self.c.z));
+        self.property_max = new Vector3(max(self.a.x, self.b.x, self.c.x), max(self.a.y, self.b.y, self.c.y), max(self.a.z, self.b.z, self.c.z));
     };
     
     static CheckObject = function(object) {
@@ -309,10 +311,10 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static GetMin = function() {
-        return new Vector3(min(self.a.x, self.b.x, self.c.x), min(self.a.y, self.b.y, self.c.y), min(self.a.z, self.b.z, self.c.z));
+        return self.property_min;
     };
     
     static GetMax = function() {
-        return new Vector3(max(self.a.x, self.b.x, self.c.x), max(self.a.y, self.b.y, self.c.y), max(self.a.z, self.b.z, self.c.z));
+        return self.property_max;
     };
 }
