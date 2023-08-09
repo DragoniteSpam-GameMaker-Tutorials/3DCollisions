@@ -281,13 +281,19 @@ function ColTriangle(a, b, c) constructor {
         var ca = self.property_edge_ca;
         
         var v = ab.Sub(ab.Project(cb));
-        var a = 1 - (v.Dot(pa) / v.Dot(ab));
+        var vdpa = dot_product_3d(v.x, v.y, v.z, pa.x, pa.y, pa.z);
+        var vdab = dot_product_3d(v.x, v.y, v.z, ab.x, ab.y, ab.z);
+        var a = 1 - vdpa / vdab;
         
         v = bc.Sub(bc.Project(ac));
-        var b = 1 - (v.Dot(pb) / v.Dot(bc));
+        var vdpb = dot_product_3d(v.x, v.y, v.z, pb.x, pb.y, pb.z);
+        var vdbc = dot_product_3d(v.x, v.y, v.z, bc.x, bc.y, bc.z);
+        var b = 1 - vdpb / vdbc;
         
         v = ca.Sub(ca.Project(ab));
-        var c = 1 - (v.Dot(pc) / v.Dot(ca));
+        var vdpc = dot_product_3d(v.x, v.y, v.z, pc.x, pc.y, pc.z);
+        var vdca = dot_product_3d(v.x, v.y, v.z, ca.x, ca.y, ca.z);
+        var c = 1 - vdpc / vdca;
         
         return new Vector3(a, b, c);
     };
