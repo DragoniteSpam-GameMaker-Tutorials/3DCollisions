@@ -32,9 +32,12 @@ function RaycastHitInformation() constructor {
 }
 
 function col_project_onto_plane(vertex, origin, norm, e1, e2) {
-    var t1 = e1.Dot(vertex.Sub(origin));
-    var t2 = e2.Dot(vertex.Sub(origin));
-    return new Vector3(t1, t2, 0);
+    var diff = vertex.Sub(origin);
+    return new Vector3(
+        dot_product_3d(diff.x, diff.y, diff.z, e1.x, e1.y, e1.z),
+        dot_product_3d(diff.x, diff.y, diff.z, e2.x, e2.y, e2.z),
+        0
+    );
 }
 
 function col_lines_intersect(a, b, c, d) {
