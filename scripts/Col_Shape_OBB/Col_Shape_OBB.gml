@@ -185,11 +185,20 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckPlane = function(plane) {
-        var plen = self.size.x * abs(plane.normal.Dot(self.orientation.x)) +
-            self.size.y * abs(plane.normal.Dot(self.orientation.y)) +
-            self.size.z * abs(plane.normal.Dot(self.orientation.z));
+        var normal = plane.normal;
+        var nx = normal.x;
+        var ny = normal.y;
+        var nz = normal.z;
+        var ox = self.orientation.x;
+        var oy = self.orientation.y;
+        var oz = self.orientation.z;
+        var p = self.position;
+        var plen =
+            self.size.x * abs(dot_product_3d(nx, ny, nz, ox, oy, oz)) +
+            self.size.y * abs(dot_product_3d(nx, ny, nz, ox, oy, oz)) +
+            self.size.z * abs(dot_product_3d(nx, ny, nz, ox, oy, oz));
         
-        var dist = plane.normal.Dot(self.position) - plane.distance;
+        var dist = dot_product_3d(nx, ny, nz, p.x, p.y, p.z) - plane.distance;
         
         return abs(dist) < plen;
     };
