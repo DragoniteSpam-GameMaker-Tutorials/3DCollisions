@@ -142,31 +142,41 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckOBB = function(obb) {
-        var my_radius = self.size.Magnitude();
-        var other_radius = obb.size.Magnitude();
+        var p1 = self.position;
+        var p2 = obb.position;
         
-        var distance = self.position.DistanceTo(obb.position);
-        if (distance > my_radius + other_radius) return false;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > self.imaginary_radius + obb.imaginary_radius) return false;
         
+        static axes = array_create(15);
         
-        var axes = [
-            obb.orientation.x,
-            obb.orientation.y,
-            obb.orientation.z,
-            
-            self.orientation.x,
-            self.orientation.y,
-            self.orientation.z,
-        ];
+        var ix = obb.orientation.x;
+        var iy = obb.orientation.y;
+        var iz = obb.orientation.z;
+        var ox = self.orientation.x;
+        var oy = self.orientation.y;
+        var oz = self.orientation.z;
         
-        for (var i = 0; i < 3; i++) {
-            for (var j = 3; j < 6; j++) {
-                array_push(axes, axes[i].Cross(axes[j]));
-            }
-        }
+        axes[0] = ix;
+        axes[1] = iy;
+        axes[2] = iz;
         
-        for (var i = 0; i < 15; i++) {
-            if (!col_overlap_axis(self, obb, axes[i])) {
+        axes[3] = ox;
+        axes[4] = oy;
+        axes[5] = oz;
+        
+        axes[6] = ix.Cross(ox);
+        axes[7] = iy.Cross(ox);
+        axes[8] = iz.Cross(ox);
+        axes[9] = ix.Cross(oy);
+        axes[10] = iy.Cross(oy);
+        axes[11] = iz.Cross(oy);
+        axes[12] = ix.Cross(oz);
+        axes[13] = iy.Cross(oz);
+        axes[14] = iz.Cross(oz);
+        
+        var i = 0;
+        repeat (15) {
+            if (!col_overlap_axis(self, obb, axes[i++])) {
                 return false;
             }
         }
