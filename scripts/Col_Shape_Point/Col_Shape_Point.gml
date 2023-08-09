@@ -1,6 +1,11 @@
 function ColPoint(position) constructor {
     self.position = position;               // Vec3
     
+    self.SetPosition = function(position) {
+        self.position = position;
+        return self;
+    };
+    
     static CheckObject = function(object) {
         return object.shape.CheckPoint(self);
     };
