@@ -63,6 +63,8 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static CheckTriangle = function(triangle) {
+        static zero_vector = new Vector3(0, 0, 0);
+        
         var p1 = self.property_center;
         var p2 = triangle.property_center;
         if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) >= (self.property_radius + triangle.property_radius)) return false;
@@ -76,13 +78,13 @@ function ColTriangle(a, b, c) constructor {
         var pab = plane_a.PlaneEquation(triangle.b);
         var pac = plane_a.PlaneEquation(triangle.c);
         
-        var pba = plane_b.PlaneEquation(self.a);
-        var pbb = plane_b.PlaneEquation(self.b);
-        var pbc = plane_b.PlaneEquation(self.c);
-        
         if ((paa * pab) > 0 && (paa * pac) > 0) {
             return false;
         }
+        
+        var pba = plane_b.PlaneEquation(self.a);
+        var pbb = plane_b.PlaneEquation(self.b);
+        var pbc = plane_b.PlaneEquation(self.c);
         
         if ((pba * pbb) > 0 && (pba * pbc) > 0) {
             return false;
@@ -90,39 +92,43 @@ function ColTriangle(a, b, c) constructor {
         
         // Phase 2: are both triangles coplanar?
         if (plane_a.distance == plane_b.distance && abs(plane_a.normal.Dot(plane_b.normal)) == 1) {
-            if (new ColPoint(self.a).CheckTriangle(triangle)) return true;
-            if (new ColPoint(self.b).CheckTriangle(triangle)) return true;
-            if (new ColPoint(self.c).CheckTriangle(triangle)) return true;
-            if (new ColPoint(triangle.a).CheckTriangle(self)) return true;
-            if (new ColPoint(triangle.b).CheckTriangle(self)) return true;
-            if (new ColPoint(triangle.c).CheckTriangle(self)) return true;
+            static test_point = new ColPoint(zero_vector);
+            
+            test_point.position = self.a;
+            if (test_point.CheckTriangle(triangle)) return true;
+            test_point.position = self.b;
+            if (test_point.CheckTriangle(triangle)) return true;
+            test_point.position = self.c;
+            if (test_point.CheckTriangle(triangle)) return true;
+            test_point.position = triangle.a;
+            if (test_point.CheckTriangle(triangle)) return true;
+            test_point.position = triangle.b;
+            if (test_point.CheckTriangle(triangle)) return true;
+            test_point.position = triangle.c;
+            if (test_point.CheckTriangle(triangle)) return true;
             
             var origin = self.a;
             var norm = self.property_normal;
             var e1 = self.property_edge_ab;
             var e2 = e1.Cross(norm);
             
-            var self_projected = new ColTriangle(
-                col_project_onto_plane(self.a, origin, norm, e1, e2),
-                col_project_onto_plane(self.b, origin, norm, e1, e2),
-                col_project_onto_plane(self.c, origin, norm, e1, e2),
-            );
+            var sa = col_project_onto_plane(self.a, origin, norm, e1, e2);
+            var sb = col_project_onto_plane(self.b, origin, norm, e1, e2);
+            var sc = col_project_onto_plane(self.c, origin, norm, e1, e2);
             
-            var other_projected = new ColTriangle(
-                col_project_onto_plane(triangle.a, origin, norm, e1, e2),
-                col_project_onto_plane(triangle.b, origin, norm, e1, e2),
-                col_project_onto_plane(triangle.c, origin, norm, e1, e2),
-            );
+            var oa = col_project_onto_plane(triangle.a, origin, norm, e1, e2);
+            var ob = col_project_onto_plane(triangle.b, origin, norm, e1, e2);
+            var oc = col_project_onto_plane(triangle.c, origin, norm, e1, e2);
             
-            if (col_lines_intersect(self_projected.a, self_projected.b, other_projected.a, other_projected.b)) return true;
-            if (col_lines_intersect(self_projected.a, self_projected.b, other_projected.b, other_projected.c)) return true;
-            if (col_lines_intersect(self_projected.a, self_projected.b, other_projected.c, other_projected.a)) return true;
-            if (col_lines_intersect(self_projected.b, self_projected.c, other_projected.a, other_projected.b)) return true;
-            if (col_lines_intersect(self_projected.b, self_projected.c, other_projected.b, other_projected.c)) return true;
-            if (col_lines_intersect(self_projected.b, self_projected.c, other_projected.c, other_projected.a)) return true;
-            if (col_lines_intersect(self_projected.c, self_projected.a, other_projected.a, other_projected.b)) return true;
-            if (col_lines_intersect(self_projected.c, self_projected.a, other_projected.b, other_projected.c)) return true;
-            if (col_lines_intersect(self_projected.c, self_projected.a, other_projected.c, other_projected.a)) return true;
+            if (col_lines_intersect(sa, sb, oa, ob)) return true;
+            if (col_lines_intersect(sa, sb, ob, oc)) return true;
+            if (col_lines_intersect(sa, sb, oc, oa)) return true;
+            if (col_lines_intersect(sb, sc, oa, ob)) return true;
+            if (col_lines_intersect(sb, sc, ob, oc)) return true;
+            if (col_lines_intersect(sb, sc, oc, oa)) return true;
+            if (col_lines_intersect(sc, sa, oa, ob)) return true;
+            if (col_lines_intersect(sc, sa, ob, oc)) return true;
+            if (col_lines_intersect(sc, sa, oc, oa)) return true;
             
             return false;
         }
