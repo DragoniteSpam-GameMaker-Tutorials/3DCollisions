@@ -26,12 +26,7 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
     
     self.vector_array = [self.x, self.y, self.z];
     
-    self.rotation_matrix = new Matrix4(
-        self.x.x, self.x.y, self.x.z, 0,
-        self.y.x, self.y.y, self.y.z, 0,
-        self.z.x, self.z.y, self.z.z, 0,
-        0,        0,        0,        1
-    );
+    self.rotation_matrix = undefined;
     
     static AsLinearArray = function() {
         return self.linear_array;
@@ -42,15 +37,21 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
     };
     
     static GetRotationMatrix = function() {
+        self.rotation_matrix ??= new Matrix4(
+            self.x.x, self.x.y, self.x.z, 0,
+            self.y.x, self.y.y, self.y.z, 0,
+            self.z.x, self.z.y, self.z.z, 0,
+            0,        0,        0,        1
+        );
         return self.rotation_matrix;
     };
     
     static Mul = function(mat) {
-        return self.rotation_matrix.Mul(mat.rotation_matrix).GetOrientationMatrix();
+        return self.GetRotationMatrix().Mul(mat.GetRotationMatrix()).GetOrientationMatrix();
     };
     
     static MulVector = function(vec) {
-        return self.rotation_matrix.MulVector(vec);
+        return self.GetRotationMatrix().MulVector(vec);
     };
 }
 
@@ -86,11 +87,7 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     
     self.vector_array = [self.x, self.y, self.z, self.w];
     
-    self.orientation_matrix = new Matrix3(
-        self.x.x, self.y.x, self.z.x,
-        self.x.y, self.y.y, self.z.y,
-        self.x.z, self.y.z, self.z.z
-    );
+    self.orientation_matrix = undefined;
     
     static AsLinearArray = function() {
         return self.linear_array;
@@ -101,6 +98,11 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     };
     
     static GetOrientationMatrix = function() {
+        self.orientation_matrix ??= new Matrix3(
+            self.x.x, self.y.x, self.z.x,
+            self.x.y, self.y.y, self.z.y,
+            self.x.z, self.y.z, self.z.z
+        );
         return self.orientation_matrix;
     };
     
