@@ -195,16 +195,19 @@ function ColAABB(position, half_extents) constructor {
         var box_min = self.property_min;
         var box_max = self.property_max;
         
-        var ray_x = (ray.direction.x == 0) ? 0.0001 : ray.direction.x;
-        var ray_y = (ray.direction.y == 0) ? 0.0001 : ray.direction.y;
-        var ray_z = (ray.direction.z == 0) ? 0.0001 : ray.direction.z;
+        var dir = ray.direction;
+        var p = ray.origin;
         
-        var t1 = (box_min.x - ray.origin.x) / ray_x;
-        var t2 = (box_max.x - ray.origin.x) / ray_x;
-        var t3 = (box_min.y - ray.origin.y) / ray_y;
-        var t4 = (box_max.y - ray.origin.y) / ray_y;
-        var t5 = (box_min.z - ray.origin.z) / ray_z;
-        var t6 = (box_max.z - ray.origin.z) / ray_z;
+        var ray_x = (dir.x == 0) ? 0.0001 : dir;
+        var ray_y = (dir.y == 0) ? 0.0001 : dir;
+        var ray_z = (dir.z == 0) ? 0.0001 : dir;
+        
+        var t1 = (box_min.x - p.x) / ray_x;
+        var t2 = (box_max.x - p.x) / ray_x;
+        var t3 = (box_min.y - p.y) / ray_y;
+        var t4 = (box_max.y - p.y) / ray_y;
+        var t5 = (box_min.z - p.z) / ray_z;
+        var t6 = (box_max.z - p.z) / ray_z;
         
         var tmin = max(
             min(t1, t2),
@@ -225,7 +228,7 @@ function ColAABB(position, half_extents) constructor {
             t = tmin;
         }
         
-        var contact_point = ray.origin.Add(ray.direction.Mul(t));
+        var contact_point = p.Add(dir.Mul(t));
         
         var tnormal;
         if (t == t1) tnormal = new Vector3(-1, 0, 0);
