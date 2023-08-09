@@ -101,24 +101,39 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckAABB = function(aabb) {
-        var axes = [
-            new Vector3(1, 0, 0),
-            new Vector3(0, 1, 0),
-            new Vector3(0, 0, 1),
-            
-            self.orientation.x,
-            self.orientation.y,
-            self.orientation.z,
+        static vec_x = new Vector3(1, 0, 0);
+        static vec_y = new Vector3(0, 1, 0);
+        static vec_z = new Vector3(0, 0, 1);
+        
+        static axes = [
+            vec_x, vec_y, vec_z,
+            undefined, undefined, undefined,
+            undefined, undefined, undefined,
+            undefined, undefined, undefined,
+            undefined, undefined, undefined
         ];
         
-        for (var i = 0; i < 3; i++) {
-            for (var j = 3; j < 6; j++) {
-                array_push(axes, axes[i].Cross(axes[j]));
-            }
-        }
+        var ox = self.orientation.x;
+        var oy = self.orientation.y;
+        var oz = self.orientation.z;
         
-        for (var i = 0; i < 15; i++) {
-            if (!col_overlap_axis(self, aabb, axes[i])) {
+        axes[3] = ox;
+        axes[4] = oy;
+        axes[5] = oz;
+        
+        axes[6] = vec_x.Cross(ox);
+        axes[7] = vec_y.Cross(ox);
+        axes[8] = vec_z.Cross(ox);
+        axes[9] = vec_x.Cross(oy);
+        axes[10] = vec_y.Cross(oy);
+        axes[11] = vec_z.Cross(oy);
+        axes[12] = vec_x.Cross(oz);
+        axes[13] = vec_y.Cross(oz);
+        axes[14] = vec_z.Cross(oz);
+        
+        var i = 0;
+        repeat (15) {
+            if (!col_overlap_axis(self, aabb, axes[i++])) {
                 return false;
             }
         }
