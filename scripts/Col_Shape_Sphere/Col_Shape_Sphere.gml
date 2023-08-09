@@ -2,6 +2,23 @@ function ColSphere(position, radius) constructor {
     self.position = position;               // Vec3
     self.radius = radius;                   // Vec3
     
+    static SetPosition = function(position) {
+        self.position = position;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static SetRadius = function(radius) {
+        self.radius = radius;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static RecalculateProperties = function() {
+        self.property_min = self.position.Sub(self.radius);
+        self.property_max = self.position.Add(self.radius);
+    };
+    
     static CheckObject = function(object) {
         return object.shape.CheckSphere(self);
     };
