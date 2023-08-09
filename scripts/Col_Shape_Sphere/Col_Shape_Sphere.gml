@@ -114,11 +114,11 @@ function ColSphere(position, radius) constructor {
     };
     
     static GetMin = function() {
-        return self.position.Sub(self.radius);
+        return self.property_min;
     };
     
     static GetMax = function() {
-        return self.position.Add(self.radius);
+        return self.property_max;
     };
     
     static CheckFrustum = function(frustum) {
