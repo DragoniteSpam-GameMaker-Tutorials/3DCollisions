@@ -4,22 +4,28 @@ function ColTestPoint(vbuff) constructor {
     
     self.update = function() {
         if (keyboard_check(vk_left)) {
-            self.data.position.x--;
+            var offset = new Vector3(-1, 0, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_right)) {
-            self.data.position.x++;
+            var offset = new Vector3(1, 0, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_up)) {
-            self.data.position.y--;
+            var offset = new Vector3(0, -1, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_down)) {
-            self.data.position.y++;
+            var offset = new Vector3(0, 1, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.position.z--;
+            var offset = new Vector3(0, 0, 1);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.position.z++;
+            var offset = new Vector3(0, 0, -1);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
     };
     self.draw = function() {
@@ -38,22 +44,28 @@ function ColTestSphere(vbuff) constructor {
     
     self.update = function() {
         if (keyboard_check(vk_left)) {
-            self.data.position.x--;
+            var offset = new Vector3(-1, 0, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_right)) {
-            self.data.position.x++;
+            var offset = new Vector3(1, 0, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_up)) {
-            self.data.position.y--;
+            var offset = new Vector3(0, -1, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_down)) {
-            self.data.position.y++;
+            var offset = new Vector3(0, 1, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.position.z--;
+            var offset = new Vector3(0, 0, 1);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.position.z++;
+            var offset = new Vector3(0, 0, -1);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
     };
     self.draw = function() {
@@ -76,22 +88,28 @@ function ColTestAABB(vbuff) constructor {
     
     self.update = function() {
         if (keyboard_check(vk_left)) {
-            self.data.position.x--;
+            var offset = new Vector3(-1, 0, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_right)) {
-            self.data.position.x++;
+            var offset = new Vector3(1, 0, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_up)) {
-            self.data.position.y--;
+            var offset = new Vector3(0, -1, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_down)) {
-            self.data.position.y++;
+            var offset = new Vector3(0, 1, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.position.z--;
+            var offset = new Vector3(0, 0, 1);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.position.z++;
+            var offset = new Vector3(0, 0, -1);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
     };
     self.draw = function() {
@@ -225,24 +243,29 @@ function ColTestOBB(vbuff) constructor {
     self.vbuff = vbuff;
     
     self.update = function() {
-        var step = 0.1;
         if (keyboard_check(vk_left)) {
-            self.data.SetPosition(new Vector3(self.data.position.x - step, self.data.position.y, self.data.position.z));
+            var offset = new Vector3(-1, 0, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_right)) {
-            self.data.SetPosition(new Vector3(self.data.position.x + step, self.data.position.y, self.data.position.z));
+            var offset = new Vector3(1, 0, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_up)) {
-            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y - step, self.data.position.z));
+            var offset = new Vector3(0, -1, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_down)) {
-            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y + step, self.data.position.z));
+            var offset = new Vector3(0, 1, 0);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y, self.data.position.z - step));
+            var offset = new Vector3(0, 0, 1);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y, self.data.position.z + step));
+            var offset = new Vector3(0, 0, -1);
+            self.data.SetPosition(self.data.position.Add(offset));
         }
     };
     self.draw = function() {
