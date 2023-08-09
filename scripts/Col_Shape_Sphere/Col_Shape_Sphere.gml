@@ -28,7 +28,9 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        return self.position.DistanceTo(sphere.position) < (self.radius + sphere.radius);
+        var p1 = self.position;
+        var p2 = sphere.position;
+        return point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) < (self.radius + sphere.radius);
     };
     
     static CheckAABB = function(aabb) {
