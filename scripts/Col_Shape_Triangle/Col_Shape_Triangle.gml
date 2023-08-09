@@ -299,9 +299,13 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static GetInterval = function(axis) {
-        var imin = min(axis.Dot(self.a), axis.Dot(self.b), axis.Dot(self.c));
-        var imax = max(axis.Dot(self.a), axis.Dot(self.b), axis.Dot(self.c));
-        return new ColInterval(imin, imax);
+        var ax = axis.x;
+        var ay = axis.y;
+        var az = axis.z;
+        var ada = dot_product_3d(ax, ay, az, self.a.x, self.a.y, self.a.z);
+        var adb = dot_product_3d(ax, ay, az, self.b.x, self.b.y, self.b.z);
+        var adc = dot_product_3d(ax, ay, az, self.c.x, self.c.y, self.c.z);
+        return new ColInterval(min(ada, adb, adc), max(ada, adb, adc));
     };
     
     static GetMin = function() {
