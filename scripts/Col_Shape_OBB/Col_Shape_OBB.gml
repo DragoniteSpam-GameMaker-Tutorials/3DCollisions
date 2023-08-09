@@ -73,7 +73,7 @@ function ColOBB(position, size, orientation) constructor {
     static CheckPoint = function(point) {
         var dir = point.position.Sub(self.position);
         
-        var size_array = self.size.AsLinearArray();
+        var size_array = self.size.linear_array;
         var orientation_array = self.orientation.vector_array;
         
         for (var i = 0; i < 3; i++) {
@@ -213,7 +213,7 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
-        var size_array = self.size.AsLinearArray();
+        var size_array = self.size.linear_array;
         
         var dir = self.position.Sub(ray.origin);
         
@@ -302,13 +302,6 @@ function ColOBB(position, size, orientation) constructor {
         
         if (nearest.DistanceTo(sphere.position) == 0) {
             return undefined;
-            /*
-            var dir_to_center = sphere.position.Sub(self.position).Normalize();
-            var new_point = dir_to_center.Mul(self.half_extents.Magnitude());
-            
-            nearest = self.NearestPoint(new_point);
-            var dir = nearest.Sub(sphere.position).Normalize();
-            */
         } else {
             var dir = sphere.position.Sub(nearest).Normalize();
         }
@@ -320,7 +313,7 @@ function ColOBB(position, size, orientation) constructor {
         var result = self.position;
         var dir = vec3.Sub(self.position);
         
-        var size_array = self.size.AsLinearArray();
+        var size_array = self.size.linear_array;
         var orientation_array = self.orientation.vector_array;
         
         for (var i = 0; i < 3; i++) {
