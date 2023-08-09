@@ -43,9 +43,9 @@ function ColSphere(position, radius) constructor {
     };
     
     static CheckPlane = function(plane) {
-        var nearest = plane.NearestPoint(self.position);
-        var dist = nearest.DistanceTo(self.position);
-        return dist < self.radius;
+        var ps = self.position;
+        var nearest = plane.NearestPoint(ps);
+        return point_distance_3d(nearest.x, nearest.y, nearest.z, ps.x, ps.y, ps.z) < self.radius;
     };
     
     static CheckOBB = function(obb) {
