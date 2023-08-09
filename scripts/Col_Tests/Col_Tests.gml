@@ -177,39 +177,33 @@ function ColTestTriangle() constructor {
     
     self.update = function() {
         if (keyboard_check(vk_left)) {
-            self.data.a.x--;
-            self.data.b.x--;
-            self.data.c.x--;
+            var offset = new Vector3(-1, 0, 0);
+            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.x--;
         }
         if (keyboard_check(vk_right)) {
-            self.data.a.x++;
-            self.data.b.x++;
-            self.data.c.x++;
+            var offset = new Vector3(1, 0, 0);
+            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.x++;
         }
         if (keyboard_check(vk_up)) {
-            self.data.a.y--;
-            self.data.b.y--;
-            self.data.c.y--;
+            var offset = new Vector3(0, -1, 0);
+            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.y--;
         }
         if (keyboard_check(vk_down)) {
-            self.data.a.y++;
-            self.data.b.y++;
-            self.data.c.y++;
+            var offset = new Vector3(0, 1, 0);
+            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.y++;
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.a.z++;
-            self.data.b.z++;
-            self.data.c.z++;
+            var offset = new Vector3(0, 0, 1);
+            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.z++;
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.a.z--;
-            self.data.b.z--;
-            self.data.c.z--;
+            var offset = new Vector3(0, 0, -1);
+            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.z--;
         }
     };
