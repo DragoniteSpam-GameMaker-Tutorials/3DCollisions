@@ -19,6 +19,7 @@ function ColAABB(position, half_extents) constructor {
     static RecalculateProperties = function() {
         self.property_min = self.position.Sub(self.half_extents);
         self.property_max = self.position.Add(self.half_extents);
+        self.property_radius = self.half_extents.Magnitude();
         
         var pmin = self.property_min;
         var pmax = self.property_max;
@@ -248,7 +249,7 @@ function ColAABB(position, half_extents) constructor {
     static DisplaceSphere = function(sphere) {
         if (!self.CheckSphere(sphere)) return undefined;
         
-        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        if (self.position.Equals(sphere.position)) return undefined;
         
         var nearest = self.NearestPoint(sphere.position);
         
@@ -335,10 +336,12 @@ function ColAABB(position, half_extents) constructor {
     static CheckFrustum = function(frustum) {
         var planes = frustum.AsArray();
         var is_intersecting_anything = false;
-        for (var i = 0, n = array_length(planes); i < n; i++) {
-            var r = self.half_extents.Magnitude();
-            
-            var dist = planes[i].normal.Dot(self.position) + planes[i].distance;
+        var r = self.property_radius;
+        var p = self.position;
+        var i = 0;
+        repeat (array_length(planes)) {
+            var plane = planes[i++];
+            var dist = dot_product_3d(plane.normal.x, plane.normal.y, plane.normal.z, p.x, p.y, p.z) + plane.distance;
             
             if (dist < -r)
                 return EFrustumResults.OUTSIDE;
