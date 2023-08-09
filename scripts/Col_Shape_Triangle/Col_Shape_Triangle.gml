@@ -23,6 +23,12 @@ function ColTriangle(a, b, c) constructor {
         self.property_edge_ab = diffAB;
         self.property_edge_bc = self.c.Sub(self.b);
         self.property_edge_ca = self.a.Sub(self.c);
+        
+        self.property_center = new Vector3(
+            (self.a.x + self.b.x + self.c.x) / 3,
+            (self.a.y + self.b.y + self.c.y) / 3,
+            (self.a.z + self.b.z + self.c.z) / 3
+        );
     };
     
     static CheckObject = function(object) {
