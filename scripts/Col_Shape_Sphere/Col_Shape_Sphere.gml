@@ -100,12 +100,14 @@ function ColSphere(position, radius) constructor {
     static DisplaceSphere = function(sphere) {
         if (!self.CheckSphere(sphere)) return undefined;
         
-        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        var p1 = self.position;
+        var p2 = sphere.position;
+        if (p1.x == p2.x && p1.y == p2.y && p1.z == p2.z) return undefined;
         
-        var dir = sphere.position.Sub(self.position).Normalize();
+        var dir = sphere.position.Sub(p1).Normalize();
         var offset = dir.Mul(sphere.radius + self.radius);
         
-        return self.position.Add(offset);
+        return p1.Add(offset);
     };
     
     static NearestPoint = function(vec3) {
