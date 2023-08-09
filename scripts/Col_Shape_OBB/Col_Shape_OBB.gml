@@ -253,34 +253,41 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
+        static direction_dots = array_create(3);
+        static position_dots = array_create(3);
+        static t = array_create(6, 0);
+        
         var size_array = self.size.linear_array;
         
         var dir = self.position.Sub(ray.origin);
+        var dx = dir.x, dy = dir.y, dz = dir.z;
+        var ox = self.orientation.x;
+        var oy = self.orientation.y;
+        var oz = self.orientation.z;
+        var rd = ray.direction;
+        var rdx = rd.x, rdy = rd.y, rdz = rd.z;
         
-        var direction_dots = [
-            self.orientation.x.Dot(ray.direction),
-            self.orientation.y.Dot(ray.direction),
-            self.orientation.z.Dot(ray.direction),
-        ];
+        direction_dots[0] = dot_product_3d(ox.x, ox.y, ox.z, rdx, rdy, rdz);
+        direction_dots[1] = dot_product_3d(oy.x, oy.y, oy.z, rdx, rdy, rdz);
+        direction_dots[2] = dot_product_3d(oz.x, oz.y, oz.z, rdx, rdy, rdz);
         
-        var position_dots = [
-            self.orientation.x.Dot(dir),
-            self.orientation.y.Dot(dir),
-            self.orientation.z.Dot(dir),
-        ];
-        
-        var t = array_create(6, 0);
+        direction_dots[3] = dot_product_3d(ox.x, ox.y, ox.z, dx, dy, dz);
+        direction_dots[4] = dot_product_3d(oy.x, oy.y, oy.z, dx, dy, dz);
+        direction_dots[5] = dot_product_3d(oz.x, oz.y, oz.z, dx, dy, dz);
         
         for (var i = 0; i < 3; i++) {
+            var dd = direction_dots[i];
+            var pd = position_dots[i];
+            var s = size_array[i];
             if (direction_dots[i] == 0) {
-                if ((-position_dots[i] - size_array[i]) > 0 || (-position_dots[i] + size_array[i]) < 0) {
+                if ((-pd - s) > 0 || (-pd + s) < 0) {
                     return false;
                 }
-                direction_dots[i] = 0.0001;
+                dd = 0.0001;
             }
             
-            t[i * 2 + 0] = (position_dots[i] + size_array[i]) / direction_dots[i];
-            t[i * 2 + 1] = (position_dots[i] - size_array[i]) / direction_dots[i];
+            t[i * 2 + 0] = (pd + s) / dd;
+            t[i * 2 + 1] = (pd - s) / dd;
         }
         
         var tmin = max(
@@ -300,21 +307,21 @@ function ColOBB(position, size, orientation) constructor {
         
         if (hit_info) {
             var contact_distance = (tmin < 0) ? tmax : tmin;
-            var contact_normal = new Vector3(0, 0, 0);
+            var contact_normal;
             
-            var contact_point = ray.origin.Add(ray.direction.Mul(contact_distance));
-            
-            var possible_normals = [
-                self.orientation.x,
-                self.orientation.x.Mul(-1),
-                self.orientation.y,
-                self.orientation.y.Mul(-1),
-                self.orientation.z,
-                self.orientation.z.Mul(-1),
-            ];
+            var contact_point = ray.origin.Add(rd.Mul(contact_distance));
             
             for (var i = 0; i < 6; i++) {
-                if (contact_distance == t[i]) contact_normal = possible_normals[i];
+                if (contact_distance == t[i]) {
+                    switch (i) {
+                        case 0: contact_normal = ox; break;
+                        case 1: contact_normal = ox.Mul(-1); break;
+                        case 2: contact_normal = oy; break;
+                        case 3: contact_normal = oy.Mul(-1); break;
+                        case 4: contact_normal = oz; break;
+                        case 5: contact_normal = oz.Mul(-1); break;
+                    }
+                }
             }
             
             hit_info.Update(contact_distance, self, contact_point, contact_normal);
