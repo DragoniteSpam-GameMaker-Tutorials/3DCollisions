@@ -343,16 +343,17 @@ function ColOBB(position, size, orientation) constructor {
     static DisplaceSphere = function(sphere) {
         if (!self.CheckSphere(sphere)) return undefined;
         
-        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        var ps = sphere.position;
+        var po = self.position;
+        if (ps.x == po.x && ps.y == po.y && ps.z == po.z) return undefined;
         
-        var nearest = self.NearestPoint(sphere.position);
+        var nearest = self.NearestPoint(ps);
         
-        if (nearest.DistanceTo(sphere.position) == 0) {
+        if (point_distance_3d(nearest.x, nearest.y, nearest.z, ps.x, ps.y, ps.z) == 0) {
             return undefined;
-        } else {
-            var dir = sphere.position.Sub(nearest).Normalize();
         }
         
+        var dir = sphere.position.Sub(nearest).Normalize();
         return nearest.Add(dir.Mul(sphere.radius));
     };
     
