@@ -272,13 +272,11 @@ function ColAABB(position, half_extents) constructor {
     static NearestPoint = function(vec3) {
         var box_min = self.property_min;
         var box_max = self.property_max;
-        var xx = (vec3.x < box_min.x) ? box_min.x : vec3.x;
-        var yy = (vec3.y < box_min.y) ? box_min.y : vec3.y;
-        var zz = (vec3.z < box_min.z) ? box_min.z : vec3.z;
-        xx = (xx > box_max.x) ? box_max.x : xx;
-        yy = (yy > box_max.y) ? box_max.y : yy;
-        zz = (zz > box_max.z) ? box_max.z : zz;
-        return new Vector3(xx, yy, zz);
+        return new Vector3(
+            clamp(vec3.x, box_min.x, box_max.x),
+            clamp(vec3.y, box_min.y, box_max.y),
+            clamp(vec3.z, box_min.z, box_max.z)
+        );
     };
     
     static CheckAABBSAT = function(aabb) {
