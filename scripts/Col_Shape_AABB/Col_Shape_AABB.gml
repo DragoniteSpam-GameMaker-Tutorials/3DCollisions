@@ -336,14 +336,16 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckFrustum = function(frustum) {
-        var planes = frustum.AsArray();
+        var planes = frustum.as_array;
         var is_intersecting_anything = false;
         var r = self.property_radius;
         var p = self.position;
+        var px = p.x, py = p.y, pz = p.z;
         var i = 0;
-        repeat (array_length(planes)) {
+        repeat (6) {
             var plane = planes[i++];
-            var dist = dot_product_3d(plane.normal.x, plane.normal.y, plane.normal.z, p.x, p.y, p.z) + plane.distance;
+            var n = plane.normal;
+            var dist = dot_product_3d(n.x, n.y, n.z, px, py, pz) + plane.distance;
             
             if (dist < -r)
                 return EFrustumResults.OUTSIDE;
