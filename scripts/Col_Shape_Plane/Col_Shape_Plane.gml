@@ -106,8 +106,8 @@ function ColPlane(normal, distance) constructor {
         // - +1ish if the value is in front of the plane
         // - 0 if the value is on the plane
         // - -1ish is the value is behind the plane
-        var dot = vec3.Dot(self.normal);
-        return dot - self.distance;
+        var n = self.normal;
+        return dot_product_3d(n.x, n.y, n.z, vec3.x, vec3.y, vec3.z) - self.distance;
     };
     
     static GetMin = function() {
