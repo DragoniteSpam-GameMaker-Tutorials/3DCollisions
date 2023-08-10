@@ -66,9 +66,7 @@ function ColPlane(normal, distance) constructor {
         var t = (self.distance - OdotN) / DdotN;
         if (t < 0) return false;
         
-        var contact_point = ro.Add(rd.Mul(t));
-        
-        hit_info.Update(t, self, contact_point, n);
+        hit_info.Update(t, self, ro.Add(rd.Mul(t)), n);
         
         return true;
     };
