@@ -16,6 +16,7 @@ function ColLine(start, finish) constructor {
         self.property_max = self.start.Max(self.finish);
         self.property_ray = new ColRay(self.start, self.finish.Sub(self.start));
         self.property_length = self.start.DistanceTo(self.finish);
+        self.property_center = self.start.Add(self.finish).Div(2);
     };
     
     static CheckObject = function(object) {
