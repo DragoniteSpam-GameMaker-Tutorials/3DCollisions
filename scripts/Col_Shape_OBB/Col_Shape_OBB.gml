@@ -81,11 +81,11 @@ function ColOBB(position, size, orientation) constructor {
         var po = self.position;
         if (point_distance_3d(po.x, po.y, po.z, pp.x, pp.y, pp.z) > self.imaginary_radius) return false;
         
-        var dir = point.position.Sub(self.position);
+        var dir = pp.Sub(po);
         var dx = dir.x, dy = dir.y, dz = dir.z;
         
         var size_array = [self.size.x, self.size.y, self.size.z];
-        var orientation_array = self.orientation.vector_array;
+        var orientation_array = [self.orientation.x, self.orientation.y, self.orientation.z];
         
         for (var i = 0; i < 3; i++) {
             var axis = orientation_array[i];
@@ -379,7 +379,7 @@ function ColOBB(position, size, orientation) constructor {
         var dx = dir.x, dy = dir.y, dz = dir.z;
         
         var size_array = [self.size.x, self.size.y, self.size.z];
-        var orientation_array = self.orientation.vector_array;
+        var orientation_array = [self.orientation.x, self.orientation.y, self.orientation.z];
         
         for (var i = 0; i < 3; i++) {
             var axis = orientation_array[i];
