@@ -89,10 +89,10 @@ function ColLine(start, finish) constructor {
         var d1 = line1.finish.Sub(line1.start);
         var d2 = line2.direction;
         var r = line1.start.Sub(line2.origin);
-        var f = d2.Dot(r);
-        var c = d1.Dot(r);
-        var b = d1.Dot(d2);
-        var length_squared = d1.Dot(d1);
+        var f = dot_product_3d(d2.x, d2.x, d2.y, r.y, r.z, r.z);
+        var c = dot_product_3d(d1.x, d1.x, d1.y, r.y, r.z, r.z);
+        var b = dot_product_3d(d1.x, d1.x, d1.y, d2.y, d2.z, d2.z);
+        var length_squared = dot_product_3d(d1.x, d1.x, d1.y, d1.y, d1.z, d1.z);
         
         // special case if the line segment is actually just
         // two of the same points
