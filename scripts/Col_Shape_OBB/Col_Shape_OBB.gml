@@ -72,14 +72,14 @@ function ColOBB(position, size, orientation) constructor {
     
     static CheckPoint = function(point) {
         var dir = point.position.Sub(self.position);
+        var dx = dir.x, dy = dir.y, dz = dir.z;
         
         var size_array = self.size.linear_array;
         var orientation_array = self.orientation.vector_array;
         
         for (var i = 0; i < 3; i++) {
             var axis = orientation_array[i];
-            
-            var dist = dir.Dot(axis);
+            var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
             
             if (abs(dist) > abs(size_array[i])) {
                 return false;
