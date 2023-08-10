@@ -17,7 +17,9 @@ function ColPoint(position) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        return self.position.DistanceTo(sphere.position) < sphere.radius;
+        var pp = self.position;
+        var ps = sphere.position;
+        return point_distance_3d(pp.x, pp.y, pp.z, ps.x, ps.y, ps.z) < sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
