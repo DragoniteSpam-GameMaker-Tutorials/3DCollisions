@@ -85,9 +85,9 @@ function ColPoint(position) constructor {
     };
     
     static CheckLine = function(line) {
-        var nearest = line.NearestPoint(self.position);
-        var dist = point_distance_3d(nearest.x, nearest.y, nearest.z, self.position.x, self.position.y, self.position.z);
-         return (dist == 0);
+        var p = self.position;
+        var nearest = line.NearestPoint(p);
+         return nearest.x == p.x && nearest.y == p.y && nearest.z == p.z;
     };
     
     static DisplaceSphere = function(sphere) {
