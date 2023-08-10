@@ -14,8 +14,10 @@ function ColCameraFrustum(view_mat, proj_mat) constructor {
     self.near =         new ColPlane(c4.Add(c3), vp.w.w + vp.z.w).Normalize();
     self.far =          new ColPlane(c4.Sub(c3), vp.w.w - vp.z.w).Normalize();
     
+    self.as_array = [self.left, self.right, self.bottom, self.top, self.near, self.far];
+    
     static AsArray = function() {
-        return [self.left, self.right, self.bottom, self.top, self.near, self.far];
+        return self.as_array;
     };
     
     static GetCorners = function() {
@@ -92,15 +94,16 @@ function ColCameraFrustum(view_mat, proj_mat) constructor {
 }
 
 function col_three_plane_intersection(p1, p2, p3) {
+    var n = p1.normal;
     var p2xp3 = p2.normal.Cross(p3.normal);
-    var p3xp1 = p3.normal.Cross(p1.normal);
-    var p1xp2 = p1.normal.Cross(p2.normal);
+    var p3xp1 = p3.normal.Cross(n);
+    var p1xp2 = n.Cross(p2.normal);
     
     var cross_product_sum = p2xp3.Mul(-p1.distance)
         .Add(p3xp1.Mul(-p2.distance))
         .Add(p1xp2.Mul(-p3.distance));
     
-    return cross_product_sum.Div(p1.normal.Dot(p2xp3));
+    return cross_product_sum.Div(dot_product_3d(n.x, n.y, n.z, p2xp3.x, p2xp3.y, p2xp3.z));
 }
 
 enum EFrustumResults {
