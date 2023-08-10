@@ -24,11 +24,7 @@ function ColTriangle(a, b, c) constructor {
         self.property_edge_bc = self.c.Sub(self.b);
         self.property_edge_ca = self.a.Sub(self.c);
         
-        self.property_center = new Vector3(
-            (self.a.x + self.b.x + self.c.x) / 3,
-            (self.a.y + self.b.y + self.c.y) / 3,
-            (self.a.z + self.b.z + self.c.z) / 3
-        );
+        self.property_center = self.a.Add(self.b).Add(self.c).Div(3);
         self.property_radius = self.property_center.DistanceTo(self.a);
         self.property_min = new Vector3(min(self.a.x, self.b.x, self.c.x), min(self.a.y, self.b.y, self.c.y), min(self.a.z, self.b.z, self.c.z));
         self.property_max = new Vector3(max(self.a.x, self.b.x, self.c.x), max(self.a.y, self.b.y, self.c.y), max(self.a.z, self.b.z, self.c.z));

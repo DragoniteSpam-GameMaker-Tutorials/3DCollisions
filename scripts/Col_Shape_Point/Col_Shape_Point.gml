@@ -11,7 +11,9 @@ function ColPoint(position) constructor {
     };
     
     static CheckPoint = function(point) {
-        return self.position.Equals(point.position);
+        var p1 = self.position;
+        var p2 = point.position;
+        return p1.x == p2.x && p1.y == p2.y && p1.z == p2.z;
     };
     
     static CheckSphere = function(sphere) {
