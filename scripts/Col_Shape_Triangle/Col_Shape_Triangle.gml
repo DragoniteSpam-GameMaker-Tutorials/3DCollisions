@@ -215,10 +215,9 @@ function ColTriangle(a, b, c) constructor {
         var ps = sphere.position;
         var nearest = self.NearestPoint(ps);
         // you may also wish to just use the normal of the triangle in this case
-        if (point_distance_3d(pt.x, pt.y, pt.z, ps.x, ps.y, ps.z) == 0) return undefined;
+        if (pt.x == ps.x && pt.y == ps.y && pt.z == ps.z) return undefined;
         
-        var dir = ps.Sub(nearest).Normalize();
-        var offset = dir.Mul(sphere.radius);
+        var offset = ps.Sub(nearest).Normalize().Mul(sphere.radius);
         
         return nearest.Add(offset);
     };
