@@ -322,7 +322,7 @@ function ColAABB(position, half_extents) constructor {
             imax = max(imax, dot);
         }
         
-        return new ColInterval(imin, imax);
+        return { val_min: imin, val_max: imax };
     };
     
     static GetVertices = function() {

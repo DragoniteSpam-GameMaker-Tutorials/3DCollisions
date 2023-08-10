@@ -311,7 +311,7 @@ function ColTriangle(a, b, c) constructor {
         var ada = dot_product_3d(ax, ay, az, self.a.x, self.a.y, self.a.z);
         var adb = dot_product_3d(ax, ay, az, self.b.x, self.b.y, self.b.z);
         var adc = dot_product_3d(ax, ay, az, self.c.x, self.c.y, self.c.z);
-        return new ColInterval(min(ada, adb, adc), max(ada, adb, adc));
+        return { val_min: min(ada, adb, adc), val_max: max(ada, adb, adc) };
     };
     
     static GetMin = function() {
