@@ -42,22 +42,28 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckAABB = function(aabb) {
-        var endcap_start = new ColSphere(self.line.start, self.radius);
-        if (endcap_start.CheckAABB(aabb)) return true;
+        static test_sphere = new ColSphere(new Vector3(0, 0, 0), 0);
+        test_sphere.position = self.line.start;
+        test_sphere.radius = self.radius;
+        if (test_sphere.CheckAABB(aabb)) return true;
         
-        var endcap_finish = new ColSphere(self.line.finish, self.radius);
-        if (endcap_finish.CheckAABB(aabb)) return true;
+        test_sphere.position = self.line.finish;
+        if (test_sphere.CheckAABB(aabb)) return true;
         
         var edges = aabb.property_edges;
         
-        for (var i = 0, n = array_length(edges); i < n; i++) {
-            var nearest_line_to_edge = edges[i].NearestConnectionToLine(self.line);
-            var start_distance = self.line.NearestPoint(nearest_line_to_edge.start).DistanceTo(nearest_line_to_edge.start);
+        var i = 0;
+        repeat (12) {
+            var nearest_line_to_edge = edges[i++].NearestConnectionToLine(self.line);
+            var nearest_start = nearest_line_to_edge.start;
+            var nearest_self = self.line.NearestPoint(nearest_start);
+            
+            var start_distance = point_distance_3d(nearest_self.x, nearest_self.y, nearest_self.z, nearest_start.x, nearest_start.y, nearest_start.z);
             if (start_distance == 0) {
-                var test_sphere = new ColSphere(nearest_line_to_edge.start, self.radius);
+                test_sphere.position = nearest_line_to_edge.start;
                 if (test_sphere.CheckAABB(aabb)) return true;
             } else {
-                var test_sphere = new ColSphere(nearest_line_to_edge.finish, self.radius);
+                test_sphere.position = nearest_line_to_edge.finish;
                 if (test_sphere.CheckAABB(aabb)) return true;
             }
         }
