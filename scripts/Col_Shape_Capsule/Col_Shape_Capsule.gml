@@ -119,13 +119,14 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckTriangle = function(triangle) {
-        var nearest_point_start = triangle.NearestPoint(self.line.start);
-        var capsule_line_nearest_point_start = self.line.NearestPoint(nearest_point_start);
-        if (capsule_line_nearest_point_start.DistanceTo(nearest_point_start) < self.radius) return true;
+        var line = self.line;
+        var target = triangle.NearestPoint(line.start);
+        var nearest = line.NearestPoint(target);
+        if (point_distance_3d(nearest.x, nearest.y, nearest.z, target.x, target.y, target.z) < self.radius) return true;
         
-        var nearest_point_finish = triangle.NearestPoint(self.line.finish);
-        var capsule_line_nearest_point_finish = self.line.NearestPoint(nearest_point_finish);
-        if (capsule_line_nearest_point_finish.DistanceTo(nearest_point_finish) < self.radius) return true;
+        var target = triangle.NearestPoint(line.finish);
+        var nearest = line.NearestPoint(target);
+        if (point_distance_3d(nearest.x, nearest.y, nearest.z, target.x, target.y, target.z) < self.radius) return true;
         
         return false;
     };
