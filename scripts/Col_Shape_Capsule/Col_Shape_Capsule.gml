@@ -140,14 +140,21 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
-        var capsule_dir = self.line.finish.Sub(self.line.start);
-        var relative_ray_origin = ray.origin.Sub(self.line.start);
+        var c = self.property_center;
+        var nearest = ray.NearestPoint(c);
+        if (point_distance_3d(nearest.x, nearest.y, nearest.z, c.x, c.y, c.z) >= self.property_radius) return false;
         
-        var baba = capsule_dir.Dot(capsule_dir);
-        var bard = capsule_dir.Dot(ray.direction);
-        var baoa = capsule_dir.Dot(relative_ray_origin);
-        var rdoa = ray.direction.Dot(relative_ray_origin);
-        var oaoa = relative_ray_origin.Dot(relative_ray_origin);
+        var line = self.line;
+        var cd = line.property_ray.direction;
+        var rd = ray.direction;
+        var ro = ray.origin;
+        var relative_ray_origin = ro.Sub(line.start);
+        
+        var baba = dot_product_3d(cd.x, cd.x, cd.y, cd.y, cd.z, cd.z);
+        var bard = dot_product_3d(cd.x, cd.x, cd.y, rd.y, rd.z, rd.z);
+        var baoa = dot_product_3d(cd.x, cd.x, cd.y, relative_ray_origin.y, relative_ray_origin.z, relative_ray_origin.z);
+        var rdoa = dot_product_3d(rd.x, rd.x, rd.y, relative_ray_origin.y, relative_ray_origin.z, relative_ray_origin.z);
+        var oaoa = dot_product_3d(relative_ray_origin.x, relative_ray_origin.x, relative_ray_origin.y, relative_ray_origin.y, relative_ray_origin.z, relative_ray_origin.z);
         
         var a = baba - sqr(bard);
         var b = baba * rdoa - baoa * bard;
@@ -159,22 +166,22 @@ function ColCapsule(start, finish, radius) constructor {
             var why = baoa + t * bard;
             
             if (why > 0 && why < baba) {
-                var contact_point = ray.origin.Add(ray.direction.Mul(t));
-                var nearest_inner_point = self.line.NearestPoint(contact_point);
+                var contact_point = ro.Add(rd.Mul(t));
+                var nearest_inner_point = line.NearestPoint(contact_point);
                 var contact_normal = contact_point.Sub(nearest_inner_point).Normalize();
                 hit_info.Update(t, self, contact_point, contact_normal);
                 return true;
             }
             
-            var oc = (why <= 0) ? relative_ray_origin : ray.origin.Sub(self.line.finish);
-            b = ray.direction.Dot(oc);
-            c = oc.Dot(oc) - sqr(self.radius);
+            var oc = (why <= 0) ? relative_ray_origin : ro.Sub(line.finish);
+            b = dot_product_3d(rd.x, rd.y, rd.z, oc.x, oc.y, oc.z);
+            c = dot_product_3d(oc.x, oc.y, oc.z, oc.x, oc.y, oc.z) - sqr(self.radius);
             h = sqr(b) - c;
             
             if (h > 0) {
                 t = -b - sqrt(h);
-                var contact_point = ray.origin.Add(ray.direction.Mul(t));
-                var nearest_inner_point = self.line.NearestPoint(contact_point);
+                var contact_point = ro.Add(rd.Mul(t));
+                var nearest_inner_point = line.NearestPoint(contact_point);
                 var contact_normal = contact_point.Sub(nearest_inner_point).Normalize();
                 hit_info.Update(t, self, contact_point, contact_normal);
                 return true;
@@ -192,11 +199,12 @@ function ColCapsule(start, finish, radius) constructor {
     static DisplaceSphere = function(sphere) {
         if (!self.CheckSphere(sphere)) return undefined;
         
-        var nearest = self.line.NearestPoint(sphere.position);
+        var ps = sphere.position;
+        var nearest = self.line.NearestPoint(ps);
         
-        if (nearest.DistanceTo(sphere.position) == 0) return undefined;
+        if (ps.x == nearest.x && ps.y == nearest.y && ps.z == nearest.z) return undefined;
         
-        var dir = sphere.position.Sub(nearest).Normalize();
+        var dir = ps.Sub(nearest).Normalize();
         var offset = dir.Mul(sphere.radius + self.radius);
         
         return nearest.Add(offset);
