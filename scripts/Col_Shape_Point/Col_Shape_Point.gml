@@ -54,11 +54,11 @@ function ColPoint(position) constructor {
         var normPCA = pc.Cross(pa).Normalize();
         var normPAB = pa.Cross(pb).Normalize();
         
-        if (normPBC.Dot(normPCA) < 1) {
+        if (dot_product_3d(normPBC.x, normPBC.y, normPBC.z, normPCA.x, normPCA.y, normPCA.z) < 1) {
             return false;
         }
         
-        if (normPBC.Dot(normPAB) < 1) {
+        if (dot_product_3d(normPBC.x, normPBC.y, normPBC.z, normPAB.x, normPAB.y, normPAB.z) < 1) {
             return false;
         }
         
