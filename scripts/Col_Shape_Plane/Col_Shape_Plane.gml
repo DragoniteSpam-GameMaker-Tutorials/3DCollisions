@@ -56,16 +56,19 @@ function ColPlane(normal, distance) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
-        var DdotN = ray.direction.Dot(self.normal);
+        var rd = ray.direction;
+        var n = self.normal;
+        var DdotN = dot_product_3d(rd.x, rd.y, rd.z, n.x, n.y, n.z);
         if (DdotN >= 0) return false;
         
-        var OdotN = ray.origin.Dot(self.normal);
+        var ro = ray.origin;
+        var OdotN = dot_product_3d(ro.x, ro.y, ro.z, n.x, n.y, n.z);
         var t = (self.distance - OdotN) / DdotN;
         if (t < 0) return false;
         
-        var contact_point = ray.origin.Add(ray.direction.Mul(t));
+        var contact_point = ro.Add(rd.Mul(t));
         
-        hit_info.Update(t, self, contact_point, self.normal);
+        hit_info.Update(t, self, contact_point, n);
         
         return true;
     };
