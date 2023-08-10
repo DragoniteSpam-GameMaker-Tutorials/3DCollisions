@@ -32,8 +32,9 @@ function ColPoint(position) constructor {
     };
     
     static CheckPlane = function(plane) {
-        var ndot = self.position.Dot(plane.normal);
-        return (ndot == plane.distance);
+        var p = self.position;
+        var n = plane.normal;
+        return (dot_product_3d(p.x, p.y, p.z, n.x, n.y, n.z) == plane.distance);
     };
     
     static CheckOBB = function(obb) {
