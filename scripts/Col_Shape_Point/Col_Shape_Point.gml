@@ -112,11 +112,11 @@ function ColPoint(position) constructor {
     static CheckFrustum = function(frustum) {
         var planes = frustum.AsArray();
         var i = 0;
+        var p = self.position;
         repeat (array_length(planes)) {
-            var plane = planes[i];
-            var dist = plane.normal.Dot(self.position) + plane.distance;
-            i++;
-            if (dist < 0)
+            var plane = planes[i++];
+            var n = plane.normal;
+            if (dot_product_3d(n.x, n.y, n.z, p.x, p.y, p.z) + plane.distance < 0)
                 return EFrustumResults.OUTSIDE;
         }
         return EFrustumResults.INSIDE;
