@@ -2,6 +2,27 @@ function ColCapsule(start, finish, radius) constructor {
     self.line = new ColLine(start, finish);
     self.radius = radius;
     
+    self.RecalculateProperties();
+    
+    static SetEnds = function(start, finish) {
+        self.line.SetEnds(start, finish);
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static SetRadius = function(radius) {
+        self.radius = radius;
+        self.RecalculateProperties();
+        return self;
+    };
+    
+    static RecalculateProperties = function() {
+        self.property_center = self.line.property_center;
+        self.property_radius = self.line.property_length / 2 + self.radius;
+        self.property_min = self.line.property_min.Sub(self.radius);
+        self.property_max = self.line.property_min.Add(self.radius);
+    };
+    
     static CheckObject = function(object) {
         return object.shape.CheckCapsule(self);
     };
@@ -167,10 +188,10 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static GetMin = function() {
-        return self.line.property_min.Sub(self.radius);
+        return self.property_min;
     };
     
     static GetMax = function() {
-        return self.line.property_max.Add(self.radius);
+        return self.property_max;
     };
 }
