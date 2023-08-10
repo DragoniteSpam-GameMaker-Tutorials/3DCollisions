@@ -24,16 +24,10 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
     // x2 y2 z2
     // x3 y3 z3
     
-    self.vector_array = [self.x, self.y, self.z];
-    
     self.rotation_matrix = undefined;
     
     static AsLinearArray = function() {
         return self.linear_array;
-    };
-    
-    static AsVectorArray = function() {
-        return self.vector_array;
     };
     
     static GetRotationMatrix = function() {
@@ -85,16 +79,10 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     // x3 y3 z3 w3
     // x4 y4 z4 w4
     
-    self.vector_array = [self.x, self.y, self.z, self.w];
-    
     self.orientation_matrix = undefined;
     
     static AsLinearArray = function() {
         return self.linear_array;
-    };
-    
-    static AsVectorArray = function() {
-        return self.vector_array;
     };
     
     static GetOrientationMatrix = function() {
