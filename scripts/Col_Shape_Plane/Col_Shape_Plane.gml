@@ -95,9 +95,9 @@ function ColPlane(normal, distance) constructor {
     };
     
     static NearestPoint = function(vec3) {
-        var ndot = self.normal.Dot(vec3);
-        var dist = ndot - self.distance;
-        var scaled_dist = self.normal.Mul(dist);
+        var n = self.normal;
+        var dist = dot_product_3d(n.x, n.y, n.z, vec3.x, vec3.y, vec3.z) - self.distance;
+        var scaled_dist = n.Mul(dist);
         return vec3.Sub(scaled_dist);
     };
     
