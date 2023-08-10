@@ -116,7 +116,7 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     };
     
     static MulVector = function(vec) {
-        var transformed_point = matrix_transform_vertex(self.linear_array, point.x, point.y, point.z, 0);
+        var transformed_point = matrix_transform_vertex(self.linear_array, vec.x, vec.y, vec.z, 0);
         return new Vector3(transformed_point[0], transformed_point[1], transformed_point[2]);
     };
     
