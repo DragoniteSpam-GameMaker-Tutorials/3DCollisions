@@ -25,8 +25,9 @@ function ColPoint(position) constructor {
     static CheckAABB = function(aabb) {
         var box_min = aabb.property_min;
         var box_max = aabb.property_max;
-        if (self.position.x < box_min.x || self.position.y < box_min.y || self.position.z < box_min.z) return false;
-        if (self.position.x > box_max.x || self.position.y > box_max.y || self.position.z > box_max.z) return false;
+        var p = self.position;
+        if (p.x < box_min.x || p.y < box_min.y || p.z < box_min.z) return false;
+        if (p.x > box_max.x || p.y > box_max.y || p.z > box_max.z) return false;
         return true;
     };
     
