@@ -140,6 +140,10 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckTriangle = function(triangle) {
+        var p1 = self.position;
+        var p2 = triangle.property_center;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > triangle.property_radius + self.property_radius) return false;
+        
         var ab = triangle.property_edge_ab;
         var bc = triangle.property_edge_bc;
         var ca = triangle.property_edge_ca;
