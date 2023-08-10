@@ -78,7 +78,7 @@ function ColOBB(position, size, orientation) constructor {
         var dir = point.position.Sub(self.position);
         var dx = dir.x, dy = dir.y, dz = dir.z;
         
-        var size_array = self.size.linear_array;
+        var size_array = [self.size.x, self.size.y, self.size.z];
         var orientation_array = self.orientation.vector_array;
         
         for (var i = 0; i < 3; i++) {
@@ -267,7 +267,7 @@ function ColOBB(position, size, orientation) constructor {
         static position_dots = array_create(3);
         static t = array_create(6);
         
-        var size_array = self.size.linear_array;
+        var size_array = [self.size.x, self.size.y, self.size.z];
         var dir = self.position.Sub(ray.origin);
         
         var dx = dir.x, dy = dir.y, dz = dir.z;
@@ -372,7 +372,7 @@ function ColOBB(position, size, orientation) constructor {
         var dir = vec3.Sub(result);
         var dx = dir.x, dy = dir.y, dz = dir.z;
         
-        var size_array = self.size.linear_array;
+        var size_array = [self.size.x, self.size.y, self.size.z];
         var orientation_array = self.orientation.vector_array;
         
         for (var i = 0; i < 3; i++) {
@@ -395,14 +395,15 @@ function ColOBB(position, size, orientation) constructor {
         var imin = infinity;
         var imax = -infinity;
         
-        for (var i = 0; i < 8; i++) {
-            var vertex = vertices[i];
+        var i = 0;
+        repeat (8) {
+            var vertex = vertices[i++];
             var dot = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
             imin = min(imin, dot);
             imax = max(imax, dot);
         }
         
-        return new ColInterval(imin, imax);
+        return { val_min: imin, val_max: imax };
     };
     
     static GetVertices = function() {

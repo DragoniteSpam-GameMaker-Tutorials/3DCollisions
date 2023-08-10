@@ -3,10 +3,8 @@ function Vector3(x, y, z) constructor {
     self.y = y;
     self.z = z;
     
-    self.linear_array = [x, y, z];
-    
     static AsLinearArray = function() {
-        return self.linear_array;
+        return [self.x, self.y, self.z];
     };
     
     static Add = function(val) {
@@ -108,10 +106,8 @@ function Vector4(x, y, z, w) constructor {
     self.z = z;
     self.w = w;
     
-    self.linear_array = [x, y, z, w];
-    
     static AsLinearArray = function() {
-        return self.linear_array;
+        return [self.x, self.y, self.z, self.w];
     };
     
     static Add = function(val) {
