@@ -91,14 +91,12 @@ function ColPoint(position) constructor {
     };
     
     static DisplaceSphere = function(sphere) {
-        if (!self.CheckSphere(sphere)) return undefined;
+        var pp = self.position;
+        var ps = sphere.position;
+        var d = point_distance_3d(pp.x, pp.y, pp.z, ps.x, ps.y, ps.z);
+        if (d == 0 || d > sphere.radius) return undefined;
         
-        if (self.position.Equals(sphere.position)) return undefined;
-        
-        var dir = sphere.position.Sub(self.position).Normalize();
-        var offset = dir.Mul(sphere.radius);
-        
-        return self.position.Add(offset);
+        return pp.Add(ps.Sub(pp).Normalize().Mul(sphere.radius));
     };
     
     static GetMin = function() {
