@@ -78,9 +78,8 @@ function ColLine(start, finish) constructor {
     static NearestPoint = function(vec3) {
         var line_vec = self.finish.Sub(self.start);
         var point_vec = vec3.Sub(self.start);
-        var t = clamp(point_vec.Dot(line_vec) / line_vec.Dot(line_vec), 0, 1);
-        var scaled_vec = line_vec.Mul(t);
-        return self.start.Add(scaled_vec);
+        var t = dot_product_3d(point_vec.x, point_vec.y, point_vec.z, line_vec.x, line_vec.y, line_vec.z) / dot_product_3d(line_vec.x, line_vec.y, line_vec.z, line_vec.x, line_vec.y, line_vec.z);
+        return self.start.Add(line_vec.Mul(clamp(t, 0, 1)));
     };
     
     static NearestConnectionToRay = function(ray) {
