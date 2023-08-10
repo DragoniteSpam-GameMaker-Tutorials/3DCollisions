@@ -119,7 +119,8 @@ function ColPlane(normal, distance) constructor {
     };
     
     static Normalize = function() {
-        var mag = self.normal.Magnitude();
-        return new ColPlane(self.normal.Div(mag), self.distance / mag);
+        var n = self.normal;
+        var mag = dot_product_3d(n.x, n.x, n.y, n.y, n.z, n.z);
+        return new ColPlane(n.Div(mag), self.distance / mag);
     };
 }
