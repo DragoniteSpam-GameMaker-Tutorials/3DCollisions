@@ -78,8 +78,10 @@ function ColPoint(position) constructor {
         var nearest = ray.NearestPoint(p);
         if (point_distance_3d(nearest.x, nearest.y, nearest.z, p.x, p.y, p.z) > 0) return false;
         
-        var ro = ray.origin;
-        hit_info.Update(point_distance_3d(p.x, p.y, p.z, ro.x, ro.x, ro.z), self, p, undefined);
+        if (hit_info) {
+            var ro = ray.origin;
+            hit_info.Update(point_distance_3d(p.x, p.y, p.z, ro.x, ro.x, ro.z), self, p, undefined);
+        }
         
         return true;
     };

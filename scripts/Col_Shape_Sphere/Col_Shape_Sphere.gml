@@ -79,14 +79,16 @@ function ColSphere(position, radius) constructor {
         var offset = r_squared - (mag_squared - (EdotD * EdotD));
         if (offset < 0) return false;
         
-        var f = sqrt(abs(offset));
-        var t = EdotD - f;
-        if (mag_squared < r_squared) {
-            t = EdotD + f;
+        if (hit_info) {
+            var f = sqrt(abs(offset));
+            var t = EdotD - f;
+            if (mag_squared < r_squared) {
+                t = EdotD + f;
+            }
+            var contact_point = ray.origin.Add(dir.Mul(t));
+            
+            hit_info.Update(t, self, contact_point, contact_point.Sub(self.position).Normalize());
         }
-        var contact_point = ray.origin.Add(dir.Mul(t));
-        
-        hit_info.Update(t, self, contact_point, contact_point.Sub(self.position).Normalize());
         
         return true;
     };

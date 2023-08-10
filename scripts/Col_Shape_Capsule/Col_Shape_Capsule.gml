@@ -166,10 +166,12 @@ function ColCapsule(start, finish, radius) constructor {
             var why = baoa + t * bard;
             
             if (why > 0 && why < baba) {
-                var contact_point = ro.Add(rd.Mul(t));
-                var nearest_inner_point = line.NearestPoint(contact_point);
-                var contact_normal = contact_point.Sub(nearest_inner_point).Normalize();
-                hit_info.Update(t, self, contact_point, contact_normal);
+                if (hit_info) {
+                    var contact_point = ro.Add(rd.Mul(t));
+                    var nearest_inner_point = line.NearestPoint(contact_point);
+                    var contact_normal = contact_point.Sub(nearest_inner_point).Normalize();
+                    hit_info.Update(t, self, contact_point, contact_normal);
+                }
                 return true;
             }
             
@@ -179,11 +181,13 @@ function ColCapsule(start, finish, radius) constructor {
             h = sqr(b) - c;
             
             if (h > 0) {
-                t = -b - sqrt(h);
-                var contact_point = ro.Add(rd.Mul(t));
-                var nearest_inner_point = line.NearestPoint(contact_point);
-                var contact_normal = contact_point.Sub(nearest_inner_point).Normalize();
-                hit_info.Update(t, self, contact_point, contact_normal);
+                if (hit_info) {
+                    t = -b - sqrt(h);
+                    var contact_point = ro.Add(rd.Mul(t));
+                    var nearest_inner_point = line.NearestPoint(contact_point);
+                    var contact_normal = contact_point.Sub(nearest_inner_point).Normalize();
+                    hit_info.Update(t, self, contact_point, contact_normal);
+                }
                 return true;
             }
         }

@@ -185,11 +185,12 @@ function ColTriangle(a, b, c) constructor {
             return false;
         }
         
-        var result = plane_hit_info.point;
-        var barycentric = self.Barycentric(result);
+        var barycentric = self.Barycentric(plane_hit_info.point);
         
         if ((barycentric.x >= 0 && barycentric.x <= 1) && (barycentric.y >= 0 && barycentric.y <= 1) && (barycentric.z >= 0 && barycentric.z <= 1)) {
-            hit_info.Update(plane_hit_info.distance, self, result, plane_hit_info.normal);
+            if (plane_hit_info) {
+                hit_info.Update(plane_hit_info.distance, self, plane_hit_info.point, plane_hit_info.normal);
+            }
             return true;
         }
         

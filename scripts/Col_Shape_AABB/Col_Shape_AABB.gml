@@ -230,22 +230,22 @@ function ColAABB(position, half_extents) constructor {
         if (tmax < 0) return false;
         if (tmin > tmax) return false;
         
-        var t = tmax;
-        if (tmin > 0) {
-            t = tmin;
+        if (hit_info) {
+            var t = tmax;
+            if (tmin > 0) {
+                t = tmin;
+            }
+            
+            var tnormal;
+            if (t == t1) tnormal = new Vector3(-1, 0, 0);
+            if (t == t2) tnormal = new Vector3(+1, 0, 0);
+            if (t == t3) tnormal = new Vector3(0, -1, 0);
+            if (t == t4) tnormal = new Vector3(0, +1, 0);
+            if (t == t5) tnormal = new Vector3(0, 0, -1);
+            if (t == t6) tnormal = new Vector3(0, 0, +1);
+            
+            hit_info.Update(t, self, p.Add(dir.Mul(t)), tnormal);
         }
-        
-        var contact_point = p.Add(dir.Mul(t));
-        
-        var tnormal;
-        if (t == t1) tnormal = new Vector3(-1, 0, 0);
-        if (t == t2) tnormal = new Vector3(+1, 0, 0);
-        if (t == t3) tnormal = new Vector3(0, -1, 0);
-        if (t == t4) tnormal = new Vector3(0, +1, 0);
-        if (t == t5) tnormal = new Vector3(0, 0, -1);
-        if (t == t6) tnormal = new Vector3(0, 0, +1);
-        
-        if (hit_info) hit_info.Update(t, self, contact_point, tnormal);
         
         return true;
     };

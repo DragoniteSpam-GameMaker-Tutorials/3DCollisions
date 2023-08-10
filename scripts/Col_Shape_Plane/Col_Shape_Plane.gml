@@ -66,7 +66,9 @@ function ColPlane(normal, distance) constructor {
         var t = (self.distance - OdotN) / DdotN;
         if (t < 0) return false;
         
-        hit_info.Update(t, self, ro.Add(rd.Mul(t)), n);
+        if (hit_info) {
+            hit_info.Update(t, self, ro.Add(rd.Mul(t)), n);
+        }
         
         return true;
     };
