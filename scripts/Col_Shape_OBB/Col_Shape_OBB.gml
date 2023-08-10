@@ -21,15 +21,21 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static RecalculateProperties = function() {
+        var p = self.position;
+        var s = self.size;
+        var xs = self.orientation.x.Mul(s.x);
+        var ys = self.orientation.y.Mul(s.y);
+        var zs = self.orientation.z.Mul(s.z);
+        
         self.property_vertices = [
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Add(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Add(self.orientation.y.Mul(self.size.y)).Sub(self.orientation.z.Mul(self.size.z)),
-            self.position.Sub(self.orientation.x.Mul(self.size.x)).Sub(self.orientation.y.Mul(self.size.y)).Add(self.orientation.z.Mul(self.size.z)),
+            p.Add(xs).Add(ys).Add(zs),
+            p.Sub(xs).Add(ys).Add(zs),
+            p.Add(xs).Sub(ys).Add(zs),
+            p.Add(xs).Add(ys).Sub(zs),
+            p.Sub(xs).Sub(ys).Sub(zs),
+            p.Add(xs).Sub(ys).Sub(zs),
+            p.Sub(xs).Add(ys).Sub(zs),
+            p.Sub(xs).Sub(ys).Add(zs),
         ];
         
         var vertices = self.property_vertices;
@@ -56,14 +62,14 @@ function ColOBB(position, size, orientation) constructor {
             self.property_min.z = min(self.property_min.z, vertices[i].z);
         }
         
-        self.property_max = new Vector3(infinity, infinity, infinity);
+        self.property_max = new Vector3(-infinity, -infinity, -infinity);
         for (var i = 0; i < array_length(vertices); i++) {
-            self.property_max.x = min(self.property_max.x, vertices[i].x);
-            self.property_max.y = min(self.property_max.y, vertices[i].y);
-            self.property_max.z = min(self.property_max.z, vertices[i].z);
+            self.property_max.x = max(self.property_max.x, vertices[i].x);
+            self.property_max.y = max(self.property_max.y, vertices[i].y);
+            self.property_max.z = max(self.property_max.z, vertices[i].z);
         }
         
-        self.imaginary_radius = self.size.Magnitude();
+        self.imaginary_radius = point_distance_3d(s.x, s.y, s.z, 0, 0, 0);
     };
     
     static CheckObject = function(object) {
