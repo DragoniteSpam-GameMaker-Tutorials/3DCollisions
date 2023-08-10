@@ -74,9 +74,11 @@ function ColPlane(normal, distance) constructor {
     };
     
     static CheckLine = function(line) {
-        var dir = line.finish.Sub(line.start);
-        var NdotS = self.normal.Dot(line.start);
-        var NdotD = self.normal.Dot(dir);
+        var n = self.normal;
+        var start = line.start;
+        var dir = line.property_ray.direction;
+        var NdotS = dot_product_3d(n.x, n.y, n.z, start.x, start.y, start.z);
+        var NdotD = dot_product_3d(n.x, n.y, n.z, dir.x, dir.y, dir.z);
         
         if (NdotD == 0) return false;
         var t = (self.distance - NdotS) / NdotD;
