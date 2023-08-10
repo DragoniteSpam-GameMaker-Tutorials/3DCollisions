@@ -158,7 +158,10 @@ function ColTriangle(a, b, c) constructor {
         
         var i = 0;
         repeat (11) {
-            if (!col_overlap_axis(self, triangle, axes[i++])) {
+            var axis = axes[i++];
+            var a = self.GetInterval(axis);
+            var b = triangle.GetInterval(axis);
+            if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
                 return false;
             }
         }

@@ -179,7 +179,10 @@ function ColAABB(position, half_extents) constructor {
         
         var i = 0;
         repeat (13) {
-            if (!col_overlap_axis(self, triangle, axes[i++])) {
+            var axis = axes[i++];
+            var a = self.GetInterval(axis);
+            var b = triangle.GetInterval(axis);
+            if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
                 return false;
             }
         }
@@ -291,7 +294,10 @@ function ColAABB(position, half_extents) constructor {
         ];
         
         for (var i = 0; i < 3; i++) {
-            if (!col_overlap_axis(self, aabb, axes[i])) {
+            var axis = axes[i++];
+            var a = self.GetInterval(axis);
+            var b = aabb.GetInterval(axis);
+            if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
                 return false;
             }
         }
