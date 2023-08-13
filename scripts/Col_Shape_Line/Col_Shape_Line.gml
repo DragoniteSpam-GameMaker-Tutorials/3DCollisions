@@ -2,25 +2,35 @@ function ColLine(start, finish) constructor {
     self.start = start;                     // Vec3
     self.finish = finish;                   // Vec3
     
-    self.RecalculateProperties();
+    var sx = start.x, sy = start.y, sz = start.z;
+    var fx = finish.x, fy = finish.y, fz = finish.z;
+    self.property_min = new Vector3(min(sx, fx), min(sy, fy), min(sz, fz));
+    self.property_max = new Vector3(max(sx, fx), max(sy, fy), max(sz, fz));
+    self.property_ray = new ColRay(start, new Vector3(fx - sx, fy - sy, fz - sz));
+    self.property_length = point_distance_3d(sx, sy, sz, fx, fy, fz);
+    self.property_center = new Vector3(mean(sx, fx), mean(sy, fy), mean(sz, fz));
     
-    static SetEnds = function(start, finish) {
+    static Set = function(start, finish) {
         self.start = start;
         self.finish = finish;
-        self.RecalculateProperties();
-        return self;
-    };
-    
-    static RecalculateProperties = function() {
-        var start = self.start;
-        var finish = self.finish;
         var sx = start.x, sy = start.y, sz = start.z;
         var fx = finish.x, fy = finish.y, fz = finish.z;
-        self.property_min = new Vector3(min(sx, fx), min(sy, fy), min(sz, fz));
-        self.property_max = new Vector3(max(sx, fx), max(sy, fy), max(sz, fz));
-        self.property_ray = new ColRay(start, new Vector3(fx - sx, fy - sy, fz - sz));
+        self.property_min.x = min(sx, fx);
+        self.property_min.y = min(sy, fy);
+        self.property_min.z = min(sz, fz);
+        self.property_max.x = max(sx, fx);
+        self.property_max.y = max(sy, fy);
+        self.property_max.z = max(sz, fz);
+        self.property_ray.origin = start;
         self.property_length = point_distance_3d(sx, sy, sz, fx, fy, fz);
-        self.property_center = new Vector3(mean(sx, fx), mean(sy, fy), mean(sz, fz));
+        var mag = self.property_length;
+        self.property_ray.direction.x = (fx - sx) / mag;
+        self.property_ray.direction.y = (fy - sy) / mag;
+        self.property_ray.direction.z = (fz - sz) / mag;
+        self.property_center.x = mean(sx, fx);
+        self.property_center.y = mean(sy, fy);
+        self.property_center.z = mean(sz, fz);
+        return self;
     };
     
     static CheckObject = function(object) {
