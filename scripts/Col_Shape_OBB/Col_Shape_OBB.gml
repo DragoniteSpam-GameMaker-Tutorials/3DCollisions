@@ -372,9 +372,10 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static NearestPoint = function(vec3) {
-        var result = self.position;
-        var dir = vec3.Sub(result);
-        var dx = dir.x, dy = dir.y, dz = dir.z;
+        var rx = self.position.x;
+        var ry = self.position.y;
+        var rz = self.position.z;
+        var dx = vec3.x - rx, dy = vec3.y - ry, dz = vec3.z - rz;
         
         var size_array = [self.size.x, self.size.y, self.size.z];
         var orientation_array = [self.orientation.x, self.orientation.y, self.orientation.z];
@@ -383,10 +384,12 @@ function ColOBB(position, size, orientation) constructor {
             var axis = orientation_array[i];
             var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
             dist = clamp(dist, -size_array[i], size_array[i]);
-            result = result.Add(axis.Mul(dist));
+            rx += axis.x * dist;
+            ry += axis.y * dist;
+            rz += axis.z * dist;
         }
         
-        return result;
+        return new Vector3(rx, ry, rz);
     };
     
     static GetInterval = function(axis) {
