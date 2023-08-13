@@ -284,6 +284,10 @@ function ColWorldSpatialHash(chunk_size) constructor {
         
         return displaced_position;
     };
+    
+    static GetObjectsInFrustum = function(frustum, output) {
+        // not implemented
+    };
 }
 
 function ColSpatialHashNode(bounds) constructor {
