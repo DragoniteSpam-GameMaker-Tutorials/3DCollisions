@@ -2,21 +2,19 @@ function ColSphere(position, radius) constructor {
     self.position = position;               // Vec3
     self.radius = radius;                   // Vec3
     
-    static SetPosition = function(position) {
+    self.property_min = position.Sub(radius);
+    self.property_max = position.Add(radius);
+    
+    static Set = function(position = self.position, radius = self.radius) {
         self.position = position;
-        self.RecalculateProperties();
-        return self;
-    };
-    
-    static SetRadius = function(radius) {
         self.radius = radius;
-        self.RecalculateProperties();
+        self.property_min.x = position.x - radius;
+        self.property_min.y = position.y - radius;
+        self.property_min.z = position.z - radius;
+        self.property_max.x = position.x + radius;
+        self.property_max.y = position.y + radius;
+        self.property_max.z = position.z + radius;
         return self;
-    };
-    
-    static RecalculateProperties = function() {
-        self.property_min = self.position.Sub(self.radius);
-        self.property_max = self.position.Add(self.radius);
     };
     
     static CheckObject = function(object) {
