@@ -12,11 +12,15 @@ function ColLine(start, finish) constructor {
     };
     
     static RecalculateProperties = function() {
-        self.property_min = self.start.Min(self.finish);
-        self.property_max = self.start.Max(self.finish);
-        self.property_ray = new ColRay(self.start, self.finish.Sub(self.start));
-        self.property_length = self.start.DistanceTo(self.finish);
-        self.property_center = self.start.Add(self.finish).Div(2);
+        var start = self.start;
+        var finish = self.finish;
+        var sx = start.x, sy = start.y, sz = start.z;
+        var fx = finish.x, fy = finish.y, fz = finish.z;
+        self.property_min = new Vector3(min(sx, fx), min(sy, fy), min(sz, fz));
+        self.property_max = new Vector3(max(sx, fx), max(sy, fy), max(sz, fz));
+        self.property_ray = new ColRay(start, new Vector3(fx - sx, fy - sy, fz - sz));
+        self.property_length = point_distance_3d(sx, sy, sz, fx, fy, fz);
+        self.property_center = new Vector3(mean(sx, fx), mean(sy, fy), mean(sz, fz));
     };
     
     static CheckObject = function(object) {

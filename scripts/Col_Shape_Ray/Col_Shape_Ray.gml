@@ -1,6 +1,11 @@
 function ColRay(origin, direction) constructor {
     self.origin = origin;                   // Vec3
-    self.direction = direction.Normalize(); // Vec3
+    var mag = point_distance_3d(0, 0, 0, direction.x, direction.y, direction.z);
+    self.direction = new Vector3(
+        direction.x / mag,
+        direction.y / mag,
+        direction.z / mag
+    );                                      // vec3
     
     static CheckPoint = function(point, hit_info) {
         return point.CheckRay(self, hit_info);
