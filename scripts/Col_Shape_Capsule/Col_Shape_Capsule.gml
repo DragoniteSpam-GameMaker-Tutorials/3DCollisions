@@ -84,30 +84,66 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckOBB = function(obb) {
-        static test_sphere = new ColSphere(new Vector3(0, 0, 0), 0);
-        test_sphere.position = self.line.start;
-        test_sphere.radius = self.radius;
-        if (obb.CheckSphere(test_sphere)) return true;
+        var obb_position = obb.position;
+        var obb_size_array = [obb.size.x, obb.size.y, obb.size.z];
+        var obb_orientation_array = [obb.orientation.x, obb.orientation.y, obb.orientation.z];
         
-        test_sphere.position = self.line.finish;
-        if (obb.CheckSphere(test_sphere)) return true;
+        var r = self.radius;
+        var line = self.line;
+        var p = line.start;
+        
+        var nx = obb_position.x, ny = obb_position.y, nz = obb_position.z;
+        var dx = p.x - nx, dy = p.y - ny, dz = p.z - nz;
+        
+        for (var i = 0; i < 3; i++) {
+            var axis = obb_orientation_array[i];
+            var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
+            dist = clamp(dist, -obb_size_array[i], obb_size_array[i]);
+            nx += axis.x * dist;
+            ny += axis.y * dist;
+            nz += axis.z * dist;
+        }
+        
+        if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
+        p = line.finish;
+        
+        var nx = obb_position.x, ny = obb_position.y, nz = obb_position.z;
+        var dx = p.x - nx, dy = p.y - ny, dz = p.z - nz;
+        
+        for (var i = 0; i < 3; i++) {
+            var axis = obb_orientation_array[i];
+            var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
+            dist = clamp(dist, -obb_size_array[i], obb_size_array[i]);
+            nx += axis.x * dist;
+            ny += axis.y * dist;
+            nz += axis.z * dist;
+        }
+        
+        if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
         
         var edges = obb.property_edges;
         
         var i = 0;
         repeat (12) {
-            var nearest_line_to_edge = edges[i++].NearestConnectionToLine(self.line);
+            var nearest_line_to_edge = edges[i++].NearestConnectionToLine(line);
             var nearest_start = nearest_line_to_edge.start;
-            var nearest_self = self.line.NearestPoint(nearest_start);
+            var nearest_self = line.NearestPoint(nearest_start);
             
-            var start_distance = point_distance_3d(nearest_self.x, nearest_self.y, nearest_self.z, nearest_start.x, nearest_start.y, nearest_start.z);
-            if (start_distance == 0) {
-                test_sphere.position = nearest_line_to_edge.start;
-                if (obb.CheckSphere(test_sphere)) return true;
-            } else {
-                test_sphere.position = nearest_line_to_edge.finish;
-                if (obb.CheckSphere(test_sphere)) return true;
+            p = (nearest_self.x == nearest_start.x && nearest_self.y == nearest_start.y && nearest_self.z == nearest_start.z) ? nearest_line_to_edge.start : nearest_line_to_edge.finish;
+            
+            var nx = obb_position.x, ny = obb_position.y, nz = obb_position.z;
+            var dx = p.x - nx, dy = p.y - ny, dz = p.z - nz;
+            
+            for (var i = 0; i < 3; i++) {
+                var axis = obb_orientation_array[i];
+                var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
+                dist = clamp(dist, -obb_size_array[i], obb_size_array[i]);
+                nx += axis.x * dist;
+                ny += axis.y * dist;
+                nz += axis.z * dist;
             }
+            
+            if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
         }
         
         return false;
