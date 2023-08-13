@@ -47,10 +47,10 @@ function ColOBB(position, size, orientation) constructor {
             new ColLine(vertices[7], vertices[1]),
             new ColLine(vertices[0], vertices[3]),
             new ColLine(vertices[3], vertices[5]),
-            new ColLine(vertices[5], vertices[1]),
+            new ColLine(vertices[5], vertices[2]),
             new ColLine(vertices[1], vertices[0]),
             new ColLine(vertices[7], vertices[2]),
-            new ColLine(vertices[1], vertices[0]),
+            new ColLine(vertices[2], vertices[0]),
             new ColLine(vertices[6], vertices[3]),
             new ColLine(vertices[4], vertices[5]),
         ];
