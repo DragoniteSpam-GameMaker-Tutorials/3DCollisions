@@ -14,7 +14,6 @@ function ColSphere(position, radius) constructor {
         self.property_max.x = position.x + radius;
         self.property_max.y = position.y + radius;
         self.property_max.z = position.z + radius;
-        return self;
     };
     
     static CheckObject = function(object) {

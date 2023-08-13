@@ -1,26 +1,14 @@
 function ColCapsule(start, finish, radius) constructor {
-    self.line = new ColLine(start, finish);
-    self.radius = radius;
+    self.Set(start, finish, radius);
     
-    self.RecalculateProperties();
-    
-    static SetEnds = function(start, finish) {
-        self.line.SetEnds(start, finish);
-        self.RecalculateProperties();
-        return self;
-    };
-    
-    static SetRadius = function(radius) {
+    static Set = function(start = self.start, finish = self.finish, radius = self.radius) {
+        var line = self.line;
+        line.Set(start, finish);
         self.radius = radius;
-        self.RecalculateProperties();
-        return self;
-    };
-    
-    static RecalculateProperties = function() {
-        self.property_center = self.line.property_center;
-        self.property_radius = self.line.property_length / 2 + self.radius;
-        self.property_min = self.line.property_min.Sub(self.radius);
-        self.property_max = self.line.property_min.Add(self.radius);
+        self.property_center = line.property_center;
+        self.property_radius = line.property_length / 2 + radius;
+        self.property_min = line.property_min.Sub(radius);
+        self.property_max = line.property_min.Add(radius);
     };
     
     static CheckObject = function(object) {

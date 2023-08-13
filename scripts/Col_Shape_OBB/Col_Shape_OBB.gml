@@ -1,41 +1,24 @@
 function ColOBB(position, size, orientation) constructor {
-    self.position = position;               // Vec3
-    self.size = size;                       // Vec3
-    self.orientation = orientation;         // mat3
+    self.Set(position, size, orientation);
     
-    self.RecalculateProperties();
-    
-    static SetPosition = function(position) {
+    static Set = function(position = self.position, size = self.size, orientation = self.orientation) {
         self.position = position;
-        self.RecalculateProperties();
-    };
-    
-    static SetSize = function(size) {
         self.size = size;
-        self.RecalculateProperties();
-    };
-    
-    static SetOrientation = function(orientation) {
         self.orientation = orientation;
-        self.RecalculateProperties();
-    };
-    
-    static RecalculateProperties = function() {
-        var p = self.position;
-        var s = self.size;
-        var xs = self.orientation.x.Mul(s.x);
-        var ys = self.orientation.y.Mul(s.y);
-        var zs = self.orientation.z.Mul(s.z);
+        
+        var xs = orientation.x.Mul(size.x);
+        var ys = orientation.y.Mul(size.y);
+        var zs = orientation.z.Mul(size.z);
         
         self.property_vertices = [
-            p.Add(xs).Add(ys).Add(zs),
-            p.Sub(xs).Add(ys).Add(zs),
-            p.Add(xs).Sub(ys).Add(zs),
-            p.Add(xs).Add(ys).Sub(zs),
-            p.Sub(xs).Sub(ys).Sub(zs),
-            p.Add(xs).Sub(ys).Sub(zs),
-            p.Sub(xs).Add(ys).Sub(zs),
-            p.Sub(xs).Sub(ys).Add(zs),
+            position.Add(xs).Add(ys).Add(zs),
+            position.Sub(xs).Add(ys).Add(zs),
+            position.Add(xs).Sub(ys).Add(zs),
+            position.Add(xs).Add(ys).Sub(zs),
+            position.Sub(xs).Sub(ys).Sub(zs),
+            position.Add(xs).Sub(ys).Sub(zs),
+            position.Sub(xs).Add(ys).Sub(zs),
+            position.Sub(xs).Sub(ys).Add(zs),
         ];
         
         var vertices = self.property_vertices;
@@ -69,7 +52,7 @@ function ColOBB(position, size, orientation) constructor {
             pmax.z = max(pmax.z, vertex.z);
         }
         
-        self.property_radius = point_distance_3d(s.x, s.y, s.z, 0, 0, 0);
+        self.property_radius = point_distance_3d(size.x, size.y, size.z, 0, 0, 0);
     };
     
     static CheckObject = function(object) {

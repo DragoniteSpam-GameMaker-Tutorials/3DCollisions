@@ -1,25 +1,13 @@
 function ColAABB(position, half_extents) constructor {
-    self.position = position;               // Vec3
-    self.half_extents = half_extents;       // Vec3
+    self.Set(position, half_extents);
     
-    self.RecalculateProperties();
-    
-    static SetPosition = function(position) {
+    static Set = function(position = self.position, half_extents = self.half_extents) {
         self.position = position;
-        self.RecalculateProperties();
-        return self;
-    };
-    
-    static SetHalfExtents = function(half_extents) {
         self.half_extents = half_extents;
-        self.RecalculateProperties();
-        return self;
-    };
-    
-    static RecalculateProperties = function() {
-        self.property_min = self.position.Sub(self.half_extents);
-        self.property_max = self.position.Add(self.half_extents);
-        self.property_radius = self.half_extents.Magnitude();
+        
+        self.property_min = position.Sub(half_extents);
+        self.property_max = position.Add(half_extents);
+        self.property_radius = point_distance_3d(0, 0, 0, half_extents.x, half_extents.y, half_extents.z);
         
         var pmin = self.property_min;
         var pmax = self.property_max;

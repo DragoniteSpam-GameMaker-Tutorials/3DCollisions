@@ -30,7 +30,6 @@ function ColLine(start, finish) constructor {
         self.property_center.x = mean(sx, fx);
         self.property_center.y = mean(sy, fy);
         self.property_center.z = mean(sz, fz);
-        return self;
     };
     
     static CheckObject = function(object) {

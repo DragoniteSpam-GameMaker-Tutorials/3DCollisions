@@ -4,17 +4,20 @@ function ColMesh(triangle_array) constructor {
     self.bounds_min = new Vector3(infinity, infinity, infinity);
     self.bounds_max = new Vector3(-infinity, -infinity, -infinity);
     
+    var bmn = self.bounds_min;
+    var bmx = self.bounds_max;
+    
     for (var i = 0; i < array_length(triangle_array); i++) {
         var tri = triangle_array[i];
-        self.bounds_min.x = min(self.bounds_min.x, tri.a.x, tri.b.x, tri.c.x);
-        self.bounds_min.y = min(self.bounds_min.y, tri.a.y, tri.b.y, tri.c.y);
-        self.bounds_min.z = min(self.bounds_min.z, tri.a.z, tri.b.z, tri.c.z);
-        self.bounds_max.x = max(self.bounds_max.x, tri.a.x, tri.b.x, tri.c.x);
-        self.bounds_max.y = max(self.bounds_max.y, tri.a.y, tri.b.y, tri.c.y);
-        self.bounds_max.z = max(self.bounds_max.z, tri.a.z, tri.b.z, tri.c.z);
+        bmn.x = min(bmn.x, tri.a.x, tri.b.x, tri.c.x);
+        bmn.y = min(bmn.y, tri.a.y, tri.b.y, tri.c.y);
+        bmn.z = min(bmn.z, tri.a.z, tri.b.z, tri.c.z);
+        bmx.x = max(bmx.x, tri.a.x, tri.b.x, tri.c.x);
+        bmx.y = max(bmx.y, tri.a.y, tri.b.y, tri.c.y);
+        bmx.z = max(bmx.z, tri.a.z, tri.b.z, tri.c.z);
     }
     
-    self.bounds = NewColAABBFromMinMax(self.bounds_min, self.bounds_max);
+    self.bounds = NewColAABBFromMinMax(bmn, bmx);
     
     self.accelerator = new ColOctree(self.bounds, self);
     self.accelerator.triangles = triangle_array;

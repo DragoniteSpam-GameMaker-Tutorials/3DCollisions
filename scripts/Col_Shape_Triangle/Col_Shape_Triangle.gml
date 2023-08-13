@@ -1,33 +1,24 @@
 function ColTriangle(a, b, c) constructor {
-    self.a = a;
-    self.b = b;
-    self.c = c;
+    self.Set(a, b, c);
     
-    self.RecalculateProperties();
-    
-    static SetVertices = function(a, b, c) {
+    static Set = function(a, b, c) {
         self.a = a;
         self.b = b;
         self.c = c;
-        self.RecalculateProperties();
-        return self;
-    };
-    
-    static RecalculateProperties = function() {
-        var diffAB = self.b.Sub(self.a);
-        var diffAC = self.c.Sub(self.a);
+        var diffAB = b.Sub(a);
+        var diffAC = c.Sub(a);
         self.property_normal = diffAB.Cross(diffAC).Normalize();
-        var dist = self.property_normal.Dot(self.a);
+        var dist = self.property_normal.Dot(a);
         self.property_plane = new ColPlane(self.property_normal, dist);
         
         self.property_edge_ab = diffAB;
-        self.property_edge_bc = self.c.Sub(self.b);
-        self.property_edge_ca = self.a.Sub(self.c);
+        self.property_edge_bc = c.Sub(b);
+        self.property_edge_ca = a.Sub(c);
         
-        self.property_center = self.a.Add(self.b).Add(self.c).Div(3);
-        self.property_radius = self.property_center.DistanceTo(self.a);
-        self.property_min = new Vector3(min(self.a.x, self.b.x, self.c.x), min(self.a.y, self.b.y, self.c.y), min(self.a.z, self.b.z, self.c.z));
-        self.property_max = new Vector3(max(self.a.x, self.b.x, self.c.x), max(self.a.y, self.b.y, self.c.y), max(self.a.z, self.b.z, self.c.z));
+        self.property_center = a.Add(b).Add(c).Div(3);
+        self.property_radius = self.property_center.DistanceTo(a);
+        self.property_min = new Vector3(min(a.x, b.x, c.x), min(a.y, b.y, c.y), min(a.z, b.z, c.z));
+        self.property_max = new Vector3(max(a.x, b.x, c.x), max(a.y, b.y, c.y), max(a.z, b.z, c.z));
     };
     
     static CheckObject = function(object) {
@@ -205,7 +196,7 @@ function ColTriangle(a, b, c) constructor {
             return (hit_info.distance <= line.property_length);
         }
         static reverse = new ColLine(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
-        reverse.SetEnds(line.finish, line.start.Sub(line.finish));
+        reverse.Set(line.finish, line.start.Sub(line.finish));
         if (self.CheckRay(reverse.property_ray, hit_info)) {
             return (hit_info.distance <= reverse.property_length);
         }
