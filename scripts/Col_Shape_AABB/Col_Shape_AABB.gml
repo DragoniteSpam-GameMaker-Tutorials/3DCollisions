@@ -178,7 +178,7 @@ function ColAABB(position, half_extents) constructor {
         axes[12] = nz.Cross(ca);
         
         var my_interval = self.GetInterval;
-        var tri_interval = triangle.GetInterval;
+        var tri_interval = method(triangle, triangle.GetInterval);
         var i = 0;
         repeat (13) {
             var axis = axes[i++];

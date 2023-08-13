@@ -145,7 +145,7 @@ function ColOBB(position, size, orientation) constructor {
         
         var i = 0;
         var my_interval = self.GetInterval;
-        var aabb_interval = aabb.GetInterval;
+        var aabb_interval = method(aabb, aabb.GetInterval);
         repeat (15) {
             var axis = axes[i++];
             var a = my_interval(axis);
@@ -193,7 +193,7 @@ function ColOBB(position, size, orientation) constructor {
         
         var i = 0;
         var my_interval = self.GetInterval;
-        var obb_interval = obb.GetInterval;
+        var obb_interval = method(obb, obb.GetInterval);
         repeat (15) {
             var axis = axes[i++];
             var a = my_interval(axis);
@@ -262,7 +262,7 @@ function ColOBB(position, size, orientation) constructor {
         
         var i = 0;
         var my_interval = self.GetInterval;
-        var tri_interval = triangle.GetInterval;
+        var tri_interval = method(triangle, triangle.GetInterval);
         repeat (13) {
             var axis = axes[i++];
             var a = my_interval(axis);
