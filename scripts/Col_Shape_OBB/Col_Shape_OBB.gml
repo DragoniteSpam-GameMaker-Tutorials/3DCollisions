@@ -69,7 +69,7 @@ function ColOBB(position, size, orientation) constructor {
             pmax.z = max(pmax.z, vertex.z);
         }
         
-        self.imaginary_radius = point_distance_3d(s.x, s.y, s.z, 0, 0, 0);
+        self.property_radius = point_distance_3d(s.x, s.y, s.z, 0, 0, 0);
     };
     
     static CheckObject = function(object) {
@@ -79,7 +79,7 @@ function ColOBB(position, size, orientation) constructor {
     static CheckPoint = function(point) {
         var pp = point.position;
         var po = self.position;
-        if (point_distance_3d(po.x, po.y, po.z, pp.x, pp.y, pp.z) > self.imaginary_radius) return false;
+        if (point_distance_3d(po.x, po.y, po.z, pp.x, pp.y, pp.z) > self.property_radius) return false;
         
         var dir = pp.Sub(po);
         var dx = dir.x, dy = dir.y, dz = dir.z;
@@ -102,7 +102,7 @@ function ColOBB(position, size, orientation) constructor {
     static CheckSphere = function(sphere) {
         var ps = sphere.position;
         var po = self.position;
-        if (point_distance_3d(po.x, po.y, po.z, ps.x, ps.y, ps.z) > self.imaginary_radius + sphere.radius) return false;
+        if (point_distance_3d(po.x, po.y, po.z, ps.x, ps.y, ps.z) > self.property_radius + sphere.radius) return false;
         
         var nearest = self.NearestPoint(ps);
         return point_distance_3d(nearest.x, nearest.y, nearest.z, ps.x, ps.y, ps.z) < sphere.radius;
@@ -111,7 +111,7 @@ function ColOBB(position, size, orientation) constructor {
     static CheckAABB = function(aabb) {
         var p1 = self.position;
         var p2 = aabb.position;
-        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > aabb.property_radius + self.imaginary_radius) return false;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > aabb.property_radius + self.property_radius) return false;
         
         static vec_x = new Vector3(1, 0, 0);
         static vec_y = new Vector3(0, 1, 0);
@@ -160,7 +160,7 @@ function ColOBB(position, size, orientation) constructor {
         var p1 = self.position;
         var p2 = obb.position;
         
-        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > self.imaginary_radius + obb.imaginary_radius) return false;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > self.property_radius + obb.property_radius) return false;
         
         static axes = array_create(15);
         
@@ -228,7 +228,7 @@ function ColOBB(position, size, orientation) constructor {
     static CheckTriangle = function(triangle) {
         var p1 = self.position;
         var p2 = triangle.property_center;
-        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > triangle.property_radius + self.imaginary_radius) return false;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > triangle.property_radius + self.property_radius) return false;
         
         static axes = array_create(13);
         
