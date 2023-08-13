@@ -64,17 +64,14 @@ function ColOBB(position, size, orientation) constructor {
         var po = self.position;
         if (point_distance_3d(po.x, po.y, po.z, pp.x, pp.y, pp.z) > self.property_radius) return false;
         
-        var dir = pp.Sub(po);
-        var dx = dir.x, dy = dir.y, dz = dir.z;
+        var dx = pp.x - po.x, dy = pp.y - po.y, dz = pp.z - po.z;
         
         var size_array = [self.size.x, self.size.y, self.size.z];
         var orientation_array = [self.orientation.x, self.orientation.y, self.orientation.z];
         
         for (var i = 0; i < 3; i++) {
             var axis = orientation_array[i];
-            var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
-            
-            if (abs(dist) > abs(size_array[i])) {
+            if (abs(dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z)) > abs(size_array[i])) {
                 return false;
             }
         }
