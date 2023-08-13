@@ -44,6 +44,8 @@ function ColCapsule(start, finish, radius) constructor {
     static CheckAABB = function(aabb) {
         var r = self.radius;
         var line = self.line;
+        var line_start = self.line.start;
+        var line_finish = self.line.finish;
         var box_min = aabb.property_min;
         var box_max = aabb.property_max;
         var bmnx = box_min.x;
@@ -52,18 +54,23 @@ function ColCapsule(start, finish, radius) constructor {
         var bmxx = box_max.x;
         var bmxy = box_max.y;
         var bmxz = box_max.z;
+        var lvx = line_finish.x - line_start.x;
+        var lvy = line_finish.y - line_start.y;
+        var lvz = line_finish.z - line_start.z;
+        var lsx = line_start.x;
+        var lsy = line_start.y;
+        var lsz = line_start.z;
+        var ldd = dot_product_3d(lvx, lvy, lvz, lvx, lvy, lvz);
         
-        var p = line.start;
-        var nx = clamp(p.x, bmnx, bmxx);
-        var ny = clamp(p.y, bmny, bmxy);
-        var nz = clamp(p.z, bmnz, bmxz);
-        if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
+        var nx = clamp(line_start.x, bmnx, bmxx);
+        var ny = clamp(line_start.y, bmny, bmxy);
+        var nz = clamp(line_start.z, bmnz, bmxz);
+        if (point_distance_3d(nx, ny, nz, line_start.x, line_start.y, line_start.z) < r) return true;
         
-        p = line.finish;
-        var nx = clamp(p.x, bmnx, bmxx);
-        var ny = clamp(p.y, bmny, bmxy);
-        var nz = clamp(p.z, bmnz, bmxz);
-        if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
+        var nx = clamp(line_finish.x, bmnx, bmxx);
+        var ny = clamp(line_finish.y, bmny, bmxy);
+        var nz = clamp(line_finish.z, bmnz, bmxz);
+        if (point_distance_3d(nx, ny, nz, line_finish.x, line_finish.y, line_finish.z) < r) return true;
         
         var edges = aabb.property_edges;
         
@@ -71,9 +78,13 @@ function ColCapsule(start, finish, radius) constructor {
         repeat (12) {
             var nearest_line_to_edge = edges[i++].NearestConnectionToLine(line);
             var nearest_start = nearest_line_to_edge.start;
-            var nearest_self = line.NearestPoint(nearest_start);
             
-            p = (nearest_self.x == nearest_start.x && nearest_self.y == nearest_start.y && nearest_self.z == nearest_start.z) ? nearest_line_to_edge.start : nearest_line_to_edge.finish;
+            var px = nearest_start.x - lsx;
+            var py = nearest_start.y - lsy;
+            var pz = nearest_start.z - lsz;
+            var t = clamp(dot_product_3d(px, py, pz, lvx, lvy, lvz) / ldd , 0, 1);
+            
+            var p = (lsx + lvx * t == nearest_start.x && lsy + lvy * t == nearest_start.y && lsz + lvz * t == nearest_start.z) ? nearest_line_to_edge.start : nearest_line_to_edge.finish;
             
             var nx = clamp(p.x, bmnx, bmxx);
             var ny = clamp(p.y, bmny, bmxy);
