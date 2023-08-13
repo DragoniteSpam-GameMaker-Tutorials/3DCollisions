@@ -42,30 +42,44 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckAABB = function(aabb) {
-        static test_sphere = new ColSphere(new Vector3(0, 0, 0), 0);
-        test_sphere.position = self.line.start;
-        test_sphere.radius = self.radius;
-        if (test_sphere.CheckAABB(aabb)) return true;
+        var r = self.radius;
+        var line = self.line;
+        var box_min = aabb.property_min;
+        var box_max = aabb.property_max;
+        var bmnx = box_min.x;
+        var bmny = box_min.y;
+        var bmnz = box_min.z;
+        var bmxx = box_max.x;
+        var bmxy = box_max.y;
+        var bmxz = box_max.z;
         
-        test_sphere.position = self.line.finish;
-        if (test_sphere.CheckAABB(aabb)) return true;
+        var p = line.start;
+        var nx = clamp(p.x, bmnx, bmxx);
+        var ny = clamp(p.y, bmny, bmxy);
+        var nz = clamp(p.z, bmnz, bmxz);
+        if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
+        
+        p = line.finish;
+        var nx = clamp(p.x, bmnx, bmxx);
+        var ny = clamp(p.y, bmny, bmxy);
+        var nz = clamp(p.z, bmnz, bmxz);
+        if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
         
         var edges = aabb.property_edges;
         
         var i = 0;
         repeat (12) {
-            var nearest_line_to_edge = edges[i++].NearestConnectionToLine(self.line);
+            var nearest_line_to_edge = edges[i++].NearestConnectionToLine(line);
             var nearest_start = nearest_line_to_edge.start;
-            var nearest_self = self.line.NearestPoint(nearest_start);
+            var nearest_self = line.NearestPoint(nearest_start);
             
-            var start_distance = point_distance_3d(nearest_self.x, nearest_self.y, nearest_self.z, nearest_start.x, nearest_start.y, nearest_start.z);
-            if (start_distance == 0) {
-                test_sphere.position = nearest_line_to_edge.start;
-                if (test_sphere.CheckAABB(aabb)) return true;
-            } else {
-                test_sphere.position = nearest_line_to_edge.finish;
-                if (test_sphere.CheckAABB(aabb)) return true;
-            }
+            p = (nearest_self.x == nearest_start.x && nearest_self.y == nearest_start.y && nearest_self.z == nearest_start.z) ? nearest_line_to_edge.start : nearest_line_to_edge.finish;
+            
+            var nx = clamp(p.x, bmnx, bmxx);
+            var ny = clamp(p.y, bmny, bmxy);
+            var nz = clamp(p.z, bmnz, bmxz);
+            
+            if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
         }
         
         return false;
