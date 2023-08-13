@@ -28,10 +28,8 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     };
 }
 
-function ColWorld(bounds_min, bounds_max, max_depth) constructor {
-    self.bounds = NewColAABBFromMinMax(bounds_min, bounds_max);
-    self.accelerator = new ColWorldQuadtree(self.bounds, max_depth);
-    self.depth = max_depth;
+function ColWorld(accelerator) constructor {
+    self.accelerator = accelerator;
     
     static Add = function(object) {
         self.accelerator.Add(object);
