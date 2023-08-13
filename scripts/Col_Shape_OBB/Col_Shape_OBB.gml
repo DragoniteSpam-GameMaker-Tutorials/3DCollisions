@@ -56,17 +56,17 @@ function ColOBB(position, size, orientation) constructor {
         ];
         
         self.property_min = new Vector3(infinity, infinity, infinity);
-        for (var i = 0; i < array_length(vertices); i++) {
-            self.property_min.x = min(self.property_min.x, vertices[i].x);
-            self.property_min.y = min(self.property_min.y, vertices[i].y);
-            self.property_min.z = min(self.property_min.z, vertices[i].z);
-        }
-        
         self.property_max = new Vector3(-infinity, -infinity, -infinity);
-        for (var i = 0; i < array_length(vertices); i++) {
-            self.property_max.x = max(self.property_max.x, vertices[i].x);
-            self.property_max.y = max(self.property_max.y, vertices[i].y);
-            self.property_max.z = max(self.property_max.z, vertices[i].z);
+        var pmin = self.property_min;
+        var pmax = self.property_max;
+        for (var i = 0; i < 12; i++) {
+            var vertex = vertices[i];
+            pmin.x = min(pmin.x, vertex.x);
+            pmin.y = min(pmin.y, vertex.y);
+            pmin.z = min(pmin.z, vertex.z);
+            pmax.x = max(pmax.x, vertex.x);
+            pmax.y = max(pmax.y, vertex.y);
+            pmax.z = max(pmax.z, vertex.z);
         }
         
         self.imaginary_radius = point_distance_3d(s.x, s.y, s.z, 0, 0, 0);
