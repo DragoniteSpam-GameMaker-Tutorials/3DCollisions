@@ -282,14 +282,15 @@ function ColOBB(position, size, orientation) constructor {
         static position_dots = array_create(3);
         static t = array_create(6);
         
+        var rd = ray.direction;
+        var p = self.position;
+        var o = ray.origin;
         var size_array = [self.size.x, self.size.y, self.size.z];
-        var dir = self.position.Sub(ray.origin);
         
-        var dx = dir.x, dy = dir.y, dz = dir.z;
+        var dx = p.x - o.x, dy = p.y - o.y, dz = p.z - o.z;
         var ox = self.orientation.x;
         var oy = self.orientation.y;
         var oz = self.orientation.z;
-        var rd = ray.direction;
         var rdx = rd.x, rdy = rd.y, rdz = rd.z;
         
         direction_dots[0] = dot_product_3d(ox.x, ox.y, ox.z, rdx, rdy, rdz);
