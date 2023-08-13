@@ -157,8 +157,36 @@ function ColLine(start, finish) constructor {
     static NearestConnectionToLine = function(line) {
         var nearest_connection_to_ray = self.NearestConnectionToRay(line.property_ray);
         
-        var starting_point = line.NearestPoint(nearest_connection_to_ray.start);
-        var ending_point = self.NearestPoint(nearest_connection_to_ray.finish);
+        var start = self.start;
+        var finish = self.finish;
+        var lvx = finish.x - start.x;
+        var lvy = finish.y - start.y;
+        var lvz = finish.z - start.z;
+        
+        var p = nearest_connection_to_ray.start;
+        var px = p.x - start.x;
+        var py = p.y - start.y;
+        var pz = p.z - start.z;
+        var t = clamp(dot_product_3d(px, py, pz, lvx, lvy, lvz) / dot_product_3d(lvx, lvy, lvz, lvx, lvy, lvz), 0, 1);
+        
+        var starting_point = new Vector3(
+            start.x + lvx * t,
+            start.y + lvy * t,
+            start.z + lvz * t
+        );
+        
+        var lstart = line.start;
+        p = nearest_connection_to_ray.finish;
+        px = p.x - lstart.x;
+        py = p.y - lstart.y;
+        pz = p.z - lstart.z;
+        t = clamp(dot_product_3d(px, py, pz, lvx, lvy, lvz) / dot_product_3d(lvx, lvy, lvz, lvx, lvy, lvz), 0, 1);
+        
+        var ending_point = new Vector3(
+            lstart.x + lvx * t,
+            lstart.y + lvy * t,
+            lstart.z + lvz * t
+        );
         
         return new ColLine(starting_point, ending_point);
     };
