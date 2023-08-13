@@ -35,8 +35,13 @@ function ColSphere(position, radius) constructor {
         var ps = self.position;
         if (point_distance_3d(pa.x, pa.y, pa.z, ps.x, ps.y, ps.z) > aabb.property_radius + self.radius) return false;
         
-        var nearest = aabb.NearestPoint(ps);
-        return point_distance_3d(nearest.x, nearest.y, nearest.z, ps.x, ps.y, ps.z) < self.radius;
+        var box_min = aabb.property_min;
+        var box_max = aabb.property_max;
+        var nx = clamp(ps.x, box_min.x, box_max.x);
+        var ny = clamp(ps.y, box_min.y, box_max.y);
+        var nz = clamp(ps.z, box_min.z, box_max.z);
+        
+        return point_distance_3d(nx, ny, nz, ps.x, ps.y, ps.z) < self.radius;
     };
     
     static CheckPlane = function(plane) {
