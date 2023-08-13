@@ -80,7 +80,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
                     if (chunk == undefined) {
                         var coords = new Vector3(i, j, k);
                         var coords_min = coords.Mul(self.chunk_size);
-                        var coords_max = coords.Mul(self.chunk_size).Add(self.chunk_size);
+                        var coords_max = coords_min.Add(self.chunk_size);
                         
                         var chunk_bounds = NewColAABBFromMinMax(coords_min, coords_max);
                         chunk = new ColSpatialHashNode(chunk_bounds);
