@@ -144,10 +144,12 @@ function ColOBB(position, size, orientation) constructor {
         axes[14] = vec_z.Cross(oz);
         
         var i = 0;
+        var my_interval = self.GetInterval;
+        var aabb_interval = aabb.GetInterval;
         repeat (15) {
             var axis = axes[i++];
-            var a = self.GetInterval(axis);
-            var b = aabb.GetInterval(axis);
+            var a = my_interval(axis);
+            var b = aabb_interval(axis);
             if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
                 return false;
             }
@@ -190,10 +192,12 @@ function ColOBB(position, size, orientation) constructor {
         axes[14] = iz.Cross(oz);
         
         var i = 0;
+        var my_interval = self.GetInterval;
+        var obb_interval = obb.GetInterval;
         repeat (15) {
             var axis = axes[i++];
-            var a = self.GetInterval(axis);
-            var b = obb.GetInterval(axis);
+            var a = my_interval(axis);
+            var b = obb_interval(axis);
             if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
                 return false;
             }
@@ -257,10 +261,12 @@ function ColOBB(position, size, orientation) constructor {
         axes[12] = oz.Cross(ca);
         
         var i = 0;
+        var my_interval = self.GetInterval;
+        var tri_interval = triangle.GetInterval;
         repeat (13) {
             var axis = axes[i++];
-            var a = self.GetInterval(axis);
-            var b = triangle.GetInterval(axis);
+            var a = my_interval(axis);
+            var b = tri_interval(axis);
             if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
                 return false;
             }
