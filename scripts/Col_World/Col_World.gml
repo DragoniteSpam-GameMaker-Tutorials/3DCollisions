@@ -112,10 +112,12 @@ function ColWorldOctree(bounds, depth) constructor {
             new ColWorldOctree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y,  sides.z)), sides), self.depth - 1),
         ];
         
-        for (var i = 0; i < 8; i++) {
-            var tree = self.children[i];
-            for (var j = 0; j < array_length(self.contents); j++) {
-                tree.Add(self.contents[j]);
+        var i = 0;
+        repeat (array_length(self.children)) {
+            var j = 0;
+            var tree = self.children[i++];
+            repeat (array_length(self.contents)) {
+                tree.Add(self.contents[j++]);
             }
         }
     };
@@ -222,10 +224,12 @@ function ColWorldQuadtree(bounds, depth) : ColWorldQuadtree(bounds, depth) const
             new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, 0)), sides), self.depth - 1),
         ];
         
-        for (var i = 0; i < array_length(self.children); i++) {
-            var tree = self.children[i];
-            for (var j = 0; j < array_length(self.contents); j++) {
-                tree.Add(self.contents[j]);
+        var i = 0;
+        repeat (array_length(self.children)) {
+            var j = 0;
+            var tree = self.children[i++];
+            repeat (array_length(self.contents)) {
+                tree.Add(self.contents[j++]);
             }
         }
     };
