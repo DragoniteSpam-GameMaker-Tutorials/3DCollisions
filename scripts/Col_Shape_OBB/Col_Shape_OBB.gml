@@ -59,7 +59,7 @@ function ColOBB(position, size, orientation) constructor {
         self.property_max = new Vector3(-infinity, -infinity, -infinity);
         var pmin = self.property_min;
         var pmax = self.property_max;
-        for (var i = 0; i < 12; i++) {
+        for (var i = 0; i < 8; i++) {
             var vertex = vertices[i];
             pmin.x = min(pmin.x, vertex.x);
             pmin.y = min(pmin.y, vertex.y);
