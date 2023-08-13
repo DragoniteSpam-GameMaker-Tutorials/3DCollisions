@@ -51,13 +51,17 @@ function ColRay(origin, direction) constructor {
     };
     
     static NearestPoint = function(vec3) {
-        var diff = vec3.Sub(self.origin);
-        var vx = self.origin.x - vec3.x;
-        var vy = self.origin.y - vec3.y;
-        var vz = self.origin.z - vec3.z;
-        var t = max(dot_product_3d(vx, vy, vz, self.direction.x, self.direction.y, self.direction.z), 0);
-        var scaled_dir = self.direction.Mul(t);
-        return self.origin.Add(scaled_dir);
+        var origin = self.origin;
+        var vx = origin.x - vec3.x;
+        var vy = origin.y - vec3.y;
+        var vz = origin.z - vec3.z;
+        var d = self.direction;
+        var t = max(dot_product_3d(vx, vy, vz, d.x, d.y, d.z), 0);
+        return new Vector3(
+            origin.x + d.x * t,
+            origin.y + d.y * t,
+            origin.z + d.z * t
+        );
     };
     
     static GetMin = function() {
