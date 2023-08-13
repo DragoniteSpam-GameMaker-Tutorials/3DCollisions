@@ -162,12 +162,13 @@ function ColLine(start, finish) constructor {
         var lvx = finish.x - start.x;
         var lvy = finish.y - start.y;
         var lvz = finish.z - start.z;
+        var ldd = dot_product_3d(lvx, lvy, lvz, lvx, lvy, lvz);
         
         var p = nearest_connection_to_ray.start;
         var px = p.x - start.x;
         var py = p.y - start.y;
         var pz = p.z - start.z;
-        var t = clamp(dot_product_3d(px, py, pz, lvx, lvy, lvz) / dot_product_3d(lvx, lvy, lvz, lvx, lvy, lvz), 0, 1);
+        var t = clamp(dot_product_3d(px, py, pz, lvx, lvy, lvz) / ldd, 0, 1);
         
         var starting_point = new Vector3(
             start.x + lvx * t,
@@ -180,7 +181,7 @@ function ColLine(start, finish) constructor {
         px = p.x - lstart.x;
         py = p.y - lstart.y;
         pz = p.z - lstart.z;
-        t = clamp(dot_product_3d(px, py, pz, lvx, lvy, lvz) / dot_product_3d(lvx, lvy, lvz, lvx, lvy, lvz), 0, 1);
+        t = clamp(dot_product_3d(px, py, pz, lvx, lvy, lvz) / ldd, 0, 1);
         
         var ending_point = new Vector3(
             lstart.x + lvx * t,
