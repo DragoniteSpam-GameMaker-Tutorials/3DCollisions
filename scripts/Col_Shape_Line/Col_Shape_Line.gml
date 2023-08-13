@@ -76,28 +76,50 @@ function ColLine(start, finish) constructor {
     };
     
     static NearestPoint = function(vec3) {
-        var line_vec = self.finish.Sub(self.start);
-        var point_vec = vec3.Sub(self.start);
-        var t = dot_product_3d(point_vec.x, point_vec.y, point_vec.z, line_vec.x, line_vec.y, line_vec.z) / dot_product_3d(line_vec.x, line_vec.y, line_vec.z, line_vec.x, line_vec.y, line_vec.z);
-        return self.start.Add(line_vec.Mul(clamp(t, 0, 1)));
+        var start = self.start;
+        var finish = self.finish;
+        var lvx = finish.x - start.x;
+        var lvy = finish.y - start.y;
+        var lvz = finish.z - start.z;
+        var px = vec3.x - start.x;
+        var py = vec3.y - start.y;
+        var pz = vec3.z - start.z;
+        var t = clamp(dot_product_3d(px, py, pz, lvx, lvy, lvz) / dot_product_3d(lvx, lvy, lvz, lvx, lvy, lvz), 0, 1);
+        return new Vector3(
+            start.x + lvx * t,
+            start.y + lvy * t,
+            start.z + lvz * t
+        );
     };
     
     static NearestConnectionToRay = function(ray) {
         var line1 = self;
         var line2 = ray;
         
-        var d1 = line1.finish.Sub(line1.start);
-        var d2 = line2.direction;
-        var r = line1.start.Sub(line2.origin);
-        var f = dot_product_3d(d2.x, d2.x, d2.y, r.y, r.z, r.z);
-        var c = dot_product_3d(d1.x, d1.x, d1.y, r.y, r.z, r.z);
-        var b = dot_product_3d(d1.x, d1.x, d1.y, d2.y, d2.z, d2.z);
-        var length_squared = dot_product_3d(d1.x, d1.x, d1.y, d1.y, d1.z, d1.z);
+        var start = line1.start;
+        var finish = line1.finish;
+        var origin = line2.origin;
+        var dir = line2.direction;
+        
+        var d1x = finish.x - start.x;
+        var d1y = finish.y - start.y;
+        var d1z = finish.z - start.z;
+        var d2x = dir.x;
+        var d2y = dir.y;
+        var d2z = dir.z;
+        var rx = start.x - origin.x;
+        var ry = start.y - origin.y;
+        var rz = start.z - origin.z;
+        
+        var f = dot_product_3d(d2x, d2y, d2z, rx, ry, rz);
+        var c = dot_product_3d(d1x, d1y, d1z, rx, ry, rz);
+        var b = dot_product_3d(d1x, d1y, d1z, d2y, d2z, d2z);
+        var length_squared = dot_product_3d(d1x, d1y, d1z, d1x, d1y, d1z);
         
         // special case if the line segment is actually just
         // two of the same points
         if (length_squared == 0) {
-            return new ColLine(line1.start, line2.NearestPoint(line1.start));
+            return new ColLine(start, line2.NearestPoint(start));
         }
         
         var f1 = 0;
@@ -119,7 +141,17 @@ function ColLine(start, finish) constructor {
             f1 = clamp(-c / length_squared, 0, 1);
         }
         
-        return new ColLine(line1.start.Add(d1.Mul(f1)), line2.origin.Add(d2.Mul(f2)));
+        return new ColLine(
+            new Vector3(
+                start.x + d1x * f1,
+                start.y + d1y * f1,
+                start.z + d1z * f1
+            ), new Vector3(
+                origin.x + d2x * f2,
+                origin.y + d2y * f2,
+                origin.z + d2z * f2
+            )
+        );
     };
     
     static NearestConnectionToLine = function(line) {
