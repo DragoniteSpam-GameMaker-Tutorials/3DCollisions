@@ -1,8 +1,13 @@
 function ColPoint(position) constructor {
     self.position = position;               // Vec3
     
-    self.SetPosition = function(position) {
+    self.property_min = position;
+    self.property_max = position;
+    
+    static Set = function(position) {
         self.position = position;
+        self.property_min = position;
+        self.property_max = position;
         return self;
     };
     
