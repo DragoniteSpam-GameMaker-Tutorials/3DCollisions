@@ -128,7 +128,7 @@ function ColAABB(position, half_extents) constructor {
         var anorm = normal.Abs();
         var plength = dot_product_3d(anorm.x, anorm.y, anorm.z, size.x, size.y, size.z);
         var ndot = dot_product_3d(normal.x, normal.y, normal.z, pos.x, pos.y, pos.z);
-        return (abs(ndot - plane.distance) < plength);
+        return (abs(ndot - plane.distance) <= plength);
     };
     
     static CheckOBB = function(obb) {
