@@ -19,8 +19,9 @@ function ColPlane(normal, distance) constructor {
     };
     
     static CheckPlane = function(plane) {
+        if (self.distance == plane.distance) return true;
         var cross = self.normal.Cross(plane.normal);
-        return (self.distance == plane.distance) || (cross.x != 0 && cross.y != 0 && cross.z != 0);
+        return (cross.x != 0 && cross.y != 0 && cross.z != 0);
     };
     
     static CheckOBB = function(obb) {
