@@ -177,11 +177,13 @@ function ColAABB(position, half_extents) constructor {
         axes[11] = nz.Cross(bc);
         axes[12] = nz.Cross(ca);
         
+        var my_interval = self.GetInterval;
+        var tri_interval = triangle.GetInterval;
         var i = 0;
         repeat (13) {
             var axis = axes[i++];
-            var a = self.GetInterval(axis);
-            var b = triangle.GetInterval(axis);
+            var a = my_interval(axis);
+            var b = tri_interval(axis);
             if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
                 return false;
             }
