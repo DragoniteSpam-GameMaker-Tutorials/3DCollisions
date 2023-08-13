@@ -169,7 +169,7 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static GetMin = function() {
-        return self.line.GetMin().Sub(self.radius);
+        return self.line.GetMax().Sub(self.radius);
     };
     
     static GetMax = function() {
