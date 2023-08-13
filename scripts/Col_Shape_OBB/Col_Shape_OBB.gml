@@ -84,11 +84,25 @@ function ColOBB(position, size, orientation) constructor {
     
     static CheckSphere = function(sphere) {
         var ps = sphere.position;
-        var po = self.position;
-        if (point_distance_3d(po.x, po.y, po.z, ps.x, ps.y, ps.z) > self.property_radius + sphere.radius) return false;
+        var px = self.position.x;
+        var py = self.position.y;
+        var pz = self.position.z;
+        if (point_distance_3d(px, py, pz, ps.x, ps.y, ps.z) > self.property_radius + sphere.radius) return false;
         
-        var nearest = self.NearestPoint(ps);
-        return point_distance_3d(nearest.x, nearest.y, nearest.z, ps.x, ps.y, ps.z) < sphere.radius;
+        var dx = ps.x - px, dy = ps.y - py, dz = ps.z - pz;
+        
+        var size_array = [self.size.x, self.size.y, self.size.z];
+        var orientation_array = [self.orientation.x, self.orientation.y, self.orientation.z];
+        
+        for (var i = 0; i < 3; i++) {
+            var axis = orientation_array[i];
+            var dist = clamp(dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z), -size_array[i], size_array[i]);
+            px += axis.x * dist;
+            py += axis.y * dist;
+            pz += axis.z * dist;
+        }
+        
+        return point_distance_3d(px, py, pz, ps.x, ps.y, ps.z) < sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
