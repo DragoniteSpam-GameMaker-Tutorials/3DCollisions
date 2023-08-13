@@ -1,7 +1,6 @@
 {
   "FolderOrderSettings": [],
   "ResourceOrderSettings": [
-    {"name":"Col_Octree","order":5,"path":"scripts/Col_Octree/Col_Octree.yy",},
     {"name":"obj_demo","order":1,"path":"objects/obj_demo/obj_demo.yy",},
     {"name":"Col_Transformed_Model","order":10,"path":"scripts/Col_Transformed_Model/Col_Transformed_Model.yy",},
     {"name":"Col_Shape_Point","order":6,"path":"scripts/Col_Shape_Point/Col_Shape_Point.yy",},

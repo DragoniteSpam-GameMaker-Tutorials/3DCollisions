@@ -7,8 +7,9 @@ function ColMesh(triangle_array) constructor {
     var bmn = self.bounds_min;
     var bmx = self.bounds_max;
     
-    for (var i = 0; i < array_length(triangle_array); i++) {
-        var tri = triangle_array[i];
+    var i = 0;
+    repeat (array_length(triangle_array)) {
+        var tri = triangle_array[i++];
         bmn.x = min(bmn.x, tri.a.x, tri.b.x, tri.c.x);
         bmn.y = min(bmn.y, tri.a.y, tri.b.y, tri.c.y);
         bmn.z = min(bmn.z, tri.a.z, tri.b.z, tri.c.z);
@@ -19,9 +20,59 @@ function ColMesh(triangle_array) constructor {
     
     self.bounds = NewColAABBFromMinMax(bmn, bmx);
     
-    self.accelerator = new ColOctree(self.bounds, self);
+    self.accelerator = new self.octree(self.bounds, self.octree);
     self.accelerator.triangles = triangle_array;
     self.accelerator.Split(3);
+    
+    static octree = function(bounds, octree) constructor {
+        self.bounds = bounds;
+        self.octree = octree;
+        
+        self.triangles = [];
+        self.children = undefined;
+        
+        static DebugDraw = function() {
+            self.bounds.DebugDraw();
+            if (self.children != undefined) {
+                for (var i = 0; i < 8; i++) {
+                    self.children[i].DebugDraw();
+                }
+            }
+        };
+        
+        static Split = function(depth) {
+            if (depth == 0) return;
+            if (array_length(self.triangles) == 0) return;
+            if (self.children != undefined) return;
+            
+            var center = self.bounds.position;
+            var sides = self.bounds.half_extents.Mul(0.5);
+            
+            self.children = [
+                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y, -sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y, -sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y,  sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y,  sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, -sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y, -sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y,  sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y,  sides.z)), sides), self.octree),
+            ];
+            
+            var i = 0;
+            repeat (8) {
+                var tree = self.children[i++];
+                var j = 0;
+                repeat (array_length(self.triangles)) {
+                    if (tree.bounds.CheckTriangle(self.triangles[j])) {
+                        array_push(tree.triangles, self.triangles[j]);
+                    }
+                    j++;
+                }
+                tree.Split(depth - 1);
+            }
+        };
+    };
     
     static CheckObject = function(object) {
         return object.shape.CheckMesh(self);
