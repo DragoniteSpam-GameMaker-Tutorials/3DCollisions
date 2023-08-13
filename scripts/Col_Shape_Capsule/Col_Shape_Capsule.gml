@@ -1,9 +1,14 @@
 function ColCapsule(start, finish, radius) constructor {
+    self.line = undefined;
     self.Set(start, finish, radius);
     
     static Set = function(start = self.start, finish = self.finish, radius = self.radius) {
+        if (self.line) {
+            self.line.Set(start, finish);
+        } else {
+            self.line = new ColLine(start, finish);
+        }
         var line = self.line;
-        line.Set(start, finish);
         self.radius = radius;
         self.property_center = line.property_center;
         self.property_radius = line.property_length / 2 + radius;
