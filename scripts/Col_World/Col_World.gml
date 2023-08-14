@@ -68,11 +68,11 @@ function ColWorld(accelerator) constructor {
             var displaced_position = collided_with.DisplaceSphere(sphere_object.shape);
             if (displaced_position == undefined) break;
             
-            sphere_object.shape.position = displaced_position;
+            sphere_object.Set(sphere_object);
         }
         
         var displaced_position = sphere_object.shape.position;
-        sphere_object.shape.position = current_position;
+        sphere_object.Set(current_position);
         
         if (current_position == displaced_position) return undefined;
         
