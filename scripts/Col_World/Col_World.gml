@@ -133,8 +133,9 @@ function ColWorldOctree(bounds, depth) constructor {
         if (self.depth > 0) {
             self.Split();
             
-            for (var i = 0; i < array_length(self.children); i++) {
-                self.children[i].Add(object);
+            var i = 0;
+            repeat (array_length(self.children)) {
+                self.children[i++].Add(object);
             }
         }
     };
@@ -143,8 +144,9 @@ function ColWorldOctree(bounds, depth) constructor {
         var index = array_get_index(self.contents, object);
         if (index != -1) {
             array_delete(self.contents, index, 1);
-            for (var j = 0; j < array_length(self.children); j++) {
-                self.children[j].Remove(object);
+            var i = 0;
+            repeat (array_length(self.children)) {
+                self.children[j++].Remove(object);
             }
         }
     };
@@ -153,14 +155,17 @@ function ColWorldOctree(bounds, depth) constructor {
         if (!object.shape.CheckAABB(self.bounds)) return;
         
         if (self.children == undefined) {
-            for (var i = 0; i < array_length(self.contents); i++) {
+            var i = 0;
+            repeat (array_length(self.contents)) {
                 if (self.contents[i].CheckObject(object)) {
                     return self.contents[i];
                 }
+                i++;
             }
         } else {
-            for (var i = 0; i < array_length(self.children); i++) {
-                var recursive_result = self.children[i].CheckObject(object);
+            var i = 0;
+            repeat (array_length(self.children)) {
+                var recursive_result = self.children[i++].CheckObject(object);
                 if (recursive_result != undefined) return recursive_result;
             }
         }
@@ -173,14 +178,16 @@ function ColWorldOctree(bounds, depth) constructor {
         
         var result = false;
         if (self.children == undefined) {
-            for (var i = 0; i < array_length(self.contents); i++) {
-                if (self.contents[i].CheckRay(ray, hit_info, group)) {
+            var i = 0;
+            repeat (array_length(self.contents)) {
+                if (self.contents[i++].CheckRay(ray, hit_info, group)) {
                     result = true;
                 }
             }
         } else {
-            for (var i = 0; i < array_length(self.children); i++) {
-                if (self.children[i].CheckRay(ray, hit_info, group)) {
+            var i = 0;
+            repeat (array_length(self.children)) {
+                if (self.children[i++].CheckRay(ray, hit_info, group)) {
                     result = true;
                 }
             }
@@ -203,8 +210,9 @@ function ColWorldOctree(bounds, depth) constructor {
             return;
         }
         
-        for (var i = 0, n = array_length(self.children); i < n; i++) {
-            self.children[i].GetObjectsInFrustum(frustum, output);
+        var i = 0;
+        repeat (array_length(self.children)) {
+            self.children[i++].GetObjectsInFrustum(frustum, output);
         }
     };
 }
