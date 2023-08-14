@@ -308,25 +308,6 @@ function ColAABB(position, half_extents) constructor {
         );
     };
     
-    static CheckAABBSAT = function(aabb) {
-        static axes = [
-            new Vector3(1, 0, 0),
-            new Vector3(0, 1, 0),
-            new Vector3(0, 0, 1)
-        ];
-        
-        for (var i = 0; i < 3; i++) {
-            var axis = axes[i++];
-            var a = self.GetInterval(axis);
-            var b = aabb.GetInterval(axis);
-            if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
-                return false;
-            }
-        }
-        
-        return true;
-    };
-    
     static GetInterval = function(axis) {
         var vertices = self.property_vertices;
         var ax = axis.x;
