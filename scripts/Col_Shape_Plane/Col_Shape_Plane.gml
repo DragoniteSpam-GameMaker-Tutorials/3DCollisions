@@ -22,7 +22,7 @@ function ColPlane(normal, distance) constructor {
         if (self.distance == plane.distance) return true;
         var n1 = self.normal;
         var n2 = plane.normal;
-        return (n1.y * n2.z - n2.y * n1.z != 0 && n1.z * n2.x - n2.z * n1.x != 0 && n1.x * n2.y - n2.x * n1.y != 0);
+        return point_distance_3d(0, 0, 0, n1.y * n2.z - n2.y * n1.z, n1.z * n2.x - n2.z * n1.x, n1.x * n2.y - n2.x * n1.y) > 0;
     };
     
     static CheckOBB = function(obb) {
