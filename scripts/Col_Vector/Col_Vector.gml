@@ -67,7 +67,12 @@ function Vector3(x, y, z) constructor {
     static Project = function(direction) {
         var dot = dot_product_3d(self.x, self.y, self.z, direction.x, direction.y, direction.z);
         var mag2 = dot_product_3d(direction.x, direction.y, direction.z, direction.x, direction.y, direction.z);
-        return direction.Mul(dot / mag2);
+        var f = dot / mag2;
+        return new Vector3(
+            direction.x * f,
+            direction.y * f,
+            direction.z * f
+        );
     };
     
     static Min = function(vec3) {
@@ -166,7 +171,13 @@ function Vector4(x, y, z, w) constructor {
     static Project = function(direction) {
         var dot = self.x * direction.x + self.y * direction.y + self.z * direction.z + self.w * direction.w;
         var mag2 = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z + direction.w * direction.w;
-        return direction.Mul(dot / mag2);
+        var f = dot / mag2;
+        return new Vector4(
+            direction.x * f,
+            direction.y * f,
+            direction.z * f,
+            direction.w * f
+        );
     };
     
     static Min = function(vec4) {
