@@ -39,7 +39,11 @@ if (is_instanceof(shape_1, ColTestSphere)) {
 var mouse_vector = screen_to_world(window_mouse_get_x(), window_mouse_get_y(), view_mat, proj_mat);
 var ray = new ColRay(new Vector3(xfrom, yfrom, zfrom), new Vector3(mouse_vector.x, mouse_vector.y, mouse_vector.z));
 var hit_info = new RaycastHitInformation();
+var ray_hit = shape_1.data && shape_1.data.CheckRay(ray, hit_info);
 if (shape_1.data && shape_1.data.CheckRay(ray, hit_info)) {
+    /*repeat (99) {
+        shape_1.data.CheckRay(ray, hit_info)
+    }*/
     matrix_set(matrix_world, matrix_build(hit_info.point.x, hit_info.point.y, hit_info.point.z, 0, 0, 0, 1, 1, 1));
     vertex_submit(point, pr_trianglelist, -1);
     matrix_set(matrix_world, matrix_build(hit_info.point.x + hit_info.normal.x, hit_info.point.y + hit_info.normal.y, hit_info.point.z + hit_info.normal.z, 0, 0, 0, 1, 1, 1));
@@ -49,6 +53,9 @@ if (shape_1.data && shape_1.data.CheckRay(ray, hit_info)) {
 
 hit_info.Clear();
 if (shape_2.data && shape_2.data.CheckRay(ray, hit_info)) {
+    /*repeat (99) {
+        shape_2.data.CheckRay(ray, hit_info)
+    }*/
     matrix_set(matrix_world, matrix_build(hit_info.point.x, hit_info.point.y, hit_info.point.z, 0, 0, 0, 1, 1, 1));
     vertex_submit(point, pr_trianglelist, -1);
     matrix_set(matrix_world, matrix_build(hit_info.point.x + hit_info.normal.x, hit_info.point.y + hit_info.normal.y, hit_info.point.z + hit_info.normal.z, 0, 0, 0, 1, 1, 1));
