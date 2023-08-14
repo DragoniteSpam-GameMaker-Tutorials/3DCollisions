@@ -98,10 +98,6 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckAABB = function(aabb) {
-        var p1 = self.position;
-        var p2 = aabb.position;
-        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > aabb.property_radius + self.property_radius) return false;
-        
         var box_min = self.property_min;
         var box_max = self.property_max;
         var other_min = aabb.property_min;
