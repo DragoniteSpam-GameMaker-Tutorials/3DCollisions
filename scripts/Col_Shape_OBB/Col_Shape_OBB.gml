@@ -301,14 +301,44 @@ function ColOBB(position, size, orientation) constructor {
         axes[11] = oz.Cross(bc);
         axes[12] = oz.Cross(ca);
         
+        var vertices = self.property_vertices;
+        var tax = triangle.a.x;
+        var tay = triangle.a.y;
+        var taz = triangle.a.z;
+        var tbx = triangle.b.x;
+        var tby = triangle.b.y;
+        var tbz = triangle.b.z;
+        var tcx = triangle.c.x;
+        var tcy = triangle.c.y;
+        var tcz = triangle.c.z;
+        
         var i = 0;
-        var my_interval = self.GetInterval;
-        var tri_interval = method(triangle, triangle.GetInterval);
         repeat (13) {
             var axis = axes[i++];
-            var a = my_interval(axis);
-            var b = tri_interval(axis);
-            if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
+            var xx = axis.x;
+            var yy = axis.y;
+            var zz = axis.z;
+            
+            var val_min_a = infinity;
+            var val_max_a = -infinity;
+            var val_min_b = infinity;
+            var val_max_b = -infinity;
+            
+            var i = 0;
+            repeat (8) {
+                var vertex = vertices[i++];
+                var dot = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+                val_min_a = min(val_min_a, dot);
+                val_max_a = max(val_max_a, dot);
+            }
+            
+            var ada = dot_product_3d(xx, yy, zz, tax, tay, taz);
+            var adb = dot_product_3d(xx, yy, zz, tbx, tby, tbz);
+            var adc = dot_product_3d(xx, yy, zz, tcx, tcy, tcz);
+            var val_min_b = min(ada, adb, adc);
+            var val_max_b = max(ada, adb, adc);
+            
+            if ((val_min_b > val_max_a) || (val_min_a > val_max_b)) {
                 return false;
             }
         }
