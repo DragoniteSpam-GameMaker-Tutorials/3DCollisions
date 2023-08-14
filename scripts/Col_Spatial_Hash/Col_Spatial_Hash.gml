@@ -164,7 +164,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
     // https://github.com/prime31/Nez/blob/master/Nez.Portable/Physics/SpatialHash.cs
     static CheckRay = function(ray, group = 1) {
         static bounds_hit_info = new RaycastHitInformation();
-        bounds_hit_info.Clear();
+        bounds_hit_info.distance = infinity;
         
         var cs = self.chunk_size;
         var rd = ray.direction;

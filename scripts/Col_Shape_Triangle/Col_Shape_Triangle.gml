@@ -260,7 +260,7 @@ function ColTriangle(a, b, c) constructor {
     
     static CheckRay = function(ray, hit_info) {
         static plane_hit_info = new RaycastHitInformation();
-        plane_hit_info.Clear();
+        hit_info.distance = infinity;
         
         if (!self.property_plane.CheckRay(ray, plane_hit_info)) {
             return false;
@@ -280,7 +280,7 @@ function ColTriangle(a, b, c) constructor {
     
     static CheckLine = function(line) {
         static hit_info = new RaycastHitInformation();
-        hit_info.Clear();
+        hit_info.distance = infinity;
         
         if (self.CheckRay(line.property_ray, hit_info)) {
             return (hit_info.distance <= line.property_length);

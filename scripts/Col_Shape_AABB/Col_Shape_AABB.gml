@@ -230,7 +230,7 @@ function ColAABB(position, half_extents) constructor {
     
     static CheckLine = function(line) {
         static hit_info = new RaycastHitInformation();
-        hit_info.Clear();
+        hit_info.distance = infinity;
         
         if (self.CheckRay(line.property_ray, hit_info)) {
             return (hit_info.distance <= line.property_length);
