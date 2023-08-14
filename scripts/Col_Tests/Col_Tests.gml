@@ -196,32 +196,32 @@ function ColTestTriangle() constructor {
     self.update = function() {
         if (keyboard_check(vk_left)) {
             var offset = new Vector3(-1, 0, 0);
-            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.x--;
         }
         if (keyboard_check(vk_right)) {
             var offset = new Vector3(1, 0, 0);
-            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.x++;
         }
         if (keyboard_check(vk_up)) {
             var offset = new Vector3(0, -1, 0);
-            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.y--;
         }
         if (keyboard_check(vk_down)) {
             var offset = new Vector3(0, 1, 0);
-            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.y++;
         }
         if (keyboard_check(vk_pageup)) {
             var offset = new Vector3(0, 0, 1);
-            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.z++;
         }
         if (keyboard_check(vk_pagedown)) {
             var offset = new Vector3(0, 0, -1);
-            self.data.SetVertices(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.z--;
         }
     };
