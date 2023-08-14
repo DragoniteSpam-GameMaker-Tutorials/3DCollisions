@@ -7,13 +7,6 @@ function ColWorldSpatialHash(chunk_size) constructor {
     
     self.planes = [];
     
-    static DebugDraw = function() {
-        self.bounds.DebugDraw();
-        struct_foreach(self.chunks, function(chunk) {
-            self.chunks[$ chunk].DebugDraw();
-        });
-    };
-    
     static HashFunction = function(x, y, z) {
         return $"{x},{y},{z}";
     };
@@ -293,14 +286,6 @@ function ColWorldSpatialHash(chunk_size) constructor {
 function ColSpatialHashNode(bounds) constructor {
     self.bounds = bounds;
     self.objects = [];
-    
-    static DebugDraw = function() {
-        self.bounds.DebugDraw();
-        /*array_foreach(self.objects, function(object) {
-            if (object.shape[$ "DebugDraw"])
-                object.shape.DebugDraw();
-        });*/
-    };
     
     static Add = function(object) {
         array_push(self.objects, object);

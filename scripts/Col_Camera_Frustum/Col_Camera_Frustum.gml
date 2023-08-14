@@ -32,65 +32,6 @@ function ColCameraFrustum(view_mat, proj_mat) constructor {
             col_three_plane_intersection(self.far,    self.bottom,    self.right)
         ];
     };
-    
-    static DebugDraw = function() {
-        var corners = self.GetCorners();
-        
-        matrix_set(matrix_world, matrix_build_identity());
-        
-        static vertex_add_point = function(vbuff, point, colour) {
-            vertex_position_3d(vbuff, point.x, point.y, point.z);
-            vertex_normal(vbuff, 0, 0, 1);
-            vertex_texcoord(vbuff, 0, 0);
-            vertex_colour(vbuff, colour, 1);
-        };
-        
-        static vb_lines = vertex_create_buffer();
-        vertex_begin(vb_lines, obj_camera.format);
-        
-        // near
-        vertex_add_point(vb_lines, corners[0], c_yellow);
-        vertex_add_point(vb_lines, corners[1], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[2], c_yellow);
-        vertex_add_point(vb_lines, corners[3], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[0], c_yellow);
-        vertex_add_point(vb_lines, corners[2], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[1], c_yellow);
-        vertex_add_point(vb_lines, corners[3], c_yellow);
-        
-        // far
-        vertex_add_point(vb_lines, corners[4], c_yellow);
-        vertex_add_point(vb_lines, corners[5], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[6], c_yellow);
-        vertex_add_point(vb_lines, corners[7], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[4], c_yellow);
-        vertex_add_point(vb_lines, corners[6], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[5], c_yellow);
-        vertex_add_point(vb_lines, corners[7], c_yellow);
-        
-        // sides
-        vertex_add_point(vb_lines, corners[0], c_yellow);
-        vertex_add_point(vb_lines, corners[4], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[1], c_yellow);
-        vertex_add_point(vb_lines, corners[5], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[2], c_yellow);
-        vertex_add_point(vb_lines, corners[6], c_yellow);
-        
-        vertex_add_point(vb_lines, corners[3], c_yellow);
-        vertex_add_point(vb_lines, corners[7], c_yellow);
-        
-        vertex_end(vb_lines);
-        
-        vertex_submit(vb_lines, pr_linelist, -1);
-    };
 }
 
 function col_three_plane_intersection(p1, p2, p3) {
