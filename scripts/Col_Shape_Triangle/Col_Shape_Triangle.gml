@@ -165,44 +165,81 @@ function ColTriangle(a, b, c) constructor {
         // Phase 3: the regular SAT
         
         // edges of ourself
-        var selfAB = self.property_edge_ab;
-        var selfBC = self.property_edge_bc;
-        var selfCA = self.property_edge_ca;
+        var ab = self.property_edge_ab;
+        var bc = self.property_edge_bc;
+        var ca = self.property_edge_ca;
+        var ixx = ab.x, ixy = ab.y, ixz = ab.z;
+        var iyx = bc.x, iyy = bc.y, iyz = bc.z;
+        var izx = ca.x, izy = ca.y, izz = ca.z;
         // edges of the other triangle
-        var otherAB = triangle.property_edge_ab;
-        var otherBC = triangle.property_edge_bc;
-        var otherCA = triangle.property_edge_ca;
+        var ox = triangle.property_edge_ab;
+        var oy = triangle.property_edge_bc;
+        var oz = triangle.property_edge_ca;
+        var oxx = ox.x, oxy = ox.y, oxz = ox.z;
+        var oyx = oy.x, oyy = oy.y, oyz = oy.z;
+        var ozx = oz.x, ozy = oz.y, ozz = oz.z;
         
-        static axes = array_create(11);
+        static axes = array_create(11 * 3);
         
         // The normals of both triangle, plus each of the edges of 
         // triangle crossed against each of the edges of the other
-        axes[0] = self.property_normal;
-        axes[1] = triangle.property_normal;
-        axes[2] = otherAB.Cross(selfAB);
-        axes[3] = otherBC.Cross(selfAB);
-        axes[4] = otherCA.Cross(selfAB);
-        axes[5] = otherAB.Cross(selfBC);
-        axes[6] = otherBC.Cross(selfBC);
-        axes[7] = otherCA.Cross(selfBC);
-        axes[8] = otherAB.Cross(selfCA);
-        axes[9] = otherBC.Cross(selfCA);
-        axes[10] = otherCA.Cross(selfCA);
+        axes[0 * 3 + 0] = self.property_normal.x;
+        axes[0 * 3 + 1] = self.property_normal.y;
+        axes[0 * 3 + 2] = self.property_normal.z;
+        axes[1 * 3 + 0] = triangle.property_normal.x;
+        axes[1 * 3 + 1] = triangle.property_normal.y;
+        axes[1 * 3 + 2] = triangle.property_normal.z;
+        
+        axes[2 * 3 + 0] = ixy * oxz - oxy * ixz;
+        axes[2 * 3 + 1] = ixz * oxx - oxz * ixx;
+        axes[2 * 3 + 2] = ixx * oxy - oxx * ixy;
+        axes[3 * 3 + 0] = iyy * oxz - oxy * iyz;
+        axes[3 * 3 + 1] = iyz * oxx - oxz * iyx;
+        axes[3 * 3 + 2] = iyx * oxy - oxx * iyy;
+        axes[4 * 3 + 0] = izy * oxz - oxy * izz;
+        axes[4 * 3 + 1] = izz * oxx - oxz * izx;
+        axes[4 * 3 + 2] = izx * oxy - oxx * izy;
+        axes[5 * 3 + 0] = ixy * oyz - oyy * ixz;
+        axes[5 * 3 + 1] = ixz * oyx - oyz * ixx;
+        axes[5 * 3 + 2] = ixx * oyy - oyx * ixy;
+        axes[6 * 3 + 0] = iyy * oyz - oyy * iyz;
+        axes[6 * 3 + 1] = iyz * oyx - oyz * iyx;
+        axes[6 * 3 + 2] = iyx * oyy - oyx * iyy;
+        axes[7 * 3 + 0] = izy * oyz - oyy * izz;
+        axes[7 * 3 + 1] = izz * oyx - oyz * izx;
+        axes[7 * 3 + 2] = izx * oyy - oyx * izy;
+        axes[8 * 3 + 0] = ixy * ozz - ozy * ixz;
+        axes[8 * 3 + 1] = ixz * ozx - ozz * ixx;
+        axes[8 * 3 + 2] = ixx * ozy - ozx * ixy;
+        axes[9 * 3 + 0] = iyy * ozz - ozy * iyz;
+        axes[9 * 3 + 1] = iyz * ozx - ozz * iyx;
+        axes[9 * 3 + 2] = iyx * ozy - ozx * iyy;
+        axes[10 * 3 + 0] = izy * ozz - ozy * izz;
+        axes[10 * 3 + 1] = izz * ozx - ozz * izx;
+        axes[10 * 3 + 2] = izx * ozy - ozx * izy;
+        
+        var tax = triangle.a.x;
+        var tay = triangle.a.y;
+        var taz = triangle.a.z;
+        var tbx = triangle.b.x;
+        var tby = triangle.b.y;
+        var tbz = triangle.b.z;
+        var tcx = triangle.c.x;
+        var tcy = triangle.c.y;
+        var tcz = triangle.c.z;
         
         var i = 0;
         repeat (11) {
-            var axis = axes[i++];
-            
-            var ax = axis.x;
-            var ay = axis.y;
-            var az = axis.z;
+            var ax = axes[i++];
+            var ay = axes[i++];
+            var az = axes[i++];
             var ada = dot_product_3d(ax, ay, az, vax, vay, vaz);
             var adb = dot_product_3d(ax, ay, az, vbx, vby, vbz);
             var adc = dot_product_3d(ax, ay, az, vcx, vcy, vcz);
             var val_min_a = min(ada, adb, adc), val_max_a = max(ada, adb, adc);
-            ada = dot_product_3d(ax, ay, az, triangle.a.x, triangle.a.y, triangle.a.z);
-            adb = dot_product_3d(ax, ay, az, triangle.b.x, triangle.b.y, triangle.b.z);
-            adc = dot_product_3d(ax, ay, az, triangle.c.x, triangle.c.y, triangle.c.z);
+            ada = dot_product_3d(ax, ay, az, tax, tay, taz);
+            adb = dot_product_3d(ax, ay, az, tbx, tby, tbz);
+            adc = dot_product_3d(ax, ay, az, tcx, tcy, tcz);
             var val_min_b = min(ada, adb, adc), val_max_b = max(ada, adb, adc);
             
             if ((val_min_b > val_max_a) || (val_min_a > val_max_b)) {
