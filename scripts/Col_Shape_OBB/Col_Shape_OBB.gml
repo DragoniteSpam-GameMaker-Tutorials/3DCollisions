@@ -88,8 +88,14 @@ function ColOBB(position, size, orientation) constructor {
         
         var dx = ps.x - px, dy = ps.y - py, dz = ps.z - pz;
         
-        var size_array = [self.size.x, self.size.y, self.size.z];
-        var orientation_array = [self.orientation.x, self.orientation.y, self.orientation.z];
+        static size_array = array_create(3);
+        static orientation_array = array_create(3);
+        size_array[0] = self.size.x;
+        size_array[1] = self.size.y;
+        size_array[2] = self.size.z;
+        orientation_array[0] = self.orientation.x;
+        orientation_array[1] = self.orientation.y;
+        orientation_array[2] = self.orientation.z;
         
         for (var i = 0; i < 3; i++) {
             var axis = orientation_array[i];
