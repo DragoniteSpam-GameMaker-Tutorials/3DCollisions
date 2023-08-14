@@ -61,24 +61,33 @@ function ColTriangle(a, b, c) constructor {
         var plane_a = self.property_plane;
         var plane_b = triangle.property_plane;
         
-        var paa = plane_a.PlaneEquation(triangle.a);
-        var pab = plane_a.PlaneEquation(triangle.b);
-        var pac = plane_a.PlaneEquation(triangle.c);
+        var a = self.a, b = self.b, c = self.c;
+        var vax = a.x, vay = a.y, vaz = a.z;
+        var vbx = b.x, vby = b.y, vbz = b.z;
+        var vcx = c.x, vcy = c.y, vcz = c.z;
+        
+        var nxa = plane_a.normal.x, nya = plane_a.normal.y, nza = plane_a.normal.z;
+        var d = plane_a.distance;
+        var paa = dot_product_3d(nxa, nya, nza, vax, vay, vaz) - d;
+        var pab = dot_product_3d(nxa, nya, nza, vbx, vby, vbz) - d;
+        var pac = dot_product_3d(nxa, nya, nza, vcx, vcy, vcz) - d;
         
         if ((paa * pab) > 0 && (paa * pac) > 0) {
             return false;
         }
         
-        var pba = plane_b.PlaneEquation(self.a);
-        var pbb = plane_b.PlaneEquation(self.b);
-        var pbc = plane_b.PlaneEquation(self.c);
+        var nxb = plane_b.normal.x, nyb = plane_b.normal.y, nzb = plane_b.normal.z;
+        d = plane_b.distance;
+        var pba = dot_product_3d(nxb, nyb, nzb, vax, vay, vaz) - d;
+        var pbb = dot_product_3d(nxb, nyb, nzb, vbx, vby, vbz) - d;
+        var pbc = dot_product_3d(nxb, nyb, nzb, vcx, vcy, vcz) - d;
         
         if ((pba * pbb) > 0 && (pba * pbc) > 0) {
             return false;
         }
         
         // Phase 2: are both triangles coplanar?
-        if (plane_a.distance == plane_b.distance && abs(plane_a.normal.Dot(plane_b.normal)) == 1) {
+        if (plane_a.distance == plane_b.distance && abs(dot_product_3d(nxa, nya, nza, nxb, nyb, nzb)) == 1) {
             static test_point = new ColPoint(zero_vector);
             
             test_point.position = self.a;
@@ -99,9 +108,9 @@ function ColTriangle(a, b, c) constructor {
             var e1 = self.property_edge_ab;
             var e2 = e1.Cross(norm);
             
-            var sa = col_project_onto_plane(self.a, origin, norm, e1, e2);
-            var sb = col_project_onto_plane(self.b, origin, norm, e1, e2);
-            var sc = col_project_onto_plane(self.c, origin, norm, e1, e2);
+            var sa = col_project_onto_plane(a, origin, norm, e1, e2);
+            var sb = col_project_onto_plane(b, origin, norm, e1, e2);
+            var sc = col_project_onto_plane(c, origin, norm, e1, e2);
             
             var oa = col_project_onto_plane(triangle.a, origin, norm, e1, e2);
             var ob = col_project_onto_plane(triangle.b, origin, norm, e1, e2);
@@ -150,9 +159,20 @@ function ColTriangle(a, b, c) constructor {
         var i = 0;
         repeat (11) {
             var axis = axes[i++];
-            var a = self.GetInterval(axis);
-            var b = triangle.GetInterval(axis);
-            if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
+            
+            var ax = axis.x;
+            var ay = axis.y;
+            var az = axis.z;
+            var ada = dot_product_3d(ax, ay, az, vax, vay, vaz);
+            var adb = dot_product_3d(ax, ay, az, vbx, vby, vbz);
+            var adc = dot_product_3d(ax, ay, az, vcx, vcy, vcz);
+            var val_min_a = min(ada, adb, adc), val_max_a = max(ada, adb, adc);
+            ada = dot_product_3d(ax, ay, az, triangle.a.x, triangle.a.y, triangle.a.z);
+            adb = dot_product_3d(ax, ay, az, triangle.b.x, triangle.b.y, triangle.b.z);
+            adc = dot_product_3d(ax, ay, az, triangle.c.x, triangle.c.y, triangle.c.z);
+            var val_min_b = min(ada, adb, adc), val_max_b = max(ada, adb, adc);
+            
+            if ((val_min_b > val_max_a) || (val_min_a > val_max_b)) {
                 return false;
             }
         }
