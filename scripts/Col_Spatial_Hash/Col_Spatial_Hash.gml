@@ -316,17 +316,20 @@ function ColSpatialHashNode(bounds) constructor {
     };
     
     static CheckObject = function(object) {
-        for (var i = 0; i < array_length(self.objects); i++) {
+        var i = 0;
+        repeat (array_length(self.objects)) {
             if (self.objects[i].CheckObject(object))
                 return self.objects[i];
+            i++;
         }
         return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
         var hit_detected = false;
-        for (var i = 0; i < array_length(self.objects); i++) {
-            if (self.objects[i].CheckRay(ray, hit_info, group))
+        var i = 0;
+        repeat (array_length(self.objects)) {
+            if (self.objects[i++].CheckRay(ray, hit_info, group))
                 hit_detected = true;
         }
         return hit_detected;
