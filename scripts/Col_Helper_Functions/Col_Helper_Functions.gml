@@ -1,11 +1,17 @@
 function NewColAABBFromMinMax(point_min, point_max) {
-    var center_position = point_min.Add(point_max).Div(2);
-    var half_size = point_max.Sub(point_min).Div(2).Abs();
-    return new ColAABB(center_position, half_size);
+    return new ColAABB(new Vector3(
+        mean(point_min.x, point_max.x),
+        mean(point_min.y, point_max.y),
+        mean(point_min.z, point_max.z)
+    ), new Vector3(
+        abs((point_max.x - point_min.x) / 2),
+        abs((point_max.y - point_min.y) / 2),
+        abs((point_max.z - point_min.z) / 2)
+    ));
 }
 
 function NewColRayFromPoints(start, finish) {
-    return new ColRay(start, finish.Sub(start));
+    return new ColRay(start, new Vector3(finish.x - start.x, finisy.y - start.y, finish.z - start.z));
 }
 
 function RaycastHitInformation() constructor {
@@ -32,10 +38,10 @@ function RaycastHitInformation() constructor {
 }
 
 function col_project_onto_plane(vertex, origin, norm, e1, e2) {
-    var diff = vertex.Sub(origin);
+    var dx = vertex.x - origin.x, dy = vertex.y - origin.y, dz = vertex.z - origin.z;
     return new Vector3(
-        dot_product_3d(diff.x, diff.y, diff.z, e1.x, e1.y, e1.z),
-        dot_product_3d(diff.x, diff.y, diff.z, e2.x, e2.y, e2.z),
+        dot_product_3d(dx, dy, dz, e1.x, e1.y, e1.z),
+        dot_product_3d(dx, dy, dz, e2.x, e2.y, e2.z),
         0
     );
 }
