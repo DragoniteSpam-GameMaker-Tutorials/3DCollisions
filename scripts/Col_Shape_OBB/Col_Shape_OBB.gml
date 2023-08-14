@@ -205,43 +205,76 @@ function ColOBB(position, size, orientation) constructor {
         
         if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > self.property_radius + obb.property_radius) return false;
         
-        static axes = array_create(15);
+        static axes = array_create(15 * 3);
         
         var ix = obb.orientation.x;
         var iy = obb.orientation.y;
         var iz = obb.orientation.z;
+        var ixx = ix.x, ixy = ix.y, ixz = ix.z;
+        var iyx = iy.x, iyy = iy.y, iyz = iy.z;
+        var izx = iz.x, izy = iz.y, izz = iz.z;
         var ox = self.orientation.x;
         var oy = self.orientation.y;
         var oz = self.orientation.z;
+        var oxx = ox.x, oxy = ox.y, oxz = ox.z;
+        var oyx = oy.x, oyy = oy.y, oyz = oy.z;
+        var ozx = oz.x, ozy = oz.y, ozz = oz.z;
         
-        axes[0] = ix;
-        axes[1] = iy;
-        axes[2] = iz;
+        axes[0 * 3 + 0] = ixx;
+        axes[0 * 3 + 1] = ixy;
+        axes[0 * 3 + 2] = ixz;
+        axes[1 * 3 + 0] = iyx;
+        axes[1 * 3 + 1] = iyy;
+        axes[1 * 3 + 2] = iyz;
+        axes[2 * 3 + 0] = izx;
+        axes[2 * 3 + 1] = izy;
+        axes[2 * 3 + 2] = izz;
+        axes[3 * 3 + 0] = oxx;
+        axes[3 * 3 + 1] = oxy;
+        axes[3 * 3 + 2] = oxz;
+        axes[4 * 3 + 0] = oyx;
+        axes[4 * 3 + 1] = oyy;
+        axes[4 * 3 + 2] = oyz;
+        axes[5 * 3 + 0] = ozx;
+        axes[5 * 3 + 1] = ozy;
+        axes[5 * 3 + 2] = ozz;
         
-        axes[3] = ox;
-        axes[4] = oy;
-        axes[5] = oz;
-        
-        axes[6] = ix.Cross(ox);
-        axes[7] = iy.Cross(ox);
-        axes[8] = iz.Cross(ox);
-        axes[9] = ix.Cross(oy);
-        axes[10] = iy.Cross(oy);
-        axes[11] = iz.Cross(oy);
-        axes[12] = ix.Cross(oz);
-        axes[13] = iy.Cross(oz);
-        axes[14] = iz.Cross(oz);
+        axes[6 * 3 + 0] = ixy * oxz - oxy * ixz;
+        axes[6 * 3 + 1] = ixz * oxx - oxz * ixx;
+        axes[6 * 3 + 2] = ixx * oxy - oxx * ixy;
+        axes[7 * 3 + 0] = iyy * oxz - oxy * iyz;
+        axes[7 * 3 + 1] = iyz * oxx - oxz * iyx;
+        axes[7 * 3 + 2] = iyx * oxy - oxx * iyy;
+        axes[8 * 3 + 0] = izy * oxz - oxy * izz;
+        axes[8 * 3 + 1] = izz * oxx - oxz * izx;
+        axes[8 * 3 + 2] = izx * oxy - oxx * izy;
+        axes[9 * 3 + 0] = ixy * oyz - oyy * ixz;
+        axes[9 * 3 + 1] = ixz * oyx - oyz * ixx;
+        axes[9 * 3 + 2] = ixx * oyy - oyx * ixy;
+        axes[10 * 3 + 0] = iyy * oyz - oyy * iyz;
+        axes[10 * 3 + 1] = iyz * oyx - oyz * iyx;
+        axes[10 * 3 + 2] = iyx * oyy - oyx * iyy;
+        axes[11 * 3 + 0] = izy * oyz - oyy * izz;
+        axes[11 * 3 + 1] = izz * oyx - oyz * izx;
+        axes[11 * 3 + 2] = izx * oyy - oyx * izy;
+        axes[12 * 3 + 0] = ixy * ozz - ozy * ixz;
+        axes[12 * 3 + 1] = ixz * ozx - ozz * ixx;
+        axes[12 * 3 + 2] = ixx * ozy - ozx * ixy;
+        axes[13 * 3 + 0] = iyy * ozz - ozy * iyz;
+        axes[13 * 3 + 1] = iyz * ozx - ozz * iyx;
+        axes[13 * 3 + 2] = iyx * ozy - ozx * iyy;
+        axes[14 * 3 + 0] = izy * ozz - ozy * izz;
+        axes[14 * 3 + 1] = izz * ozx - ozz * izx;
+        axes[14 * 3 + 2] = izx * ozy - ozx * izy;
         
         var vertices = self.property_vertices;
         var vertices_obb = self.property_vertices;
         
         var i = 0;
         repeat (15) {
-            var axis = axes[i++];
-            
-            var xx = axis.x;
-            var yy = axis.y;
-            var zz = axis.z;
+            var xx = axes[i++];
+            var yy = axes[i++];
+            var zz = axes[i++];
             
             var val_min_a = infinity;
             var val_max_a = -infinity;
