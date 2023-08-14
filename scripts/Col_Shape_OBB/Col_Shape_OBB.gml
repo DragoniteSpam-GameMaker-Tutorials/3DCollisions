@@ -329,31 +329,62 @@ function ColOBB(position, size, orientation) constructor {
         var p2 = triangle.property_center;
         if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > triangle.property_radius + self.property_radius) return false;
         
-        static axes = array_create(13);
+        static axes = array_create(13 * 3);
         
         var ab = triangle.property_edge_ab;
         var bc = triangle.property_edge_bc;
         var ca = triangle.property_edge_ca;
-        
+        var ixx = ab.x, ixy = ab.y, ixz = ab.z;
+        var iyx = bc.x, iyy = bc.y, iyz = bc.z;
+        var izx = ca.x, izy = ca.y, izz = ca.z;
         var ox = self.orientation.x;
         var oy = self.orientation.y;
         var oz = self.orientation.z;
+        var oxx = ox.x, oxy = ox.y, oxz = ox.z;
+        var oyx = oy.x, oyy = oy.y, oyz = oy.z;
+        var ozx = oz.x, ozy = oz.y, ozz = oz.z;
         var tn = triangle.property_normal;
         
-        axes[0] = ox;
-        axes[1] = oy;
-        axes[2] = oz;
-        axes[3] = tn;
+        axes[0 * 3 + 0] = oxx;
+        axes[0 * 3 + 1] = oxy;
+        axes[0 * 3 + 2] = oxz;
+        axes[1 * 3 + 0] = oyx;
+        axes[1 * 3 + 1] = oyy;
+        axes[1 * 3 + 2] = oyz;
+        axes[2 * 3 + 0] = ozx;
+        axes[2 * 3 + 1] = ozy;
+        axes[2 * 3 + 2] = ozz;
+        axes[3 * 3 + 0] = tn.x;
+        axes[3 * 3 + 1] = tn.y;
+        axes[3 * 3 + 2] = tn.z;
         
-        axes[4] = ox.Cross(ab);
-        axes[5] = ox.Cross(bc);
-        axes[6] = ox.Cross(ca);
-        axes[7] = oy.Cross(ab);
-        axes[8] = oy.Cross(bc);
-        axes[9] = oy.Cross(ca);
-        axes[10] = oz.Cross(ab);
-        axes[11] = oz.Cross(bc);
-        axes[12] = oz.Cross(ca);
+        axes[4 * 3 + 0] = ixy * oxz - oxy * ixz;
+        axes[4 * 3 + 1] = ixz * oxx - oxz * ixx;
+        axes[4 * 3 + 2] = ixx * oxy - oxx * ixy;
+        axes[5 * 3 + 0] = iyy * oxz - oxy * iyz;
+        axes[5 * 3 + 1] = iyz * oxx - oxz * iyx;
+        axes[5 * 3 + 2] = iyx * oxy - oxx * iyy;
+        axes[6 * 3 + 0] = izy * oxz - oxy * izz;
+        axes[6 * 3 + 1] = izz * oxx - oxz * izx;
+        axes[6 * 3 + 2] = izx * oxy - oxx * izy;
+        axes[7 * 3 + 0] = ixy * oyz - oyy * ixz;
+        axes[7 * 3 + 1] = ixz * oyx - oyz * ixx;
+        axes[7 * 3 + 2] = ixx * oyy - oyx * ixy;
+        axes[8 * 3 + 0] = iyy * oyz - oyy * iyz;
+        axes[8 * 3 + 1] = iyz * oyx - oyz * iyx;
+        axes[8 * 3 + 2] = iyx * oyy - oyx * iyy;
+        axes[9 * 3 + 0] = izy * oyz - oyy * izz;
+        axes[9 * 3 + 1] = izz * oyx - oyz * izx;
+        axes[9 * 3 + 2] = izx * oyy - oyx * izy;
+        axes[10 * 3 + 0] = ixy * ozz - ozy * ixz;
+        axes[10 * 3 + 1] = ixz * ozx - ozz * ixx;
+        axes[10 * 3 + 2] = ixx * ozy - ozx * ixy;
+        axes[11 * 3 + 0] = iyy * ozz - ozy * iyz;
+        axes[11 * 3 + 1] = iyz * ozx - ozz * iyx;
+        axes[11 * 3 + 2] = iyx * ozy - ozx * iyy;
+        axes[12 * 3 + 0] = izy * ozz - ozy * izz;
+        axes[12 * 3 + 1] = izz * ozx - ozz * izx;
+        axes[12 * 3 + 2] = izx * ozy - ozx * izy;
         
         var vertices = self.property_vertices;
         var tax = triangle.a.x;
@@ -368,15 +399,12 @@ function ColOBB(position, size, orientation) constructor {
         
         var i = 0;
         repeat (13) {
-            var axis = axes[i++];
-            var xx = axis.x;
-            var yy = axis.y;
-            var zz = axis.z;
+            var xx = axes[i++];
+            var yy = axes[i++];
+            var zz = axes[i++];
             
             var val_min_a = infinity;
             var val_max_a = -infinity;
-            var val_min_b = infinity;
-            var val_max_b = -infinity;
             
             var j = 0;
             repeat (8) {
