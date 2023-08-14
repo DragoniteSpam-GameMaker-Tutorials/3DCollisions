@@ -136,43 +136,79 @@ function ColAABB(position, half_extents) constructor {
         var bc = triangle.property_edge_bc;
         var ca = triangle.property_edge_ca;
          
-        static nx = new Vector3(1, 0, 0);
-        static ny = new Vector3(0, 1, 0);
-        static nz = new Vector3(0, 0, 1);
-        
         static axes = [
-            nx, ny, nz,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined
+            1, 0, 0,
+            0, 1, 0,
+            0, 0, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0
         ];
         
-        axes[3] = triangle.property_normal;
-        axes[4] = nx.Cross(ab);
-        axes[5] = nx.Cross(bc);
-        axes[6] = nx.Cross(ca);
-        axes[7] = ny.Cross(ab);
-        axes[8] = ny.Cross(bc);
-        axes[9] = ny.Cross(ca);
-        axes[10] = nz.Cross(ab);
-        axes[11] = nz.Cross(bc);
-        axes[12] = nz.Cross(ca);
+        axes[3 * 3 + 0] = triangle.property_normal.x;
+        axes[3 * 3 + 1] = triangle.property_normal.y;
+        axes[3 * 3 + 2] = triangle.property_normal.z;
+        axes[4 * 3 + 1] = -ab.z;
+        axes[4 * 3 + 2] = ab.y;
+        axes[5 * 3 + 1] = -bc.z;
+        axes[5 * 3 + 2] = bc.y;
+        axes[6 * 3 + 1] = -ca.z;
+        axes[6 * 3 + 2] = ca.y;
+        axes[7 * 3 + 0] = ab.z;
+        axes[7 * 3 + 2] = -ab.x;
+        axes[8 * 3 + 0] = bc.z;
+        axes[8 * 3 + 2] = -bc.x;
+        axes[9 * 3 + 0] = ca.z;
+        axes[9 * 3 + 2] = -ca.x;
+        axes[10 * 3 + 0] = -ab.y;
+        axes[10 * 3 + 1] = ab.x;
+        axes[11 * 3 + 0] = -bc.y;
+        axes[11 * 3 + 1] = bc.x;
+        axes[12 * 3 + 0] = -ca.y;
+        axes[12 * 3 + 1] = ca.x;
         
-        var my_interval = self.GetInterval;
-        var tri_interval = method(triangle, triangle.GetInterval);
+        var vertices = self.property_vertices;
+        var tax = triangle.a.x;
+        var tay = triangle.a.y;
+        var taz = triangle.a.z;
+        var tbx = triangle.b.x;
+        var tby = triangle.b.y;
+        var tbz = triangle.b.z;
+        var tcx = triangle.c.x;
+        var tcy = triangle.c.y;
+        var tcz = triangle.c.z;
+        
         var i = 0;
         repeat (13) {
-            var axis = axes[i++];
-            var a = my_interval(axis);
-            var b = tri_interval(axis);
-            if ((b.val_min > a.val_max) || (a.val_min > b.val_max)) {
+            var ax = axes[i++];
+            var ay = axes[i++];
+            var az = axes[i++];
+        
+            var val_min_a = infinity;
+            var val_max_a = -infinity;
+            
+            var j = 0;
+            repeat (8) {
+                var vertex = vertices[j++];
+                var dot = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+                val_min_a = min(val_min_a, dot);
+                val_max_a = max(val_max_a, dot);
+            }
+            
+            var ada = dot_product_3d(ax, ay, az, tax, tay, taz);
+            var adb = dot_product_3d(ax, ay, az, tbx, tby, tbz);
+            var adc = dot_product_3d(ax, ay, az, tcx, tcy, tcz);
+            var val_min_b = min(ada, adb, adc);
+            var val_max_b = max(ada, adb, adc);
+            
+            if ((val_min_b > val_max_a) || (val_min_a > val_max_b)) {
                 return false;
             }
         }
