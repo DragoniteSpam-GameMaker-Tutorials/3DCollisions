@@ -34,9 +34,11 @@ function ColPlane(normal, distance) constructor {
     };
     
     static CheckTriangle = function(triangle) {
-        var side_a = self.PlaneEquation(triangle.a);
-        var side_b = self.PlaneEquation(triangle.b);
-        var side_c = self.PlaneEquation(triangle.c);
+        var nx = self.normal.x, ny = self.normal.y, nz = self.normal.z;
+        var d = self.distance;
+        var side_a = dot_product_3d(nx, ny, nz, triangle.a.x, triangle.a.y, triangle.a.z) - d;
+        var side_b = dot_product_3d(nx, ny, nz, triangle.b.x, triangle.b.y, triangle.b.z) - d;
+        var side_c = dot_product_3d(nx, ny, nz, triangle.c.x, triangle.c.y, triangle.c.z) - d;
         
         if (side_a == 0 && side_b == 0 && side_c == 0) {
             return true;
