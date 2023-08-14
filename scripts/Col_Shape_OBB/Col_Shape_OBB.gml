@@ -113,45 +113,66 @@ function ColOBB(position, size, orientation) constructor {
         var p2 = aabb.position;
         if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > aabb.property_radius + self.property_radius) return false;
         
-        static vec_x = new Vector3(1, 0, 0);
-        static vec_y = new Vector3(0, 1, 0);
-        static vec_z = new Vector3(0, 0, 1);
-        
         static axes = [
-            vec_x, vec_y, vec_z,
-            undefined, undefined, undefined,
-            undefined, undefined, undefined,
-            undefined, undefined, undefined,
-            undefined, undefined, undefined
+            1, 0, 0,
+            0, 1, 0,
+            0, 0, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0
         ];
         
         var ox = self.orientation.x;
         var oy = self.orientation.y;
         var oz = self.orientation.z;
         
-        axes[3] = ox;
-        axes[4] = oy;
-        axes[5] = oz;
+        axes[3 * 3 + 0] = ox.x;
+        axes[3 * 3 + 1] = ox.y;
+        axes[3 * 3 + 2] = ox.z;
+        axes[4 * 3 + 0] = oy.x;
+        axes[4 * 3 + 1] = oy.y;
+        axes[4 * 3 + 2] = oy.z;
+        axes[5 * 3 + 0] = oz.x;
+        axes[5 * 3 + 1] = oz.y;
+        axes[5 * 3 + 2] = oz.z;
         
-        axes[6] = vec_x.Cross(ox);
-        axes[7] = vec_y.Cross(ox);
-        axes[8] = vec_z.Cross(ox);
-        axes[9] = vec_x.Cross(oy);
-        axes[10] = vec_y.Cross(oy);
-        axes[11] = vec_z.Cross(oy);
-        axes[12] = vec_x.Cross(oz);
-        axes[13] = vec_y.Cross(oz);
-        axes[14] = vec_z.Cross(oz);
+        axes[6 * 3 + 1] = -ox.z;
+        axes[6 * 3 + 2] = -ox.y;
+        axes[7 * 3 + 1] = -oy.z;
+        axes[7 * 3 + 2] = -oy.y;
+        axes[8 * 3 + 1] = -oz.z;
+        axes[8 * 3 + 2] = -oz.y;
+        
+        axes[9 * 3 + 0] = ox.z;
+        axes[9 * 3 + 2] = -ox.x;
+        axes[10 * 3 + 0] = oy.z;
+        axes[10 * 3 + 2] = -oy.x;
+        axes[11 * 3 + 0] = oz.z;
+        axes[11 * 3 + 2] = -oz.x;
+        
+        axes[12 + 3 + 0] = -ox.y;
+        axes[12 + 3 + 1] = ox.x;
+        axes[13 + 3 + 0] = -oy.y;
+        axes[13 + 3 + 1] = oy.x;
+        axes[14 + 3 + 0] = -oz.y;
+        axes[14 + 3 + 1] = oz.x;
         
         var i = 0;
         var vertices = self.property_vertices;
         var vertices_aabb = aabb.property_vertices;
         repeat (15) {
-            var axis = axes[i++];
-            
-            var xx = axis.x;
-            var yy = axis.y;
-            var zz = axis.z;
+            var xx = axes[i++];
+            var yy = axes[i++];
+            var zz = axes[i++];
             
             var val_min_a = infinity;
             var val_max_a = -infinity;
@@ -324,9 +345,9 @@ function ColOBB(position, size, orientation) constructor {
             var val_min_b = infinity;
             var val_max_b = -infinity;
             
-            var i = 0;
+            var j = 0;
             repeat (8) {
-                var vertex = vertices[i++];
+                var vertex = vertices[j++];
                 var dot = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
                 val_min_a = min(val_min_a, dot);
                 val_max_a = max(val_max_a, dot);
