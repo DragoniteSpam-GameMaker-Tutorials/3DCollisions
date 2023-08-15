@@ -268,7 +268,7 @@ function ColOBB(position, size, orientation) constructor {
         axes[14 * 3 + 2] = izx * ozy - ozx * izy;
         
         var vertices = self.property_vertices;
-        var vertices_obb = self.property_vertices;
+        var vertices_obb = obb.property_vertices;
         
         var i = 0;
         repeat (15) {
