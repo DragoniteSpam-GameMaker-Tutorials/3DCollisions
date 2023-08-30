@@ -138,7 +138,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
     static CheckObject = function(object) {
         for (var i = 0; i < array_length(self.planes); i++) {
             if (self.planes[i].CheckObject(object))
-                return true;
+                return self.planes[i];
         }
         
         var bounds = self.GetBoundingChunk(object);
