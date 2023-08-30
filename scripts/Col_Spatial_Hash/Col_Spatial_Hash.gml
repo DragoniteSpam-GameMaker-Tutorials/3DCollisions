@@ -136,7 +136,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static CheckObject = function(object) {
-        for (var i = 0; i < array_length(self.planes); i++) {
+        for (var i = 0, n = array_length(self.planes); i < n; i++) {
             if (self.planes[i].CheckObject(object))
                 return self.planes[i];
         }
@@ -255,27 +255,6 @@ function ColWorldSpatialHash(chunk_size) constructor {
         }
         
         return hit_info;
-    };
-    
-    static DisplaceSphere = function(sphere_object, attempts = 5) {
-        var current_position = sphere_object.shape.position;
-        
-        repeat (attempts) {
-            var collided_with = self.CheckObject(sphere_object);
-            if (collided_with == undefined) break;
-            
-            var displaced_position = collided_with.DisplaceSphere(sphere_object.shape);
-            if (displaced_position == undefined) break;
-            
-            sphere_object.shape.position = displaced_position;
-        }
-        
-        var displaced_position = sphere_object.shape.position;
-        sphere_object.shape.position = current_position;
-        
-        if (current_position == displaced_position) return undefined;
-        
-        return displaced_position;
     };
     
     static GetObjectsInFrustum = function(frustum, output) {
