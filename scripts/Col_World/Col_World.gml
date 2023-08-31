@@ -100,43 +100,41 @@ function ColWorldOctree(bounds, depth) constructor {
         
         var center = self.bounds.position;
         var sides = self.bounds.half_extents.Mul(0.5);
+        var sx = sides.x;
+        var sy = sides.y;
+        var sz = sides.z;
+        var d = self.depth - 1;
         
         self.children = [
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y, -sides.z)), sides), self.depth - 1),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y, -sides.z)), sides), self.depth - 1),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y,  sides.z)), sides), self.depth - 1),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y,  sides.z)), sides), self.depth - 1),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, -sides.z)), sides), self.depth - 1),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y, -sides.z)), sides), self.depth - 1),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y,  sides.z)), sides), self.depth - 1),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y,  sides.z)), sides), self.depth - 1),
+            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sx,  sy, -sz)), sides), d),
+            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sx,  sy, -sz)), sides), d),
+            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sx,  sy,  sz)), sides), d),
+            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sx,  sy,  sz)), sides), d),
+            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sx, -sy, -sz)), sides), d),
+            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sx, -sy, -sz)), sides), d),
+            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sx, -sy,  sz)), sides), d),
+            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sx, -sy,  sz)), sides), d),
         ];
         
-        var i = 0;
-        repeat (array_length(self.children)) {
-            var j = 0;
-            var tree = self.children[i++];
-            repeat (array_length(self.contents)) {
-                tree.Add(self.contents[j++]);
-            }
-        }
+        array_foreach(self.children, method({ contents: self.contents }, function(node) {
+            array_foreach (self.contents, method({ node: node }, function(item) {
+                self.node.Add(item);
+            }));
+        }));
     };
     
     static Add = function(object) {
         if (!object.shape.CheckAABB(self.bounds)) return;
-        for (var i = 0; i < array_length(self.contents); i++) {
-            if (self.contents[i] == object) return;
-        }
+        if (array_contains(self.contents, object)) return;
         
         array_push(self.contents, object);
         
         if (self.depth > 0) {
             self.Split();
             
-            var i = 0;
-            repeat (array_length(self.children)) {
-                self.children[i++].Add(object);
-            }
+            array_foreach(self.children, method({ object: object }, function(node) {
+                node.Add(self.object);
+            }));
         }
     };
     
@@ -144,10 +142,9 @@ function ColWorldOctree(bounds, depth) constructor {
         var index = array_get_index(self.contents, object);
         if (index != -1) {
             array_delete(self.contents, index, 1);
-            var i = 0;
-            repeat (array_length(self.children)) {
-                self.children[j++].Remove(object);
-            }
+            array_foreach(self.children, method({ object: object }, function(subdivision) {
+                subdivision.Remove(self.object);
+            }));
         }
     };
     
@@ -210,10 +207,9 @@ function ColWorldOctree(bounds, depth) constructor {
             return;
         }
         
-        var i = 0;
-        repeat (array_length(self.children)) {
-            self.children[i++].GetObjectsInFrustum(frustum, output);
-        }
+        array_foreach(self.children, method({ frustum: frustum, output: output }, function(node) {
+            node.GetObjectsInFrustum(self.frustum, self.output);
+        }));
     };
 }
 
@@ -221,24 +217,25 @@ function ColWorldQuadtree(bounds, depth) : ColWorldOctree(bounds, depth) constru
     static Split = function() {
         if (array_length(self.contents) == 0) return;
         if (self.children != undefined) return;
+        static factor = new Vector3(0.5, 0.5, 1);
         
         var center = self.bounds.position;
-        var sides = self.bounds.half_extents.Mul(new Vector3(0.5, 0.5, 1));
+        var sides = self.bounds.half_extents.Mul(factor);
+        var sx = sides.x;
+        var sy = sides.y;
+        var d = self.depth - 1;
         
         self.children = [
-            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y, 0)), sides), self.depth - 1),
-            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y, 0)), sides), self.depth - 1),
-            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y, 0)), sides), self.depth - 1),
-            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, 0)), sides), self.depth - 1),
+            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sx,  sy, 0)), sides), d),
+            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3( sx,  sy, 0)), sides), d),
+            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3( sx, -sy, 0)), sides), d),
+            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sx, -sy, 0)), sides), d),
         ];
         
-        var i = 0;
-        repeat (array_length(self.children)) {
-            var j = 0;
-            var tree = self.children[i++];
-            repeat (array_length(self.contents)) {
-                tree.Add(self.contents[j++]);
-            }
-        }
+        array_foreach(self.children, method({ contents: self.contents }, function(node) {
+            array_foreach (self.contents, method({ node: node }, function(item) {
+                self.node.Add(item);
+            }));
+        }));
     };
 }
