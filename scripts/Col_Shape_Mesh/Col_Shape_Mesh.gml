@@ -22,7 +22,9 @@ function ColMesh(triangle_array) constructor {
     
     self.accelerator = new self.octree(self.bounds, self.octree);
     self.accelerator.triangles = triangle_array;
+    var t = get_timer();
     self.accelerator.Split(3);
+    show_debug_message($"hierarching the tree took {(get_timer() - t) / 1000} ms")
     
     static octree = function(bounds, octree) constructor {
         self.bounds = bounds;
@@ -33,33 +35,35 @@ function ColMesh(triangle_array) constructor {
         
         static Split = function(depth) {
             if (depth == 0) return;
-            if (array_length(self.triangles) == 0) return;
+            if (array_length(self.triangles) < COL_MIN_TREE_DENSITY) return;
             if (self.children != undefined) return;
             
             var center = self.bounds.position;
             var sides = self.bounds.half_extents.Mul(0.5);
-            var sx = sides.x, sy = sides.y, sz = sides.z;
-            var tree = self.octree;
             
             self.children = [
-                new self.octree(new ColAABB(center.Add(new Vector3(-sx,  sy, -sz)), sides), tree),
-                new self.octree(new ColAABB(center.Add(new Vector3( sx,  sy, -sz)), sides), tree),
-                new self.octree(new ColAABB(center.Add(new Vector3(-sx,  sy,  sz)), sides), tree),
-                new self.octree(new ColAABB(center.Add(new Vector3( sx,  sy,  sz)), sides), tree),
-                new self.octree(new ColAABB(center.Add(new Vector3(-sx, -sy, -sz)), sides), tree),
-                new self.octree(new ColAABB(center.Add(new Vector3( sx, -sy, -sz)), sides), tree),
-                new self.octree(new ColAABB(center.Add(new Vector3(-sx, -sy,  sz)), sides), tree),
-                new self.octree(new ColAABB(center.Add(new Vector3( sx, -sy,  sz)), sides), tree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y, -sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y, -sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y,  sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y,  sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, -sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y, -sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y,  sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y,  sides.z)), sides), self.octree),
             ];
             
-            array_foreach(self.children, method({ triangles: self.triangles, d: depth - 1 }, function(node) {
-                array_foreach(self.triangles, method({ node: node }, function(triangle) {
-                    if (self.node.bounds.CheckTriangle(triangle)) {
-                        array_push(self.node.triangles, triangle);
+            var i = 0;
+            repeat (8) {
+                var tree = self.children[i++];
+                var j = 0;
+                repeat (array_length(self.triangles)) {
+                    if (tree.bounds.CheckTriangle(self.triangles[j])) {
+                        array_push(tree.triangles, self.triangles[j]);
                     }
-                }));
-                node.Split(self.d);
-            }));
+                    j++;
+                }
+                tree.Split(depth - 1);
+            }
         };
     };
     
@@ -75,9 +79,8 @@ function ColMesh(triangle_array) constructor {
             array_delete(process_these, 0, 1);
             
             if (tree.children == undefined) {
-                var i = 0;
-                repeat (array_length(tree.triangles)) {
-                    if (shape.CheckTriangle(tree.triangles[i++])) {
+                for (var i = 0; i < array_length(tree.triangles); i++) {
+                    if (shape.CheckTriangle(tree.triangles[i])) {
                         return true;
                     }
                 }
@@ -132,7 +135,7 @@ function ColMesh(triangle_array) constructor {
     static CheckRay = function(ray, hit_info) {
         var process_these = [self.accelerator];
         static dummy_hit_info = new RaycastHitInformation();
-        dummy_hit_info.distance = infinity;
+        dummy_hit_info.Clear();
         
         var hit_detected = false;
         
@@ -141,7 +144,7 @@ function ColMesh(triangle_array) constructor {
             array_delete(process_these, 0, 1);
             
             if (tree.children == undefined) {
-                for (var i = 0, n = array_length(tree.triangles); i < n; i++) {
+                for (var i = 0; i < array_length(tree.triangles); i++) {
                     if (ray.CheckTriangle(tree.triangles[i], hit_info)) {
                         hit_detected = true;
                     }
@@ -160,7 +163,7 @@ function ColMesh(triangle_array) constructor {
     
     static CheckLine = function(line) {
         static hit_info = new RaycastHitInformation();
-        hit_info.distance = infinity;
+        hit_info.Clear();
         
         if (self.CheckRay(line.property_ray, hit_info)) {
             return (hit_info.distance <= line.property_length);

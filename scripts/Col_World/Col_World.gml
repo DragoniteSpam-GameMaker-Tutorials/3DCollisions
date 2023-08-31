@@ -95,7 +95,7 @@ function ColWorldOctree(bounds, depth) constructor {
     self.children = undefined;
     
     static Split = function() {
-        if (array_length(self.contents) == 0) return;
+        if (array_length(self.contents) < COL_MIN_TREE_DENSITY) return;
         if (self.children != undefined) return;
         
         var center = self.bounds.position;
@@ -132,9 +132,11 @@ function ColWorldOctree(bounds, depth) constructor {
         if (self.depth > 0) {
             self.Split();
             
-            array_foreach(self.children, method({ object: object }, function(node) {
-                node.Add(self.object);
-            }));
+            if (self.children != undefined) {
+                array_foreach(self.children, method({ object: object }, function(node) {
+                    node.Add(self.object);
+                }));
+            }
         }
     };
     
@@ -215,7 +217,7 @@ function ColWorldOctree(bounds, depth) constructor {
 
 function ColWorldQuadtree(bounds, depth) : ColWorldOctree(bounds, depth) constructor {
     static Split = function() {
-        if (array_length(self.contents) == 0) return;
+        if (array_length(self.contents) < COL_MIN_TREE_DENSITY) return;
         if (self.children != undefined) return;
         static factor = new Vector3(0.5, 0.5, 1);
         

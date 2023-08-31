@@ -1,0 +1,1 @@
+#macro COL_MIN_TREE_DENSITY         50      // tree structures won't subdivide unless they have more than this number of items inside them
