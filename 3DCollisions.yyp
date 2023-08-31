@@ -33,7 +33,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.800.0.396",
+    "IDEVersion": "2023.800.0.406",
   },
   "resources": [
     {"id":{"name":"obj_demo","path":"objects/obj_demo/obj_demo.yy",},},
@@ -59,6 +59,7 @@
     {"id":{"name":"Col_Tests","path":"scripts/Col_Tests/Col_Tests.yy",},},
     {"id":{"name":"Col_Spatial_Hash","path":"scripts/Col_Spatial_Hash/Col_Spatial_Hash.yy",},},
     {"id":{"name":"Col_Helper_Functions","path":"scripts/Col_Helper_Functions/Col_Helper_Functions.yy",},},
+    {"id":{"name":"Col_Config","path":"scripts/Col_Config/Col_Config.yy",},},
     {"id":{"name":"Col_Shape_Capsule","path":"scripts/Col_Shape_Capsule/Col_Shape_Capsule.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],

@@ -4,6 +4,8 @@ vertex_format_add_normal();
 vertex_format_add_colour();
 vertex_format = vertex_format_end();
 
+show_debug_overlay(true);
+
 dir = 315;
 pitch = -20;
 dist = 200;
