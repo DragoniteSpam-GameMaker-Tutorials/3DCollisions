@@ -385,7 +385,7 @@ function ColTestLine(vbuff) constructor {
         if (keyboard_check(vk_pagedown)) {
             self.rotation--;
         }
-        self.data.SetEnds(
+        self.data.Set(
             new Vector3(100 * dcos(self.rotation) + self.offset.x, 100 * dsin(self.rotation) + self.offset.y, self.data.start.z),
             new Vector3(-100 * dcos(self.rotation) + self.offset.x, -100 * dsin(self.rotation) + self.offset.y, self.data.finish.z)
         );
