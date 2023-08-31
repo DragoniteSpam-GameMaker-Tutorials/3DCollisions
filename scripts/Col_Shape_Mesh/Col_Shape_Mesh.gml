@@ -1,11 +1,11 @@
 function ColMesh(triangle_array) constructor {
     self.triangles = triangle_array;
     
-    self.bounds_min = new Vector3(infinity, infinity, infinity);
-    self.bounds_max = new Vector3(-infinity, -infinity, -infinity);
+    self.property_min = new Vector3(infinity, infinity, infinity);
+    self.property_max = new Vector3(-infinity, -infinity, -infinity);
     
-    var bmn = self.bounds_min;
-    var bmx = self.bounds_max;
+    var bmn = self.property_min;
+    var bmx = self.property_max;
     
     var i = 0;
     repeat (array_length(triangle_array)) {
@@ -173,10 +173,10 @@ function ColMesh(triangle_array) constructor {
     };
     
     static GetMin = function() {
-        return self.bounds_min;
+        return self.property_min;
     };
     
     static GetMax = function() {
-        return self.bounds_max;
+        return self.property_max;
     };
 }

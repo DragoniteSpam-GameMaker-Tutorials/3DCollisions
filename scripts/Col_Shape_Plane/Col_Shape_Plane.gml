@@ -2,6 +2,9 @@ function ColPlane(normal, distance) constructor {
     self.normal = normal;                   // Vec3
     self.distance = distance;               // number
     
+    self.property_min = undefined;
+    self.property_max = undefined;
+    
     static CheckObject = function(object) {
         return object.shape.CheckPlane(self);
     };
