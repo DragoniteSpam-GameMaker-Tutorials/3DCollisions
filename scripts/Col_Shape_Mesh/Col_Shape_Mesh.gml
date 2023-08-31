@@ -38,30 +38,28 @@ function ColMesh(triangle_array) constructor {
             
             var center = self.bounds.position;
             var sides = self.bounds.half_extents.Mul(0.5);
+            var sx = sides.x, sy = sides.y, sz = sides.z;
+            var tree = self.octree;
             
             self.children = [
-                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y, -sides.z)), sides), self.octree),
-                new self.octree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y, -sides.z)), sides), self.octree),
-                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y,  sides.z)), sides), self.octree),
-                new self.octree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y,  sides.z)), sides), self.octree),
-                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, -sides.z)), sides), self.octree),
-                new self.octree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y, -sides.z)), sides), self.octree),
-                new self.octree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y,  sides.z)), sides), self.octree),
-                new self.octree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y,  sides.z)), sides), self.octree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sx,  sy, -sz)), sides), tree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sx,  sy, -sz)), sides), tree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sx,  sy,  sz)), sides), tree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sx,  sy,  sz)), sides), tree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sx, -sy, -sz)), sides), tree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sx, -sy, -sz)), sides), tree),
+                new self.octree(new ColAABB(center.Add(new Vector3(-sx, -sy,  sz)), sides), tree),
+                new self.octree(new ColAABB(center.Add(new Vector3( sx, -sy,  sz)), sides), tree),
             ];
             
-            var i = 0;
-            repeat (8) {
-                var tree = self.children[i++];
-                var j = 0;
-                repeat (array_length(self.triangles)) {
-                    if (tree.bounds.CheckTriangle(self.triangles[j])) {
-                        array_push(tree.triangles, self.triangles[j]);
+            array_foreach(self.children, method({ triangles: self.triangles, d: depth - 1 }, function(node) {
+                array_foreach(self.triangles, method({ node: node }, function(triangle) {
+                    if (self.node.bounds.CheckTriangle(triangle)) {
+                        array_push(self.node.triangles, triangle);
                     }
-                    j++;
-                }
-                tree.Split(depth - 1);
-            }
+                }));
+                node.Split(self.d);
+            }));
         };
     };
     
