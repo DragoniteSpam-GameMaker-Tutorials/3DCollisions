@@ -58,7 +58,7 @@ function ColWorld(accelerator) constructor {
         return undefined;
     };
     
-    static DisplaceSphere = function(sphere_object, attempts = 5) {
+    static DisplaceSphere = function(sphere_object, attempts = COL_DEFAULT_SPHERE_DISPLACEMENT_ATTEMPTS) {
         var current_position = sphere_object.shape.position;
         
         repeat (attempts) {
