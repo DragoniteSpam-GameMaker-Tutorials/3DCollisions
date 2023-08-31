@@ -75,8 +75,9 @@ function ColMesh(triangle_array) constructor {
             array_delete(process_these, 0, 1);
             
             if (tree.children == undefined) {
-                for (var i = 0; i < array_length(tree.triangles); i++) {
-                    if (shape.CheckTriangle(tree.triangles[i])) {
+                var i = 0;
+                repeat (array_length(tree.triangles)) {
+                    if (shape.CheckTriangle(tree.triangles[i++])) {
                         return true;
                     }
                 }
@@ -140,7 +141,7 @@ function ColMesh(triangle_array) constructor {
             array_delete(process_these, 0, 1);
             
             if (tree.children == undefined) {
-                for (var i = 0; i < array_length(tree.triangles); i++) {
+                for (var i = 0, n = array_length(tree.triangles); i < n; i++) {
                     if (ray.CheckTriangle(tree.triangles[i], hit_info)) {
                         hit_detected = true;
                     }
