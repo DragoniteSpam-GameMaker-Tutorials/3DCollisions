@@ -7,7 +7,7 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
         self.rotation = rotation;
         
         self.property_transform = rotation.GetRotationMatrix().Mul(position.GetTranslationMatrix());
-        self.property_inverse = self.property_transform.Inverse();
+        self.property_inverse = mat4_inverse(self.property_transform);
         
         var obb = new ColOBB(mat4_mul_point(self.property_transform, mesh.bounds.position), mesh.bounds.half_extents, self.property_transform.GetOrientationMatrix());
         self.property_min = obb.property_min;
