@@ -45,7 +45,7 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
     };
     
     static MulVector = function(vec) {
-        return self.GetRotationMatrix().MulVector(vec);
+        return mat4_mul_vector(self.GetRotationMatrix(), vec);
     };
 }
 
