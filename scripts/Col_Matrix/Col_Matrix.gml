@@ -87,9 +87,9 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     
     static GetOrientationMatrix = function() {
         self.orientation_matrix ??= new Matrix3(
-            self.x.x, self.y.x, self.z.x,
-            self.x.y, self.y.y, self.z.y,
-            self.x.z, self.y.z, self.z.z
+            self.x.x, self.x.y, self.x.z,
+            self.y.x, self.y.y, self.y.z,
+            self.z.x, self.z.y, self.z.z
         );
         return self.orientation_matrix;
     };
