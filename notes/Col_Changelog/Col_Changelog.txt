@@ -1,0 +1,9 @@
+Version 1.1
+
+ - A bunch of optimizations
+ - ColWorld now takes an Octree, Quadtree, or Spatial Hash as its preferred acceleration structure instead of creating one for you
+ - Added COL_MIN_TREE_DENSITY to set the object threshold for when a tree structure is subdivided, which can speed them up by a fair amount
+
+Version 1.0
+
+ - Initial release

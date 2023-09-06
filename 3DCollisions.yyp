@@ -53,6 +53,7 @@
     {"id":{"name":"Col_Shape_Line","path":"scripts/Col_Shape_Line/Col_Shape_Line.yy",},},
     {"id":{"name":"Col_Camera_Frustum","path":"scripts/Col_Camera_Frustum/Col_Camera_Frustum.yy",},},
     {"id":{"name":"Col_World","path":"scripts/Col_World/Col_World.yy",},},
+    {"id":{"name":"Col_Changelog","path":"notes/Col_Changelog/Col_Changelog.yy",},},
     {"id":{"name":"Col_Shape_Plane","path":"scripts/Col_Shape_Plane/Col_Shape_Plane.yy",},},
     {"id":{"name":"Col_Heightmap","path":"scripts/Col_Heightmap/Col_Heightmap.yy",},},
     {"id":{"name":"fnt_demo","path":"fonts/fnt_demo/fnt_demo.yy",},},

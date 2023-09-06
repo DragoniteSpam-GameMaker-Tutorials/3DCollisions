@@ -17,6 +17,7 @@
     {"name":"Col_Shape_Line","order":2,"path":"scripts/Col_Shape_Line/Col_Shape_Line.yy",},
     {"name":"Col_Camera_Frustum","order":1,"path":"scripts/Col_Camera_Frustum/Col_Camera_Frustum.yy",},
     {"name":"Col_World","order":9,"path":"scripts/Col_World/Col_World.yy",},
+    {"name":"Col_Changelog","order":11,"path":"notes/Col_Changelog/Col_Changelog.yy",},
     {"name":"Col_Shape_Plane","order":5,"path":"scripts/Col_Shape_Plane/Col_Shape_Plane.yy",},
     {"name":"Col_Heightmap","order":2,"path":"scripts/Col_Heightmap/Col_Heightmap.yy",},
     {"name":"Col_Tests","order":3,"path":"scripts/Col_Tests/Col_Tests.yy",},
