@@ -95,9 +95,6 @@ function ColWorldOctree(bounds, depth) constructor {
     self.children = undefined;
     
     static Split = function() {
-        if (array_length(self.contents) < COL_MIN_TREE_DENSITY) return;
-        if (self.children != undefined) return;
-        
         var center = self.bounds.position;
         var sides = self.bounds.half_extents.Mul(0.5);
         var sx = sides.x;
@@ -105,15 +102,19 @@ function ColWorldOctree(bounds, depth) constructor {
         var sz = sides.z;
         var d = self.depth - 1;
         
+        var cx = center.x;
+        var cy = center.y;
+        var cz = center.z;
+        
         self.children = [
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sx,  sy, -sz)), sides), d),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sx,  sy, -sz)), sides), d),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sx,  sy,  sz)), sides), d),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sx,  sy,  sz)), sides), d),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sx, -sy, -sz)), sides), d),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sx, -sy, -sz)), sides), d),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3(-sx, -sy,  sz)), sides), d),
-            new ColWorldOctree(new ColAABB(center.Add(new Vector3( sx, -sy,  sz)), sides), d),
+            new ColWorldOctree(new ColAABB(new Vector3(cx - sx, cy + sy, cz - sz), sides), d),
+            new ColWorldOctree(new ColAABB(new Vector3(cx + sx, cy + sy, cz - sz), sides), d),
+            new ColWorldOctree(new ColAABB(new Vector3(cx - sx, cy + sy, cz + sz), sides), d),
+            new ColWorldOctree(new ColAABB(new Vector3(cx + sx, cy + sy, cz + sz), sides), d),
+            new ColWorldOctree(new ColAABB(new Vector3(cx - sx, cy - sy, cz - sz), sides), d),
+            new ColWorldOctree(new ColAABB(new Vector3(cx + sx, cy - sy, cz - sz), sides), d),
+            new ColWorldOctree(new ColAABB(new Vector3(cx - sx, cy - sy, cz + sz), sides), d),
+            new ColWorldOctree(new ColAABB(new Vector3(cx + sx, cy - sy, cz + sz), sides), d),
         ];
         
         array_foreach(self.children, method({ contents: self.contents }, function(node) {
@@ -130,7 +131,9 @@ function ColWorldOctree(bounds, depth) constructor {
         array_push(self.contents, object);
         
         if (self.depth > 0) {
-            self.Split();
+            if (self.children == undefined && array_length(self.contents) >= COL_MIN_TREE_DENSITY) {
+                self.Split();
+            }
             
             if (self.children != undefined) {
                 array_foreach(self.children, method({ object: object }, function(node) {
@@ -217,8 +220,6 @@ function ColWorldOctree(bounds, depth) constructor {
 
 function ColWorldQuadtree(bounds, depth) : ColWorldOctree(bounds, depth) constructor {
     static Split = function() {
-        if (array_length(self.contents) < COL_MIN_TREE_DENSITY) return;
-        if (self.children != undefined) return;
         static factor = new Vector3(0.5, 0.5, 1);
         
         var center = self.bounds.position;
@@ -227,11 +228,15 @@ function ColWorldQuadtree(bounds, depth) : ColWorldOctree(bounds, depth) constru
         var sy = sides.y;
         var d = self.depth - 1;
         
+        var cx = center.x;
+        var cy = center.y;
+        var cz = center.z;
+        
         self.children = [
-            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sx,  sy, 0)), sides), d),
-            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3( sx,  sy, 0)), sides), d),
-            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3( sx, -sy, 0)), sides), d),
-            new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sx, -sy, 0)), sides), d),
+            new ColWorldQuadtree(new ColAABB(new Vector3(cx - sx, cy + sy, cz), sides), d),
+            new ColWorldQuadtree(new ColAABB(new Vector3(cx + sx, cy + sy, cz), sides), d),
+            new ColWorldQuadtree(new ColAABB(new Vector3(cx + sx, cy - sy, cz), sides), d),
+            new ColWorldQuadtree(new ColAABB(new Vector3(cx - sx, cy - sy, cz), sides), d),
         ];
         
         array_foreach(self.children, method({ contents: self.contents }, function(node) {
