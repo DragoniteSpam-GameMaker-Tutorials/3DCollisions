@@ -98,16 +98,6 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
         return new Matrix4(matrix_multiply(self.linear_array, mat.linear_array));
     };
     
-    static MulPoint = function(point) {
-        var transformed_point = matrix_transform_vertex(self.linear_array, point.x, point.y, point.z, 1);
-        return new Vector3(transformed_point[0], transformed_point[1], transformed_point[2]);
-    };
-    
-    static MulVector = function(vec) {
-        var transformed_point = matrix_transform_vertex(self.linear_array, vec.x, vec.y, vec.z, 0);
-        return new Vector3(transformed_point[0], transformed_point[1], transformed_point[2]);
-    };
-    
     static Inverse = function() {
         var m = self.linear_array;
         
@@ -142,4 +132,14 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
         
     	return new Matrix4(results);
     };
+}
+
+function mat4_mul_point(mat, point) {
+    var transformed_point = matrix_transform_vertex(mat, point.x, point.y, point.z, 1);
+    return new Vector3(transformed_point[0], transformed_point[1], transformed_point[2]);
+}
+
+function mat4_mul_vector(mat, vec) {
+    var transformed_point = matrix_transform_vertex(mat, vec.x, vec.y, vec.z, 0);
+    return new Vector3(transformed_point[0], transformed_point[1], transformed_point[2]);
 }
