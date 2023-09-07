@@ -35,6 +35,10 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckAABB = function(aabb) {
+        var p1 = self.property_center;
+        var p2 = aabb.position;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) >= (self.property_radius + aabb.property_radius)) return false;
+        
         var r = self.radius;
         var line = self.line;
         var line_start = self.line.start;
