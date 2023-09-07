@@ -1,4 +1,4 @@
-function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = new Matrix3(1, 0, 0, 0, 1, 0, 0, 0, 1)) constructor {
+function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = matrix_build_identity()) constructor {
     self.Set(mesh, position, rotation);
     
     static Set = function(mesh = self.mesh, position = self.position, rotation = self.rotation) {
@@ -6,7 +6,7 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
         self.position = position;
         self.rotation = rotation;
         
-        self.property_transform = rotation.GetRotationMatrix().Mul(position.GetTranslationMatrix());
+        self.property_transform = matrix_multiply(rotation, position.GetTranslationMatrix());
         self.property_inverse = mat4_inverse(self.property_transform);
         
         var obb = new ColOBB(mat4_mul_point(self.property_transform, mesh.bounds.position), mesh.bounds.half_extents, self.property_transform.GetOrientationMatrix());
@@ -34,7 +34,7 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckOBB = function(obb) {
-        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, obb.position), obb.size, obb.orientation.Mul(self.property_inverse.GetOrientationMatrix()));
+        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, obb.position), obb.size, matrix_multiply(obb.orientation, self.property_inverse.GetOrientationMatrix()));
         return self.mesh.CheckOBB(untransformed);
     };
     

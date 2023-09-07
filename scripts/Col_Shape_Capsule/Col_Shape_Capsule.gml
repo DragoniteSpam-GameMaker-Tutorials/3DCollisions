@@ -60,9 +60,9 @@ function ColCapsule(start, finish, radius) constructor {
         var nz = clamp(line_start.z, bmnz, bmxz);
         if (point_distance_3d(nx, ny, nz, line_start.x, line_start.y, line_start.z) < r) return true;
         
-        var nx = clamp(line_finish.x, bmnx, bmxx);
-        var ny = clamp(line_finish.y, bmny, bmxy);
-        var nz = clamp(line_finish.z, bmnz, bmxz);
+        nx = clamp(line_finish.x, bmnx, bmxx);
+        ny = clamp(line_finish.y, bmny, bmxy);
+        nz = clamp(line_finish.z, bmnz, bmxz);
         if (point_distance_3d(nx, ny, nz, line_finish.x, line_finish.y, line_finish.z) < r) return true;
         
         var edges = aabb.property_edges;
@@ -79,9 +79,9 @@ function ColCapsule(start, finish, radius) constructor {
             
             var p = (lsx + lvx * t == nearest_start.x && lsy + lvy * t == nearest_start.y && lsz + lvz * t == nearest_start.z) ? nearest_line_to_edge.start : nearest_line_to_edge.finish;
             
-            var nx = clamp(p.x, bmnx, bmxx);
-            var ny = clamp(p.y, bmny, bmxy);
-            var nz = clamp(p.z, bmnz, bmxz);
+            nx = clamp(p.x, bmnx, bmxx);
+            ny = clamp(p.y, bmny, bmxy);
+            nz = clamp(p.z, bmnz, bmxz);
             
             if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
         }
@@ -95,7 +95,7 @@ function ColCapsule(start, finish, radius) constructor {
         if (point_distance_3d(nearest.x, nearest.y, nearest.z, start.x, start.y, start.z) < self.radius) return true;
         
         var finish = self.line.finish;
-        var nearest = plane.NearestPoint(finish);
+        nearest = plane.NearestPoint(finish);
         if (point_distance_3d(nearest.x, nearest.y, nearest.z, finish.x, finish.y, finish.z) < self.radius) return true;
         
         return self.line.CheckPlane(plane);
@@ -125,8 +125,12 @@ function ColCapsule(start, finish, radius) constructor {
         if (point_distance_3d(nx, ny, nz, p.x, p.y, p.z) < r) return true;
         p = line.finish;
         
-        var nx = obb_position.x, ny = obb_position.y, nz = obb_position.z;
-        var dx = p.x - nx, dy = p.y - ny, dz = p.z - nz;
+        nx = obb_position.x;
+		ny = obb_position.y;
+		nz = obb_position.z;
+        dx = p.x - nx;
+		dy = p.y - ny;
+		dz = p.z - nz;
         
         for (var i = 0; i < 3; i++) {
             var axis = obb_orientation_array[i];
@@ -149,13 +153,17 @@ function ColCapsule(start, finish, radius) constructor {
             
             p = (nearest_self.x == nearest_start.x && nearest_self.y == nearest_start.y && nearest_self.z == nearest_start.z) ? nearest_line_to_edge.start : nearest_line_to_edge.finish;
             
-            var nx = obb_position.x, ny = obb_position.y, nz = obb_position.z;
-            var dx = p.x - nx, dy = p.y - ny, dz = p.z - nz;
+            nx = obb_position.x;
+			ny = obb_position.y;
+			nz = obb_position.z;
+            dx = p.x - nx;
+			dy = p.y - ny;
+			dz = p.z - nz;
             
-            for (var i = 0; i < 3; i++) {
-                var axis = obb_orientation_array[i];
+            for (var j = 0; j < 3; j++) {
+                var axis = obb_orientation_array[j];
                 var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
-                dist = clamp(dist, -obb_size_array[i], obb_size_array[i]);
+                dist = clamp(dist, -obb_size_array[j], obb_size_array[j]);
                 nx += axis.x * dist;
                 ny += axis.y * dist;
                 nz += axis.z * dist;
@@ -178,8 +186,8 @@ function ColCapsule(start, finish, radius) constructor {
         var nearest = line.NearestPoint(target);
         if (point_distance_3d(nearest.x, nearest.y, nearest.z, target.x, target.y, target.z) < self.radius) return true;
         
-        var target = triangle.NearestPoint(line.finish);
-        var nearest = line.NearestPoint(target);
+        target = triangle.NearestPoint(line.finish);
+        nearest = line.NearestPoint(target);
         if (point_distance_3d(nearest.x, nearest.y, nearest.z, target.x, target.y, target.z) < self.radius) return true;
         
         return false;
@@ -194,9 +202,9 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckRay = function(ray, hit_info) {
-        var c = self.property_center;
-        var nearest = ray.NearestPoint(c);
-        if (point_distance_3d(nearest.x, nearest.y, nearest.z, c.x, c.y, c.z) >= self.property_radius) return false;
+        var center = self.property_center;
+        var nearest = ray.NearestPoint(center);
+        if (point_distance_3d(nearest.x, nearest.y, nearest.z, center.x, center.y, center.z) >= self.property_radius) return false;
         
         var line = self.line;
         var cd = line.property_ray.direction;

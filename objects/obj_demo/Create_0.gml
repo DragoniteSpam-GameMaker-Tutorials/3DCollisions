@@ -14,35 +14,35 @@ var buffer = buffer_load("shapes/grid.vbuff");
 grid = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("shapes/aabb.vbuff");
+buffer = buffer_load("shapes/aabb.vbuff");
 aabb = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("shapes/plane.vbuff");
+buffer = buffer_load("shapes/plane.vbuff");
 plane = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("shapes/point.vbuff");
+buffer = buffer_load("shapes/point.vbuff");
 point = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("shapes/sphere.vbuff");
+buffer = buffer_load("shapes/sphere.vbuff");
 sphere = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("shapes/obb.vbuff");
+buffer = buffer_load("shapes/obb.vbuff");
 obb = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("shapes/capsule_middle.vbuff");
+buffer = buffer_load("shapes/capsule_middle.vbuff");
 capsule_middle = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("shapes/capsule_end.vbuff");
+buffer = buffer_load("shapes/capsule_end.vbuff");
 capsule_end = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("meshes/tree.vbuff");
+buffer = buffer_load("meshes/tree.vbuff");
 var vertex_size = 28;
 tree_vertices = [];
 for (var i = 0, n = buffer_get_size(buffer); i < n; i += vertex_size * 3) {
@@ -67,7 +67,7 @@ for (var i = 0, n = buffer_get_size(buffer); i < n; i += vertex_size * 3) {
 tree = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
-var buffer = buffer_load("meshes/terrain.vbuff");
+buffer = buffer_load("meshes/terrain.vbuff");
 terrain = vertex_create_buffer_from_buffer(buffer, vertex_format);
 buffer_delete(buffer);
 
