@@ -238,7 +238,7 @@ function ColTestTriangle() constructor {
 }
 
 function ColTestOBB(vbuff) constructor {
-    var orientation = new Matrix4(matrix_build(0, 0, 0, random(360), random(360), random(360), 1, 1, 1)).GetOrientationMatrix();
+    var orientation = matrix_build(0, 0, 0, random(360), random(360), random(360), 1, 1, 1);
     self.data = new ColOBB(new Vector3(0, 0, 0), new Vector3(irandom_range(2, 4), irandom_range(2, 4), irandom_range(2, 4)), orientation);
     self.vbuff = vbuff;
     
@@ -271,7 +271,7 @@ function ColTestOBB(vbuff) constructor {
     self.draw = function() {
         var mat_scale = matrix_build(0, 0, 0, 0, 0, 0, self.data.size.x, self.data.size.y, self.data.size.z);
         var mat_translation = matrix_build(self.data.position.x, self.data.position.y, self.data.position.z, 0, 0, 0, 1, 1, 1);
-        matrix_set(matrix_world, matrix_multiply(matrix_multiply(mat_scale, self.data.orientation.GetRotationMatrix()), mat_translation));
+        matrix_set(matrix_world, matrix_multiply(matrix_multiply(mat_scale, self.data.orientation), mat_translation));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build_identity());
     };
@@ -506,7 +506,7 @@ function ColTestModel(vbuff, triangles) constructor {
     self.position = new Vector3(RANDOM_POSITION, RANDOM_POSITION, RANDOM_POSITION);
     self.rotation = new Vector3(RANDOM_ROTATION, RANDOM_ROTATION, RANDOM_ROTATION);
     
-    var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+    var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
     
     self.data = new ColTransformedModel(new ColMesh(triangles), self.position, rotation_matrix);
     var t1 = get_timer();
@@ -542,32 +542,32 @@ function ColTestModel(vbuff, triangles) constructor {
         step = 5;
         if (keyboard_check(ord("I"))) {
             self.rotation.x -= step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("J"))) {
             self.rotation.x += step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("O"))) {
             self.rotation.y -= step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("K"))) {
             self.rotation.y += step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("P"))) {
             self.rotation.z -= step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("L"))) {
             self.rotation.z += step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
     };

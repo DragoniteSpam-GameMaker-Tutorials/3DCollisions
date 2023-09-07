@@ -23,18 +23,6 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
     // x1 y1 z1
     // x2 y2 z2
     // x3 y3 z3
-    
-    self.rotation_matrix = undefined;
-    
-    static GetRotationMatrix = function() {
-        self.rotation_matrix ??= new Matrix4(
-            self.x.x, self.x.y, self.x.z, 0,
-            self.y.x, self.y.y, self.y.z, 0,
-            self.z.x, self.z.y, self.z.z, 0,
-            0,        0,        0,        1
-        );
-        return self.rotation_matrix;
-    };
 }
 
 function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4, z4, w4) constructor {
@@ -66,21 +54,6 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     // x2 y2 z2 w2
     // x3 y3 z3 w3
     // x4 y4 z4 w4
-    
-    self.orientation_matrix = undefined;
-    
-    static GetOrientationMatrix = function() {
-        self.orientation_matrix ??= new Matrix3(
-            self.x.x, self.x.y, self.x.z,
-            self.y.x, self.y.y, self.y.z,
-            self.z.x, self.z.y, self.z.z
-        );
-        return self.orientation_matrix;
-    };
-    
-    static Mul = function(mat) {
-        return new Matrix4(matrix_multiply(self.linear_array, mat.linear_array));
-    };
 }
 
 function mat4_inverse(mat) {

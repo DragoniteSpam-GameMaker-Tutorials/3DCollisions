@@ -103,18 +103,18 @@ function ColCapsule(start, finish, radius) constructor {
     
     static CheckOBB = function(obb) {
         var obb_position = obb.position;
+		var obb_orientation = obb.property_orientation_array;
         var obb_size_array = [obb.size.x, obb.size.y, obb.size.z];
-        var obb_orientation_array = [obb.orientation.x, obb.orientation.y, obb.orientation.z];
         
         var r = self.radius;
         var line = self.line;
         var p = line.start;
-        
+		
         var nx = obb_position.x, ny = obb_position.y, nz = obb_position.z;
         var dx = p.x - nx, dy = p.y - ny, dz = p.z - nz;
         
         for (var i = 0; i < 3; i++) {
-            var axis = obb_orientation_array[i];
+            var axis = obb_orientation[i];
             var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
             dist = clamp(dist, -obb_size_array[i], obb_size_array[i]);
             nx += axis.x * dist;
@@ -133,7 +133,7 @@ function ColCapsule(start, finish, radius) constructor {
 		dz = p.z - nz;
         
         for (var i = 0; i < 3; i++) {
-            var axis = obb_orientation_array[i];
+            var axis = obb_orientation[i];
             var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
             dist = clamp(dist, -obb_size_array[i], obb_size_array[i]);
             nx += axis.x * dist;
@@ -161,7 +161,7 @@ function ColCapsule(start, finish, radius) constructor {
 			dz = p.z - nz;
             
             for (var j = 0; j < 3; j++) {
-                var axis = obb_orientation_array[j];
+                var axis = obb.property_orientation_array[j];
                 var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
                 dist = clamp(dist, -obb_size_array[j], obb_size_array[j]);
                 nx += axis.x * dist;

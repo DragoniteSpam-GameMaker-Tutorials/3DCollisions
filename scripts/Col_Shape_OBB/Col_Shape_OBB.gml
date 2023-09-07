@@ -5,10 +5,14 @@ function ColOBB(position, size, orientation) constructor {
         self.position = position;
         self.size = size;
         self.orientation = orientation;
-        
-        var xs = orientation.x.Mul(size.x);
-        var ys = orientation.y.Mul(size.y);
-        var zs = orientation.z.Mul(size.z);
+		
+        var ox = new Vector3(orientation[ 0], orientation[ 1], orientation[ 2]);
+        var oy = new Vector3(orientation[ 4], orientation[ 5], orientation[ 6]);
+        var oz = new Vector3(orientation[ 8], orientation[ 9], orientation[10]);
+		self.property_orientation_array = [ox, oy, oz];
+		var xs = ox.Mul(size.x);
+		var ys = oy.Mul(size.y);
+		var zs = oz.Mul(size.z);
         
         self.property_vertices = [
             position.Add(xs).Add(ys).Add(zs),
@@ -67,10 +71,9 @@ function ColOBB(position, size, orientation) constructor {
         var dx = pp.x - po.x, dy = pp.y - po.y, dz = pp.z - po.z;
         
         var size_array = [self.size.x, self.size.y, self.size.z];
-        var orientation_array = [self.orientation.x, self.orientation.y, self.orientation.z];
         
         for (var i = 0; i < 3; i++) {
-            var axis = orientation_array[i];
+            var axis = self.property_orientation_array[i];
             if (abs(dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z)) > abs(size_array[i])) {
                 return false;
             }
@@ -89,16 +92,12 @@ function ColOBB(position, size, orientation) constructor {
         var dx = ps.x - px, dy = ps.y - py, dz = ps.z - pz;
         
         static size_array = array_create(3);
-        static orientation_array = array_create(3);
         size_array[0] = self.size.x;
         size_array[1] = self.size.y;
         size_array[2] = self.size.z;
-        orientation_array[0] = self.orientation.x;
-        orientation_array[1] = self.orientation.y;
-        orientation_array[2] = self.orientation.z;
         
         for (var i = 0; i < 3; i++) {
-            var axis = orientation_array[i];
+            var axis = self.orientation_array[i];
             var dist = clamp(dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z), -size_array[i], size_array[i]);
             px += axis.x * dist;
             py += axis.y * dist;
@@ -131,9 +130,9 @@ function ColOBB(position, size, orientation) constructor {
             0, 0, 0
         ];
         
-        var ox = self.orientation.x;
-        var oy = self.orientation.y;
-        var oz = self.orientation.z;
+        var ox = self.property_orientation_array[0];
+        var oy = self.property_orientation_array[1];
+        var oz = self.property_orientation_array[2];
         
         axes[3 * 3 + 0] = ox.x;
         axes[3 * 3 + 1] = ox.y;
@@ -207,15 +206,15 @@ function ColOBB(position, size, orientation) constructor {
         
         static axes = array_create(15 * 3);
         
-        var ix = obb.orientation.x;
-        var iy = obb.orientation.y;
-        var iz = obb.orientation.z;
+        var ix = obb.property_orientation_array[0];
+        var iy = obb.property_orientation_array[1];
+        var iz = obb.property_orientation_array[2];
         var ixx = ix.x, ixy = ix.y, ixz = ix.z;
         var iyx = iy.x, iyy = iy.y, iyz = iy.z;
         var izx = iz.x, izy = iz.y, izz = iz.z;
-        var ox = self.orientation.x;
-        var oy = self.orientation.y;
-        var oz = self.orientation.z;
+        var ox = self.property_orientation_array[0];
+        var oy = self.property_orientation_array[1];
+        var oz = self.property_orientation_array[2];
         var oxx = ox.x, oxy = ox.y, oxz = ox.z;
         var oyx = oy.x, oyy = oy.y, oyz = oy.z;
         var ozx = oz.x, ozy = oz.y, ozz = oz.z;
@@ -306,9 +305,9 @@ function ColOBB(position, size, orientation) constructor {
         var nx = normal.x;
         var ny = normal.y;
         var nz = normal.z;
-        var ox = self.orientation.x;
-        var oy = self.orientation.y;
-        var oz = self.orientation.z;
+        var ox = self.property_orientation_array[0];
+        var oy = self.property_orientation_array[1];
+        var oz = self.property_orientation_array[2];
         var p = self.position;
         var plen =
             self.size.x * abs(dot_product_3d(nx, ny, nz, ox, oy, oz)) +
@@ -337,9 +336,9 @@ function ColOBB(position, size, orientation) constructor {
         var ixx = ab.x, ixy = ab.y, ixz = ab.z;
         var iyx = bc.x, iyy = bc.y, iyz = bc.z;
         var izx = ca.x, izy = ca.y, izz = ca.z;
-        var ox = self.orientation.x;
-        var oy = self.orientation.y;
-        var oz = self.orientation.z;
+        var ox = self.property_orientation_array[0];
+        var oy = self.property_orientation_array[1];
+        var oz = self.property_orientation_array[2];
         var oxx = ox.x, oxy = ox.y, oxz = ox.z;
         var oyx = oy.x, oyy = oy.y, oyz = oy.z;
         var ozx = oz.x, ozy = oz.y, ozz = oz.z;
@@ -447,9 +446,9 @@ function ColOBB(position, size, orientation) constructor {
         var size_array = [self.size.x, self.size.y, self.size.z];
         
         var dx = p.x - o.x, dy = p.y - o.y, dz = p.z - o.z;
-        var ox = self.orientation.x;
-        var oy = self.orientation.y;
-        var oz = self.orientation.z;
+        var ox = self.property_orientation_array[0];
+        var oy = self.property_orientation_array[1];
+        var oz = self.property_orientation_array[2];
         var rdx = rd.x, rdy = rd.y, rdz = rd.z;
         
         direction_dots[0] = dot_product_3d(ox.x, ox.y, ox.z, rdx, rdy, rdz);
@@ -549,10 +548,9 @@ function ColOBB(position, size, orientation) constructor {
         var dx = vec3.x - rx, dy = vec3.y - ry, dz = vec3.z - rz;
         
         var size_array = [self.size.x, self.size.y, self.size.z];
-        var orientation_array = [self.orientation.x, self.orientation.y, self.orientation.z];
         
         for (var i = 0; i < 3; i++) {
-            var axis = orientation_array[i];
+            var axis = self.property_orientation_array[i];
             var dist = dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z);
             dist = clamp(dist, -size_array[i], size_array[i]);
             rx += axis.x * dist;

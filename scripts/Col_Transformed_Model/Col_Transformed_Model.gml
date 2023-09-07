@@ -6,10 +6,10 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
         self.position = position;
         self.rotation = rotation;
         
-        self.property_transform = matrix_multiply(rotation, position.GetTranslationMatrix());
+        self.property_transform = matrix_multiply(rotation, matrix_build(position.x, position.y, position.z, 0, 0, 0, 1, 1, 1));
         self.property_inverse = mat4_inverse(self.property_transform);
         
-        var obb = new ColOBB(mat4_mul_point(self.property_transform, mesh.bounds.position), mesh.bounds.half_extents, self.property_transform.GetOrientationMatrix());
+        var obb = new ColOBB(mat4_mul_point(self.property_transform, mesh.bounds.position), mesh.bounds.half_extents, self.property_transform);
         self.property_min = obb.property_min;
         self.property_max = obb.property_max;
     };
@@ -29,12 +29,12 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     };
     
     static CheckAABB = function(aabb) {
-        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, aabb.position), aabb.half_extents, self.property_inverse.GetOrientationMatrix());
+        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, aabb.position), aabb.half_extents, self.property_inverse);
         return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckOBB = function(obb) {
-        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, obb.position), obb.size, matrix_multiply(obb.orientation, self.property_inverse.GetOrientationMatrix()));
+        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, obb.position), obb.size, matrix_multiply(obb.orientation, self.property_inverse));
         return self.mesh.CheckOBB(untransformed);
     };
     

@@ -94,15 +94,6 @@ function Vector3(x, y, z) constructor {
     static Round = function() {
         return new Vector3(round(self.x), round(self.y), round(self.z));
     };
-    
-    static GetTranslationMatrix = function() {
-        return new Matrix4(
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            self.x, self.y, self.z, 1
-        );
-    };
 }
 
 function Vector4(x, y, z, w) constructor {
@@ -198,14 +189,5 @@ function Vector4(x, y, z, w) constructor {
     
     static Round = function() {
         return new Vector4(round(self.x), round(self.y), round(self.z), round(self.w));
-    };
-    
-    static GetTranslationMatrix = function() {
-        return new Matrix4(
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            self.x, self.y, self.z, 1
-        );
     };
 }

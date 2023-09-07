@@ -57,9 +57,9 @@ function ColRay(origin, direction) constructor {
     
     static NearestPoint = function(vec3) {
         var origin = self.origin;
-        var vx = origin.x - vec3.x;
-        var vy = origin.y - vec3.y;
-        var vz = origin.z - vec3.z;
+        var vx = vec3.x - origin.x;
+        var vy = vec3.y - origin.y;
+        var vz = vec3.z - origin.z;
         var d = self.direction;
         var t = max(dot_product_3d(vx, vy, vz, d.x, d.y, d.z), 0);
         return new Vector3(
