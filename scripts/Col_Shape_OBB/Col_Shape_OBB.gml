@@ -435,7 +435,7 @@ function ColOBB(position, size, orientation) constructor {
         return model.CheckOBB(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         static direction_dots = array_create(3);
         static position_dots = array_create(3);
         static t = array_create(6);

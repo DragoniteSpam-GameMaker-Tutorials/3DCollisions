@@ -72,7 +72,7 @@ function ColLine(start, finish) constructor {
         return model.CheckLine(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         return false;
     };
     

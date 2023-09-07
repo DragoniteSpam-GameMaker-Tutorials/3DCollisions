@@ -217,7 +217,7 @@ function ColCapsule(start, finish, radius) constructor {
         return model.CheckCapsule(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         var center = self.property_center;
         var nearest = ray.NearestPoint(center);
         if (point_distance_3d(nearest.x, nearest.y, nearest.z, center.x, center.y, center.z) >= self.property_radius) return false;

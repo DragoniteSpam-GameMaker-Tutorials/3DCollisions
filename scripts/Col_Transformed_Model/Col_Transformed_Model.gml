@@ -92,7 +92,7 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
         // "homework"
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
 		if (!self.property_obb.CheckRay(ray)) return false;
 		
         static untransformed_hit_info = new RaycastHitInformation();

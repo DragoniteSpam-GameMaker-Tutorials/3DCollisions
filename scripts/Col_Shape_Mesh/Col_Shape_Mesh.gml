@@ -132,7 +132,7 @@ function ColMesh(triangle_array) constructor {
         return self.CheckGeneral(capsule);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         var process_these = [self.accelerator];
         static dummy_hit_info = new RaycastHitInformation();
         dummy_hit_info.Clear();

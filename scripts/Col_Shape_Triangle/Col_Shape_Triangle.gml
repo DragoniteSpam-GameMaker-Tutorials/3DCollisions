@@ -258,7 +258,7 @@ function ColTriangle(a, b, c) constructor {
         return model.CheckTriangle(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         static plane_hit_info = new RaycastHitInformation();
         plane_hit_info.shape = undefined;
         plane_hit_info.point = undefined;

@@ -62,7 +62,7 @@ function ColPlane(normal, distance) constructor {
         return model.CheckPlane(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         var rd = ray.direction;
         var n = self.normal;
         var DdotN = dot_product_3d(rd.x, rd.y, rd.z, n.x, n.y, n.z);

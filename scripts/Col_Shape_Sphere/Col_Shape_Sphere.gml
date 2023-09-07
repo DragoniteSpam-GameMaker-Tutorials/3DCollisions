@@ -75,7 +75,7 @@ function ColSphere(position, radius) constructor {
         return model.CheckSphere(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         var dir = ray.direction;
         var o = ray.origin;
         var p = self.position;

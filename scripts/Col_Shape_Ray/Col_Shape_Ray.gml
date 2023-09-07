@@ -43,7 +43,7 @@ function ColRay(origin, direction) constructor {
         return model.CheckRay(self, hit_info);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         return false;
     };
     

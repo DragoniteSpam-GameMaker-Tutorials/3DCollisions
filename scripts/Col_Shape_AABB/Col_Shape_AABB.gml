@@ -176,7 +176,7 @@ function ColAABB(position, half_extents) constructor {
         return model.CheckAABB(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         var box_min = self.property_min;
         var box_max = self.property_max;
         
