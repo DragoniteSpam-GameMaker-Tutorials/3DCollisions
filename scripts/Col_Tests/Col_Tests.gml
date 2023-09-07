@@ -271,7 +271,7 @@ function ColTestOBB(vbuff) constructor {
     self.draw = function() {
         var mat_scale = matrix_build(0, 0, 0, 0, 0, 0, self.data.size.x, self.data.size.y, self.data.size.z);
         var mat_translation = matrix_build(self.data.position.x, self.data.position.y, self.data.position.z, 0, 0, 0, 1, 1, 1);
-        matrix_set(matrix_world, matrix_multiply(matrix_multiply(mat_scale, self.data.orientation.GetRotationMatrix().AsLinearArray()), mat_translation));
+        matrix_set(matrix_world, matrix_multiply(matrix_multiply(mat_scale, self.data.orientation.GetRotationMatrix()), mat_translation));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build_identity());
     };
@@ -574,7 +574,7 @@ function ColTestModel(vbuff, triangles) constructor {
     
     self.draw = function() {
         var transform = self.data.GetTransformMatrix();
-        matrix_set(matrix_world, transform.AsLinearArray());
+        matrix_set(matrix_world, transform);
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build_identity());
     };

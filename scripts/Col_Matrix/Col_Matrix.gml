@@ -26,10 +26,6 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
     
     self.rotation_matrix = undefined;
     
-    static AsLinearArray = function() {
-        return self.linear_array;
-    };
-    
     static GetRotationMatrix = function() {
         self.rotation_matrix ??= new Matrix4(
             self.x.x, self.x.y, self.x.z, 0,
@@ -38,14 +34,6 @@ function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
             0,        0,        0,        1
         );
         return self.rotation_matrix;
-    };
-    
-    static Mul = function(mat) {
-        return self.GetRotationMatrix().Mul(mat.GetRotationMatrix()).GetOrientationMatrix();
-    };
-    
-    static MulVector = function(vec) {
-        return mat4_mul_vector(self.GetRotationMatrix(), vec);
     };
 }
 
@@ -80,10 +68,6 @@ function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4
     // x4 y4 z4 w4
     
     self.orientation_matrix = undefined;
-    
-    static AsLinearArray = function() {
-        return self.linear_array;
-    };
     
     static GetOrientationMatrix = function() {
         self.orientation_matrix ??= new Matrix3(
