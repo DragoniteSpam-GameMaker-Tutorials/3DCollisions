@@ -97,7 +97,7 @@ function ColOBB(position, size, orientation) constructor {
         size_array[2] = self.size.z;
         
         for (var i = 0; i < 3; i++) {
-            var axis = self.orientation_array[i];
+            var axis = self.property_orientation_array[i];
             var dist = clamp(dot_product_3d(dx, dy, dz, axis.x, axis.y, axis.z), -size_array[i], size_array[i]);
             px += axis.x * dist;
             py += axis.y * dist;
@@ -474,12 +474,6 @@ function ColOBB(position, size, orientation) constructor {
             t[i * 2 + 1] = (pd - s) / dd;
         }
         
-        var tmin = max(
-            min(t[0], t[1]),
-            min(t[2], t[3]),
-            min(t[4], t[5])
-        );
-        
         var tmax = min(
             max(t[0], t[1]),
             max(t[2], t[3]),
@@ -487,6 +481,13 @@ function ColOBB(position, size, orientation) constructor {
         );
         
         if (tmax < 0) return false;
+		
+        var tmin = max(
+            min(t[0], t[1]),
+            min(t[2], t[3]),
+            min(t[4], t[5])
+        );
+        
         if (tmin > tmax) return false;
         
         if (hit_info) {
