@@ -183,16 +183,20 @@ function ColCapsule(start, finish, radius) constructor {
         return false;
     };
     
-    static CheckCapsule = function(capsule) {/*
+    static CheckCapsule = function(capsule) {
         var p1 = self.property_center;
         var p2 = capsule.property_center;
         if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) >= (self.property_radius + capsule.property_radius)) return false;
-        */
+        
         var connecting_line = self.line.NearestConnectionToLine(capsule.line);
         return connecting_line.property_length < (self.radius + capsule.radius);
     };
     
     static CheckTriangle = function(triangle) {
+        var p1 = self.property_center;
+        var p2 = triangle.property_center;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) >= (self.property_radius + triangle.property_radius)) return false;
+        
         var line = self.line;
         var target = triangle.NearestPoint(line.start);
         var nearest = line.NearestPoint(target);
