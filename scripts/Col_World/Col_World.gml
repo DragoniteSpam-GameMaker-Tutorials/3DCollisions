@@ -3,6 +3,7 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     self.reference = reference;
     self.mask = mask;                                   // what other objects can collide with me
     self.group = group;                                 // what masks i can detect collisions with
+	shape.object = self;
     
     static CheckObject = function(object) {
         if (object == self) return false;
