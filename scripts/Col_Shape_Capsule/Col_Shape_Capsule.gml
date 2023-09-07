@@ -207,16 +207,16 @@ function ColCapsule(start, finish, radius) constructor {
         if (point_distance_3d(nearest.x, nearest.y, nearest.z, center.x, center.y, center.z) >= self.property_radius) return false;
         
         var line = self.line;
-        var cd = line.property_ray.direction;
+        var cd = line.property_ray.direction.Mul(line.Length());
         var rd = ray.direction;
         var ro = ray.origin;
-        var relative_ray_origin = ro.Sub(line.start);
+        var oa = ro.Sub(line.start);
         
-        var baba = dot_product_3d(cd.x, cd.x, cd.y, cd.y, cd.z, cd.z);
-        var bard = dot_product_3d(cd.x, cd.x, cd.y, rd.y, rd.z, rd.z);
-        var baoa = dot_product_3d(cd.x, cd.x, cd.y, relative_ray_origin.y, relative_ray_origin.z, relative_ray_origin.z);
-        var rdoa = dot_product_3d(rd.x, rd.x, rd.y, relative_ray_origin.y, relative_ray_origin.z, relative_ray_origin.z);
-        var oaoa = dot_product_3d(relative_ray_origin.x, relative_ray_origin.x, relative_ray_origin.y, relative_ray_origin.y, relative_ray_origin.z, relative_ray_origin.z);
+        var baba = dot_product_3d(cd.x, cd.y, cd.z, cd.x, cd.y, cd.z);
+        var bard = dot_product_3d(cd.x, cd.y, cd.z, rd.x, rd.y, rd.z);
+        var baoa = dot_product_3d(cd.x, cd.y, cd.z, oa.x, oa.y, oa.z);
+        var rdoa = dot_product_3d(rd.x, rd.y, rd.z, oa.x, oa.y, oa.z);
+        var oaoa = dot_product_3d(oa.x, oa.y, oa.z, oa.x, oa.y, oa.z);
         
         var a = baba - sqr(bard);
         var b = baba * rdoa - baoa * bard;
@@ -237,7 +237,7 @@ function ColCapsule(start, finish, radius) constructor {
                 return true;
             }
             
-            var oc = (why <= 0) ? relative_ray_origin : ro.Sub(line.finish);
+            var oc = (why <= 0) ? oa : ro.Sub(line.finish);
             b = dot_product_3d(rd.x, rd.y, rd.z, oc.x, oc.y, oc.z);
             c = dot_product_3d(oc.x, oc.y, oc.z, oc.x, oc.y, oc.z) - sqr(self.radius);
             h = sqr(b) - c;
