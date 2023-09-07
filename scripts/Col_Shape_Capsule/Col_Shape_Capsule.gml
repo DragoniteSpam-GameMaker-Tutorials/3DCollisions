@@ -102,6 +102,10 @@ function ColCapsule(start, finish, radius) constructor {
     };
     
     static CheckOBB = function(obb) {
+        var p1 = self.property_center;
+        var p2 = obb.position;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) >= (self.property_radius + obb.property_radius)) return false;
+        
         var obb_position = obb.position;
 		var obb_orientation = obb.property_orientation_array;
         var obb_size_array = [obb.size.x, obb.size.y, obb.size.z];
