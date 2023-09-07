@@ -147,9 +147,11 @@ function ColWorldOctree(bounds, depth) constructor {
         var index = array_get_index(self.contents, object);
         if (index != -1) {
             array_delete(self.contents, index, 1);
-            array_foreach(self.children, method({ object: object }, function(subdivision) {
-                subdivision.Remove(self.object);
-            }));
+			if (self.children != undefined) {
+	            array_foreach(self.children, method({ object: object }, function(subdivision) {
+	                subdivision.Remove(self.object);
+	            }));
+			}
         }
     };
     
