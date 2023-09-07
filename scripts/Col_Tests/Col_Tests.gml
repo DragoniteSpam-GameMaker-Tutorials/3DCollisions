@@ -238,8 +238,11 @@ function ColTestTriangle() constructor {
 }
 
 function ColTestOBB(vbuff) constructor {
+	var xx = random(10);
+	var yy = random(10);
+	var zz = random(10);
     var orientation = matrix_build(0, 0, 0, random(360), random(360), random(360), 1, 1, 1);
-    self.data = new ColOBB(new Vector3(0, 0, 0), new Vector3(irandom_range(2, 4), irandom_range(2, 4), irandom_range(2, 4)), orientation);
+    self.data = new ColOBB(new Vector3(xx, yy, zz), new Vector3(irandom_range(2, 4), irandom_range(2, 4), irandom_range(2, 4)), orientation);
     self.vbuff = vbuff;
     
     self.update = function() {

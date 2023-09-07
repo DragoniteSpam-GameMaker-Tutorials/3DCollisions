@@ -310,9 +310,9 @@ function ColOBB(position, size, orientation) constructor {
         var oz = self.property_orientation_array[2];
         var p = self.position;
         var plen =
-            self.size.x * abs(dot_product_3d(nx, ny, nz, ox, oy, oz)) +
-            self.size.y * abs(dot_product_3d(nx, ny, nz, ox, oy, oz)) +
-            self.size.z * abs(dot_product_3d(nx, ny, nz, ox, oy, oz));
+            self.size.x * abs(dot_product_3d(nx, ny, nz, ox.x, ox.y, ox.z)) +
+            self.size.y * abs(dot_product_3d(nx, ny, nz, oy.x, oy.y, oy.z)) +
+            self.size.z * abs(dot_product_3d(nx, ny, nz, oz.x, oz.y, oz.z));
         
         var dist = dot_product_3d(nx, ny, nz, p.x, p.y, p.z) - plane.distance;
         
