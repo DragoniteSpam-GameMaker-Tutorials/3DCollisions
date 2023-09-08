@@ -8,6 +8,10 @@ function Vector3(x, y, z) constructor {
 	static Infinity = function() { return new Vector3(infinity, infinity, infinity); };
 	static NegativeInfinity = function() { return new Vector3(-infinity, -infinity, -infinity); };
 	
+	static toString = function() {
+		return string("({0}, {1}, {2})", self.x, self.y, self.z);
+	};
+	
     static AsLinearArray = function() {
         return [self.x, self.y, self.z];
     };
@@ -117,6 +121,10 @@ function Vector4(x, y, z, w) constructor {
 	static One = function() { return new Vector4(1, 1, 1, 1); };
 	static Infinity = function() { return new Vector4(infinity, infinity, infinity, infinity); };
 	static NegativeInfinity = function() { return new Vector4(-infinity, -infinity, -infinity, -infinity); };
+	
+	static toString = function() {
+		return string("({0}, {1}, {2}, {3})", self.x, self.y, self.z, self.w);
+	};
 	
     static AsLinearArray = function() {
         return [self.x, self.y, self.z, self.w];
