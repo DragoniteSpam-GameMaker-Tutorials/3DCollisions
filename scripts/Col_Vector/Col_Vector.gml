@@ -75,6 +75,11 @@ function Vector3(x, y, z) constructor {
         return new Vector3(self.x / mag, self.y / mag, self.z / mag);
     };
     
+    static ClampMagnitude = function(magnitude) {
+        var d = point_distance_3d(0, 0, 0, self.x, self.y, self.z) / magnitude;
+        return new Vector3(self.x / d, self.y / d, self.z / d);
+    };
+    
     static Abs = function() {
         return new Vector3(abs(self.x), abs(self.y), abs(self.z));
     };
@@ -190,6 +195,11 @@ function Vector4(x, y, z, w) constructor {
     static Normalize = function() {
         var mag = sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w);
         return new Vector4(self.x / mag, self.y / mag, self.z / mag, self.w / mag);
+    };
+    
+    static ClampMagnitude = function(magnitude) {
+        var d = sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w) / magnitude;
+        return new Vector4(self.x / d, self.y / d, self.z / d, self.w / d);
     };
     
     static Abs = function() {
