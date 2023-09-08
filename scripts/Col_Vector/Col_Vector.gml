@@ -124,6 +124,10 @@ function Vector3(x, y, z) constructor {
 	static Lerp = function(target, amount) {
 		return new Vector3(lerp(self.x, target.x, amount), lerp(self.y, target.y, amount), lerp(self.z, target.z, amount));
 	};
+	
+	static Angle = function(vec3) {
+		return darccos(dot_product_3d(self.x, self.y, self.z, vec3.x, vec3.y, vec3.z) / (point_distance_3d(0, 0, 0, self.x, self.y, self.z) * point_distance_3d(0, 0, 0, vec3.x, vec3.y, vec3.z)));
+	};
 }
 
 function Vector4(x, y, z, w) constructor {
@@ -250,6 +254,10 @@ function Vector4(x, y, z, w) constructor {
 	
 	static Lerp = function(target, amount) {
 		return new Vector4(lerp(self.x, target.x, amount), lerp(self.y, target.y, amount), lerp(self.z, target.z, amount), lerp(self.w, target.w, amount));
+	};
+	
+	static Angle = function(vec4) {
+		return darccos((dot_product_3d(self.x, self.y, self.z, vec4.x, vec4.y, vec4.z) + self.w * vec4.w) / (sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w)) * sqrt(sqr(vec4.x) + sqr(vec4.y) + sqr(vec4.z) + sqr(vec4.w))));
 	};
 }
 
