@@ -85,14 +85,8 @@ function Vector3(x, y, z) constructor {
     };
     
     static Project = function(direction) {
-        var dot = dot_product_3d(self.x, self.y, self.z, direction.x, direction.y, direction.z);
-        var mag2 = dot_product_3d(direction.x, direction.y, direction.z, direction.x, direction.y, direction.z);
-        var f = dot / mag2;
-        return new Vector3(
-            direction.x * f,
-            direction.y * f,
-            direction.z * f
-        );
+        var f = dot_product_3d(self.x, self.y, self.z, direction.x, direction.y, direction.z) / dot_product_3d(direction.x, direction.y, direction.z, direction.x, direction.y, direction.z);
+        return new Vector3(direction.x * f, direction.y * f, direction.z * f);
     };
     
     static Min = function(vec3) {
@@ -116,7 +110,7 @@ function Vector3(x, y, z) constructor {
     };
 	
 	static Approach = function(target, amount) {
-		var dist = self.DistanceTo(target);
+		var dist = point_distance_3d(target.x, target.y, target.z, self.x, self.y, self.z);
 		var f = min(amount, dist) / dist;
 		return new Vector3(lerp(self.x, target.x, f), lerp(self.y, target.y, f), lerp(self.z, target.z, f));
 	};
@@ -185,7 +179,7 @@ function Vector4(x, y, z, w) constructor {
     };
     
     static Magnitude = function() {
-        return sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w);
+        return sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w));
     };
     
     static DistanceTo = function(val) {
@@ -193,7 +187,7 @@ function Vector4(x, y, z, w) constructor {
     };
     
     static Dot = function(val) {
-        return self.x * val.x + self.y * val.y + self.z * val.z + self.w * val.w;
+        return dot_product_3d(self.x, self.y, self.z, val.x, val.y, val.z) + self.w * val.w;
     };
     
     static Equals = function(val) {
@@ -201,12 +195,12 @@ function Vector4(x, y, z, w) constructor {
     };
     
     static Normalize = function() {
-        var mag = sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w);
+        var mag = sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w));
         return new Vector4(self.x / mag, self.y / mag, self.z / mag, self.w / mag);
     };
     
     static ClampMagnitude = function(magnitude) {
-        var d = sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w) / magnitude;
+        var d = sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w)) / magnitude;
         return new Vector4(self.x / d, self.y / d, self.z / d, self.w / d);
     };
     
@@ -215,15 +209,8 @@ function Vector4(x, y, z, w) constructor {
     };
     
     static Project = function(direction) {
-        var dot = self.x * direction.x + self.y * direction.y + self.z * direction.z + self.w * direction.w;
-        var mag2 = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z + direction.w * direction.w;
-        var f = dot / mag2;
-        return new Vector4(
-            direction.x * f,
-            direction.y * f,
-            direction.z * f,
-            direction.w * f
-        );
+        var f = (dot_product_3d(self.x, self.y, self.z, direction.x, direction.y, direction.z) + self.w * direction.w) / (dot_product_3d(direction.x, direction.y, direction.z, direction.x, direction.y, direction.z) + direction.w * direction.w);
+        return new Vector4(direction.x * f, direction.y * f, direction.z * f, direction.w * f);
     };
     
     static Min = function(vec4) {
@@ -247,7 +234,7 @@ function Vector4(x, y, z, w) constructor {
     };
 	
 	static Approach = function(target, amount) {
-		var dist = self.DistanceTo(target);
+		var dist = sqrt(sqr(self.x - target.x) + sqr(self.y - target.y) + sqrt(self.z - target.z) + sqr(self.w - target.w));
 		var f = min(amount, dist) / dist;
 		return new Vector4(lerp(self.x, target.x, f), lerp(self.y, target.y, f), lerp(self.z, target.z, f), lerp(self.w, target.w, f));
 	};
