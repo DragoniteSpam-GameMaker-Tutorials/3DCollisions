@@ -2,7 +2,12 @@ function Vector3(x, y, z) constructor {
     self.x = x;
     self.y = y;
     self.z = z;
-    
+	
+	static Zero = function() { return new Vector3(0, 0, 0); };
+	static One = function() { return new Vector3(1, 1, 1); };
+	static Infinity = function() { return new Vector3(infinity, infinity, infinity); };
+	static NegativeInfinity = function() { return new Vector3(-infinity, -infinity, -infinity); };
+	
     static AsLinearArray = function() {
         return [self.x, self.y, self.z];
     };
@@ -108,6 +113,11 @@ function Vector4(x, y, z, w) constructor {
     self.z = z;
     self.w = w;
     
+	static Zero = function() { return new Vector4(0, 0, 0, 0); };
+	static One = function() { return new Vector4(1, 1, 1, 1); };
+	static Infinity = function() { return new Vector4(infinity, infinity, infinity, infinity); };
+	static NegativeInfinity = function() { return new Vector4(-infinity, -infinity, -infinity, -infinity); };
+	
     static AsLinearArray = function() {
         return [self.x, self.y, self.z, self.w];
     };
@@ -203,3 +213,6 @@ function Vector4(x, y, z, w) constructor {
 		return new Vector4(lerp(self.x, target.x, f), lerp(self.y, target.y, f), lerp(self.z, target.z, f), lerp(self.w, target.w, f));
 	};
 }
+
+Vector3(0, 0, 0);
+Vector4(0, 0, 0, 0);
