@@ -22,12 +22,11 @@ function mat4_inverse(mat) {
     if (determinant == 0) {
     	return undefined;
     }
-    
-    var i = 0;
-    repeat (16) {
-    	results[i++] /= determinant;
-    }
-    
+	
+	array_map_ext(results, method({ determinant: determinant }, function(val) {
+		return val / self.determinant;
+	}));
+	
     return results;
 }
 
