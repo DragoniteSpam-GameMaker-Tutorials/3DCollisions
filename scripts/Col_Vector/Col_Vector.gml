@@ -1,3 +1,136 @@
+function Vector2(x, y = x) constructor {
+    self.x = x;
+    self.y = y;
+	
+	static Zero = function() { return new Vector2(0); };
+	static One = function() { return new Vector2(1); };
+	static Infinity = function() { return new Vector2(infinity); };
+	static NegativeInfinity = function() { return new Vector2(-infinity); };
+	
+	static toString = function() {
+		return string("({0}, {1})", self.x, self.y);
+	};
+	
+	static Set = function(x, y = x) {
+	    self.x = x;
+	    self.y = y;
+	};
+	
+    static AsLinearArray = function() {
+        return [self.x, self.y];
+    };
+    
+    static Add = function(val) {
+        if (is_numeric(val)) {
+            return new Vector2(self.x + val, self.y + val);
+        }
+        return new Vector2(self.x + val.x, self.y + val.y);
+    };
+    
+    static Sub = function(val) {
+        if (is_numeric(val)) {
+            return new Vector2(self.x - val, self.y - val);
+        }
+        return new Vector2(self.x - val.x, self.y - val.y);
+    };
+    
+    static Mul = function(val) {
+        if (is_numeric(val)) {
+            return new Vector2(self.x * val, self.y * val);
+        }
+        return new Vector2(self.x * val.x, self.y * val.y);
+    };
+    
+    static Div = function(val) {
+        if (is_numeric(val)) {
+            return new Vector2(self.x / val, self.y / val);
+        }
+        return new Vector2(self.x / val.x, self.y / val.y);
+    };
+    
+    static Magnitude = function() {
+        return point_distance(0, 0, self.x, self.y);
+    };
+    
+    static DistanceTo = function(val) {
+        return point_distance(val.x, val.y, self.x, self.y);
+    };
+    
+    static Dot = function(val) {
+        return dot_product(self.x, self.y, val.x, val.y);
+    };
+    
+    static Equals = function(val) {
+        return (self.x == val.x) && (self.y == val.y);
+    };
+    
+    static Normalize = function() {
+        var mag = point_distance(0, 0, 0, self.x, self.y);
+        return new Vector2(self.x / mag, self.y / mag);
+    };
+    
+	static Clamp = function(a, b) {
+		if (is_struct(a)) {
+			return new Vector2(clamp(self.x, a.x, b.x), clamp(self.y, a.y, b.y));
+		}
+		return new Vector2(clamp(self.x, a, b), clamp(self.y, a, b));
+	};
+    
+    static ClampMagnitude = function(magnitude) {
+        var d = point_distance(0, 0, self.x, self.y) / magnitude;
+        return new Vector2(self.x / d, self.y / d);
+    };
+    
+    static Abs = function() {
+        return new Vector2(abs(self.x), abs(self.y));
+    };
+    
+    static Project = function(direction) {
+        var f = dot_product(self.x, self.y, direction.x, direction.y) / dot_product(direction.x, direction.y, direction.x, direction.y);
+        return new Vector2(direction.x * f, direction.y * f);
+    };
+    
+    static Min = function(val) {
+		if (is_numeric(val)) {
+			return new Vector2(min(self.x, val), min(self.y, val));
+		}
+        return new Vector2(min(self.x, val.x), min(self.y, val.y));
+    };
+    
+    static Max = function(val) {
+		if (is_numeric(val)) {
+			return new Vector2(max(self.x, val), max(self.y, val));
+		}
+        return new Vector2(max(self.x, val.x), max(self.y, val.y));
+    };
+    
+    static Floor = function() {
+        return new Vector2(floor(self.x), floor(self.y));
+    };
+    
+    static Ceil = function() {
+        return new Vector2(ceil(self.x), ceil(self.y));
+    };
+    
+    static Round = function() {
+        return new Vector2(round(self.x), round(self.y));
+    };
+	
+	static Approach = function(target, amount) {
+		var dist = point_distance(target.x, target.y, self.x, self.y);
+		var f = min(amount, dist) / dist;
+		return new Vector2(lerp(self.x, target.x, f), lerp(self.y, target.y, f));
+	};
+	
+	static Lerp = function(target, amount) {
+		return new Vector2(lerp(self.x, target.x, amount), lerp(self.y, target.y, amount));
+	};
+	
+	static Angle = function(vec2) {
+		return darccos(dot_product(self.x, self.y, vec2.x, vec2.y) / (point_distance(0, 0, self.x, self.y) * point_distance(0, 0, vec2.x, vec2.y)));
+	};
+}
+
 function Vector3(x, y = x, z = x) constructor {
     self.x = x;
     self.y = y;
@@ -273,6 +406,7 @@ function Vector4(x, y = x, z = x, w = x) constructor {
 		return darccos((dot_product_3d(self.x, self.y, self.z, vec4.x, vec4.y, vec4.z) + self.w * vec4.w) / (sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w)) * sqrt(sqr(vec4.x) + sqr(vec4.y) + sqr(vec4.z) + sqr(vec4.w))));
 	};
 }
-round
-Vector3(0, 0, 0);
-Vector4(0, 0, 0, 0);
+
+Vector2(0);
+Vector3(0);
+Vector4(0);
