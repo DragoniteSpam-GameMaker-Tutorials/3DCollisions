@@ -1,12 +1,12 @@
-function Vector3(x, y, z) constructor {
+function Vector3(x, y = x, z = x) constructor {
     self.x = x;
     self.y = y;
     self.z = z;
 	
-	static Zero = function() { return new Vector3(0, 0, 0); };
-	static One = function() { return new Vector3(1, 1, 1); };
-	static Infinity = function() { return new Vector3(infinity, infinity, infinity); };
-	static NegativeInfinity = function() { return new Vector3(-infinity, -infinity, -infinity); };
+	static Zero = function() { return new Vector3(0); };
+	static One = function() { return new Vector3(1); };
+	static Infinity = function() { return new Vector3(infinity); };
+	static NegativeInfinity = function() { return new Vector3(-infinity); };
 	
 	static toString = function() {
 		return string("({0}, {1}, {2})", self.x, self.y, self.z);
@@ -137,16 +137,16 @@ function Vector3(x, y, z) constructor {
 	};
 }
 
-function Vector4(x, y, z, w) constructor {
+function Vector4(x, y = x, z = x, w = x) constructor {
     self.x = x;
     self.y = y;
     self.z = z;
     self.w = w;
     
-	static Zero = function() { return new Vector4(0, 0, 0, 0); };
-	static One = function() { return new Vector4(1, 1, 1, 1); };
-	static Infinity = function() { return new Vector4(infinity, infinity, infinity, infinity); };
-	static NegativeInfinity = function() { return new Vector4(-infinity, -infinity, -infinity, -infinity); };
+	static Zero = function() { return new Vector4(0); };
+	static One = function() { return new Vector4(1); };
+	static Infinity = function() { return new Vector4(infinity); };
+	static NegativeInfinity = function() { return new Vector4(-infinity); };
 	
 	static toString = function() {
 		return string("({0}, {1}, {2}, {3})", self.x, self.y, self.z, self.w);
