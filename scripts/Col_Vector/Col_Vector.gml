@@ -75,6 +75,13 @@ function Vector3(x, y, z) constructor {
         return new Vector3(self.x / mag, self.y / mag, self.z / mag);
     };
     
+	static Clamp = function(a, b) {
+		if (is_struct(a)) {
+			return new Vector3(clamp(self.x, a.x, b.x), clamp(self.y, a.y, b.y), clamp(self.z, a.z, b.z));
+		}
+		return new Vector3(clamp(self.x, a, b), clamp(self.y, a, b), clamp(self.z, a, b));
+	};
+    
     static ClampMagnitude = function(magnitude) {
         var d = point_distance_3d(0, 0, 0, self.x, self.y, self.z) / magnitude;
         return new Vector3(self.x / d, self.y / d, self.z / d);
@@ -198,6 +205,13 @@ function Vector4(x, y, z, w) constructor {
         var mag = sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w));
         return new Vector4(self.x / mag, self.y / mag, self.z / mag, self.w / mag);
     };
+	
+	static Clamp = function(a, b) {
+		if (is_struct(a)) {
+			return new Vector4(clamp(self.x, a.x, b.x), clamp(self.y, a.y, b.y), clamp(self.z, a.z, b.z), clamp(self.w, a.w, b.w));
+		}
+		return new Vector4(clamp(self.x, a, b), clamp(self.y, a, b), clamp(self.z, a, b), clamp(self.w, a, b));
+	};
     
     static ClampMagnitude = function(magnitude) {
         var d = sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w)) / magnitude;
@@ -247,6 +261,6 @@ function Vector4(x, y, z, w) constructor {
 		return darccos((dot_product_3d(self.x, self.y, self.z, vec4.x, vec4.y, vec4.z) + self.w * vec4.w) / (sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w)) * sqrt(sqr(vec4.x) + sqr(vec4.y) + sqr(vec4.z) + sqr(vec4.w))));
 	};
 }
-
+round
 Vector3(0, 0, 0);
 Vector4(0, 0, 0, 0);
