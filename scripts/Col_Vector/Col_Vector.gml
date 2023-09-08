@@ -12,6 +12,12 @@ function Vector3(x, y, z) constructor {
 		return string("({0}, {1}, {2})", self.x, self.y, self.z);
 	};
 	
+	static Set = function(x, y, z) {
+	    self.x = x;
+	    self.y = y;
+	    self.z = z;
+	};
+	
     static AsLinearArray = function() {
         return [self.x, self.y, self.z];
     };
@@ -124,6 +130,13 @@ function Vector4(x, y, z, w) constructor {
 	
 	static toString = function() {
 		return string("({0}, {1}, {2}, {3})", self.x, self.y, self.z, self.w);
+	};
+	
+	static Set = function(x, y, z, w) {
+	    self.x = x;
+	    self.y = y;
+	    self.z = z;
+	    self.w = w;
 	};
 	
     static AsLinearArray = function() {
