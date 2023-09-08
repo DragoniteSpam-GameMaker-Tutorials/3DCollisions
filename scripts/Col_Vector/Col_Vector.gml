@@ -120,6 +120,10 @@ function Vector3(x, y, z) constructor {
 		var f = min(amount, dist) / dist;
 		return new Vector3(lerp(self.x, target.x, f), lerp(self.y, target.y, f), lerp(self.z, target.z, f));
 	};
+	
+	static Lerp = function(target, amount) {
+		return new Vector3(lerp(self.x, target.x, amount), lerp(self.y, target.y, amount), lerp(self.z, target.z, amount));
+	};
 }
 
 function Vector4(x, y, z, w) constructor {
@@ -242,6 +246,10 @@ function Vector4(x, y, z, w) constructor {
 		var dist = self.DistanceTo(target);
 		var f = min(amount, dist) / dist;
 		return new Vector4(lerp(self.x, target.x, f), lerp(self.y, target.y, f), lerp(self.z, target.z, f), lerp(self.w, target.w, f));
+	};
+	
+	static Lerp = function(target, amount) {
+		return new Vector4(lerp(self.x, target.x, amount), lerp(self.y, target.y, amount), lerp(self.z, target.z, amount), lerp(self.w, target.w, amount));
 	};
 }
 
