@@ -96,12 +96,18 @@ function Vector3(x, y, z) constructor {
         return new Vector3(direction.x * f, direction.y * f, direction.z * f);
     };
     
-    static Min = function(vec3) {
-        return new Vector3(min(self.x, vec3.x), min(self.y, vec3.y), min(self.z, vec3.z));
+    static Min = function(val) {
+		if (is_numeric(val)) {
+			return new Vector3(min(self.x, val), min(self.y, val), min(self.z, val));
+		}
+        return new Vector3(min(self.x, val.x), min(self.y, val.y), min(self.z, val.z));
     };
     
-    static Max = function(vec3) {
-        return new Vector3(max(self.x, vec3.x), max(self.y, vec3.y), max(self.z, vec3.z));
+    static Max = function(val) {
+		if (is_numeric(val)) {
+			return new Vector3(max(self.x, val), max(self.y, val), max(self.z, val));
+		}
+        return new Vector3(max(self.x, val.x), max(self.y, val.y), max(self.z, val.z));
     };
     
     static Floor = function() {
@@ -227,12 +233,18 @@ function Vector4(x, y, z, w) constructor {
         return new Vector4(direction.x * f, direction.y * f, direction.z * f, direction.w * f);
     };
     
-    static Min = function(vec4) {
-        return new Vector4(min(self.x, vec4.x), min(self.y, vec4.y), min(self.z, vec4.z), min(self.w, vec4.w));
+    static Min = function(val) {
+		if (is_numeric(val)) {
+			return new Vector4(min(self.x, val), min(self.y, val), min(self.z, val), min(self.w, val));
+		}
+        return new Vector4(min(self.x, val.x), min(self.y, val.y), min(self.z, val.z), min(self.w, val.w));
     };
     
-    static Max = function(vec4) {
-        return new Vector4(max(self.x, vec4.x), max(self.y, vec4.y), max(self.z, vec4.z), max(self.w, vec4.w));
+    static Max = function(val) {
+		if (is_numeric(val)) {
+			return new Vector4(max(self.x, val), max(self.y, val), max(self.z, val), max(self.w, val));
+		}
+        return new Vector4(max(self.x, val.x), max(self.y, val.y), max(self.z, val.z), max(self.w, val.w));
     };
     
     static Floor = function() {
