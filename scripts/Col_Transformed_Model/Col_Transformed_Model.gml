@@ -2,6 +2,7 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     self.Set(mesh, position, rotation);
     
     static Set = function(mesh = self.mesh, position = self.position, rotation = self.rotation) {
+		if (is_array(mesh)) mesh = new ColMesh(mesh);
         self.mesh = mesh;
         self.position = position;
         self.rotation = rotation;

@@ -3,6 +3,8 @@ Version 1.1
  - A bunch of optimizations
  - A whole bunch of new Vector functions (including a Vector2 class), just for fun
  - Removed the Matrix classes in favor of just using the GameMaker 16-element array matrices, because those were confusing and using them added more overhead that I really like
+ - If you construct a ColTransformedModel (or call the Set() method that goes with them) with an array of ColTriangles instead of a ColMesh, a ColMesh will be created for you
+	 - This will create a new ColMesh from scratch, so only do this if each Transformed Model is to be associated with a unique Mesh
  - ColWorld now takes an Octree, Quadtree, or Spatial Hash as its preferred acceleration structure instead of creating one for you
  - ColWorld::CheckRay can now take a maximum distance, discarding any hits that are farther away
  - Added COL_MIN_TREE_DENSITY to set the object threshold for when a tree structure is subdivided, which can speed them up by a fair amount
