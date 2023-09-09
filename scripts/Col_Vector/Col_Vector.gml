@@ -16,6 +16,10 @@ function Vector2(x, y = x) constructor {
 	    self.y = y;
 	};
 	
+	static Clone = function() {
+		return new Vector2(self.x, self.y);
+	};
+	
     static AsLinearArray = function() {
         return [self.x, self.y];
     };
@@ -153,6 +157,10 @@ function Vector3(x, y = x, z = x) constructor {
 	    self.x = x;
 	    self.y = y;
 	    self.z = z;
+	};
+	
+	static Clone = function() {
+		return new Vector3(self.x, self.y, self.z);
 	};
 	
     static AsLinearArray = function() {
@@ -298,6 +306,10 @@ function Vector4(x, y = x, z = x, w = x) constructor {
 	    self.y = y;
 	    self.z = z;
 	    self.w = w;
+	};
+	
+	static Clone = function() {
+		return new Vector4(self.x, self.y, self.z, self.w);
 	};
 	
     static AsLinearArray = function() {
