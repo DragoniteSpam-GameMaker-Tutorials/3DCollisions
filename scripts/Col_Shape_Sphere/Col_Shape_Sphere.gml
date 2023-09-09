@@ -131,11 +131,11 @@ function ColSphere(position, radius) constructor {
     };
     
     static GetMin = function() {
-        return self.property_min;
+        return self.property_min.Clone();
     };
     
     static GetMax = function() {
-        return self.property_max;
+        return self.property_max.Clone();
     };
     
     static CheckFrustum = function(frustum) {

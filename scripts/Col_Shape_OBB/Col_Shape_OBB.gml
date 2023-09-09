@@ -592,10 +592,10 @@ function ColOBB(position, size, orientation) constructor {
     };
     
     static GetMin = function() {
-        return self.property_min;
+        return self.property_min.Clone();
     };
     
     static GetMax = function() {
-        return self.property_max;
+        return self.property_max.Clone();
     };
 }

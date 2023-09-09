@@ -103,11 +103,11 @@ function ColPoint(position) constructor {
     };
     
     static GetMin = function() {
-        return self.position;
+        return self.position.Clone();
     };
     
     static GetMax = function() {
-        return self.position;
+        return self.position.Clone();
     };
     
     static CheckFrustum = function(frustum) {
