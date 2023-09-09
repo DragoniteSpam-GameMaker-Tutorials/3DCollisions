@@ -65,12 +65,12 @@ function Vector2(x, y = x) constructor {
     };
     
     static Normalize = function() {
-        var mag = point_distance(0, 0, 0, self.x, self.y);
+        var mag = point_distance(0, 0, self.x, self.y);
         return new Vector2(self.x / mag, self.y / mag);
     };
     
 	static Clamp = function(a, b) {
-		if (is_struct(a)) {
+		if (is_struct(a) || is_struct(b)) {
 			return new Vector2(clamp(self.x, a.x, b.x), clamp(self.y, a.y, b.y));
 		}
 		return new Vector2(clamp(self.x, a, b), clamp(self.y, a, b));
@@ -83,6 +83,10 @@ function Vector2(x, y = x) constructor {
     
     static Abs = function() {
         return new Vector2(abs(self.x), abs(self.y));
+    };
+    
+    static Frac = function() {
+        return new Vector2(frac(self.x), frac(self.y));
     };
     
     static Project = function(direction) {
@@ -209,7 +213,7 @@ function Vector3(x, y = x, z = x) constructor {
     };
     
 	static Clamp = function(a, b) {
-		if (is_struct(a)) {
+		if (is_struct(a) || is_struct(b)) {
 			return new Vector3(clamp(self.x, a.x, b.x), clamp(self.y, a.y, b.y), clamp(self.z, a.z, b.z));
 		}
 		return new Vector3(clamp(self.x, a, b), clamp(self.y, a, b), clamp(self.z, a, b));
@@ -222,6 +226,10 @@ function Vector3(x, y = x, z = x) constructor {
     
     static Abs = function() {
         return new Vector3(abs(self.x), abs(self.y), abs(self.z));
+    };
+    
+    static Frac = function() {
+        return new Vector3(abs(self.x), frac(self.y), frac(self.z));
     };
     
     static Project = function(direction) {
@@ -346,7 +354,7 @@ function Vector4(x, y = x, z = x, w = x) constructor {
     };
 	
 	static Clamp = function(a, b) {
-		if (is_struct(a)) {
+		if (is_struct(a) || is_struct(b)) {
 			return new Vector4(clamp(self.x, a.x, b.x), clamp(self.y, a.y, b.y), clamp(self.z, a.z, b.z), clamp(self.w, a.w, b.w));
 		}
 		return new Vector4(clamp(self.x, a, b), clamp(self.y, a, b), clamp(self.z, a, b), clamp(self.w, a, b));
@@ -359,6 +367,10 @@ function Vector4(x, y = x, z = x, w = x) constructor {
     
     static Abs = function() {
         return new Vector4(abs(self.x), abs(self.y), abs(self.z), abs(self.w));
+    };
+    
+    static Frac = function() {
+        return new Vector4(frac(self.x), frac(self.y), frac(self.z), frac(self.w));
     };
     
     static Project = function(direction) {
