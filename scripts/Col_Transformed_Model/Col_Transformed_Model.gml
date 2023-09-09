@@ -15,7 +15,7 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     };
     
     static GetTransformMatrix = function() {
-        return self.property_transform;
+        return variable_clone(self.property_transform);
     };
     
     static CheckPoint = function(point) {
@@ -118,10 +118,10 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     };
     
     static GetMin = function() {
-        return self.property_min;
+        return self.property_min.Clone();
     };
     
     static GetMax = function() {
-        return self.property_max;
+        return self.property_max.Clone();
     };
 }
