@@ -49,11 +49,12 @@ function ColWorld(accelerator) constructor {
         return self.accelerator.CheckObject(object);
     };
     
-    static CheckRay = function(ray, group = 1) {
+    static CheckRay = function(ray, group = 1, distance = infinity) {
         var hit_info = new RaycastHitInformation();
         
         if (self.accelerator.CheckRay(ray, hit_info, group)) {
-            return hit_info;
+			if (hit_info.distance <= distance)
+	            return hit_info;
         }
         
         return undefined;
