@@ -285,11 +285,15 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static GetVertices = function() {
-        return self.property_vertices;
+        return array_map(self.property_vertices, function(item) {
+			return item.Clone();
+		});
     };
     
     static GetEdges = function() {
-        return self.property_edges;
+        return array_map(self.property_edges, function(item) {
+			return new ColLine(item.start, item.finish);
+		});
     };
     
     static GetMin = function() {
