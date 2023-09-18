@@ -124,18 +124,19 @@ function Vector2(x, y = x) constructor {
         return new Vector2(round(self.x), round(self.y));
     };
 	
-	static Approach = function(target, amount) {
-		var dist = point_distance(target.x, target.y, self.x, self.y);
-		var f = min(amount, dist) / dist;
-		return new Vector2(lerp(self.x, target.x, f), lerp(self.y, target.y, f));
-	};
-	
 	static Lerp = function(target, amount) {
 		return new Vector2(lerp(self.x, target.x, amount), lerp(self.y, target.y, amount));
 	};
 	
 	static Angle = function(vec2) {
 		return darccos(dot_product(self.x, self.y, vec2.x, vec2.y) / (point_distance(0, 0, self.x, self.y) * point_distance(0, 0, vec2.x, vec2.y)));
+	};
+	
+	static Approach = function(target, amount) {
+        return new Vector2(
+            (self.x < target.x) ? min(self.x + amount, target.x) : max(self.x - amount, target.x),
+            (self.y < target.y) ? min(self.y + amount, target.y) : max(self.y - amount, target.y)
+        );
 	};
 }
 
@@ -271,18 +272,20 @@ function Vector3(x, y = x, z = x) constructor {
         return new Vector3(round(self.x), round(self.y), round(self.z));
     };
 	
-	static Approach = function(target, amount) {
-		var dist = point_distance_3d(target.x, target.y, target.z, self.x, self.y, self.z);
-		var f = min(amount, dist) / dist;
-		return new Vector3(lerp(self.x, target.x, f), lerp(self.y, target.y, f), lerp(self.z, target.z, f));
-	};
-	
 	static Lerp = function(target, amount) {
 		return new Vector3(lerp(self.x, target.x, amount), lerp(self.y, target.y, amount), lerp(self.z, target.z, amount));
 	};
 	
 	static Angle = function(vec3) {
 		return darccos(dot_product_3d(self.x, self.y, self.z, vec3.x, vec3.y, vec3.z) / (point_distance_3d(0, 0, 0, self.x, self.y, self.z) * point_distance_3d(0, 0, 0, vec3.x, vec3.y, vec3.z)));
+	};
+	
+	static Approach = function(target, amount) {
+        return new Vector3(
+            (self.x < target.x) ? min(self.x + amount, target.x) : max(self.x - amount, target.x),
+            (self.y < target.y) ? min(self.y + amount, target.y) : max(self.y - amount, target.y),
+            (self.z < target.z) ? min(self.z + amount, target.z) : max(self.z - amount, target.z)
+        );
 	};
 }
 
@@ -416,18 +419,21 @@ function Vector4(x, y = x, z = x, w = x) constructor {
         return new Vector4(round(self.x), round(self.y), round(self.z), round(self.w));
     };
 	
-	static Approach = function(target, amount) {
-		var dist = sqrt(sqr(self.x - target.x) + sqr(self.y - target.y) + sqrt(self.z - target.z) + sqr(self.w - target.w));
-		var f = min(amount, dist) / dist;
-		return new Vector4(lerp(self.x, target.x, f), lerp(self.y, target.y, f), lerp(self.z, target.z, f), lerp(self.w, target.w, f));
-	};
-	
 	static Lerp = function(target, amount) {
 		return new Vector4(lerp(self.x, target.x, amount), lerp(self.y, target.y, amount), lerp(self.z, target.z, amount), lerp(self.w, target.w, amount));
 	};
 	
 	static Angle = function(vec4) {
 		return darccos((dot_product_3d(self.x, self.y, self.z, vec4.x, vec4.y, vec4.z) + self.w * vec4.w) / (sqrt(sqr(self.x) + sqr(self.y) + sqr(self.z) + sqr(self.w)) * sqrt(sqr(vec4.x) + sqr(vec4.y) + sqr(vec4.z) + sqr(vec4.w))));
+	};
+	
+	static Approach = function(target, amount) {
+        return new Vector4(
+            (self.x < target.x) ? min(self.x + amount, target.x) : max(self.x - amount, target.x),
+            (self.y < target.y) ? min(self.y + amount, target.y) : max(self.y - amount, target.y),
+            (self.z < target.z) ? min(self.z + amount, target.z) : max(self.z - amount, target.z),
+            (self.w < target.w) ? min(self.w + amount, target.w) : max(self.w - amount, target.w)
+        );
 	};
 }
 
