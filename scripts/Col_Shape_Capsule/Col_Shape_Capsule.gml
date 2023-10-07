@@ -1,8 +1,9 @@
 function ColCapsule(start, finish, radius) constructor {
     self.line = undefined;
+    self.radius = 0;
     self.Set(start, finish, radius);
     
-    static Set = function(start = self.start, finish = self.finish, radius = self.radius) {
+    static Set = function(start = self.line.start, finish = self.line.finish, radius = self.radius) {
         if (self.line) {
             self.line.Set(start, finish);
         } else {

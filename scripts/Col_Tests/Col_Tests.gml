@@ -1,3 +1,5 @@
+// feather disable GM2023
+// feather disable GM1050
 function ColTestPoint(vbuff) constructor {
     self.data = new ColPoint(new Vector3(0, 0, 0));
     self.vbuff = vbuff;
@@ -309,7 +311,7 @@ function ColTestCapsule(vbuff_end, vbuff_middle) constructor {
 			self.data.Set(start, finish);
         }
         if (keyboard_check(vk_down)) {
-			var diff = new Vector3(0, step, 0, 0);
+			var diff = new Vector3(0, step, 0);
 			var start = self.data.line.start.Add(diff);
 			var finish = self.data.line.finish.Add(diff);
 			self.data.Set(start, finish);
@@ -427,7 +429,7 @@ function ColTestMesh(vbuff) constructor {
                 buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 0, buffer_f32),
                 buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 4, buffer_f32),
                 buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 8, buffer_f32)
-            ),
+            )
         );
     }
     buffer_delete(data);

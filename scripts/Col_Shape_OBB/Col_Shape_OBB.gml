@@ -1,4 +1,7 @@
 function ColOBB(position, size, orientation) constructor {
+    self.position = undefined;
+    self.size = undefined;
+    self.orientation = undefined;
     self.Set(position, size, orientation);
     
     static Set = function(position = self.position, size = self.size, orientation = self.orientation) {

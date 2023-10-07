@@ -36,7 +36,7 @@ if (keyboard_check(vk_numpad5)) {
     shape_1 = new ColTestLine(undefined);
 }
 if (keyboard_check(vk_numpad6)) {
-    shape_1 = new ColTestMesh(tree, tree_vertices);
+    shape_1 = new ColTestMesh(tree);
 }
 if (keyboard_check(vk_numpad7)) {
     shape_1 = new ColTestOBB(obb);
@@ -70,7 +70,7 @@ if (keyboard_check(ord("6"))) {
     shape_2 = new ColTestLine(undefined);
 }
 if (keyboard_check(ord("7"))) {
-    shape_2 = new ColTestMesh(tree, tree_vertices);
+    shape_2 = new ColTestMesh(tree);
 }
 if (keyboard_check(ord("8"))) {
     shape_2 = new ColTestOBB(obb);

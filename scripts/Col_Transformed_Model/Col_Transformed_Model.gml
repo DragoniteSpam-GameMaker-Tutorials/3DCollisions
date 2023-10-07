@@ -1,4 +1,10 @@
+// feather disable GM2023
+// feather disable GM1041
 function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = matrix_build_identity()) constructor {
+    self.mesh = undefined;
+    self.position = undefined;
+    self.rotation = undefined;
+    self.property_inverse = undefined;
     self.Set(mesh, position, rotation);
     
     static Set = function(mesh = self.mesh, position = self.position, rotation = self.rotation) {

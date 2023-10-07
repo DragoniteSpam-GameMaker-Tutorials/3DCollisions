@@ -1,4 +1,6 @@
 function ColAABB(position, half_extents) constructor {
+    self.position = undefined;
+    self.half_extents = undefined;
     self.Set(position, half_extents);
     
     static Set = function(position = self.position, half_extents = self.half_extents) {

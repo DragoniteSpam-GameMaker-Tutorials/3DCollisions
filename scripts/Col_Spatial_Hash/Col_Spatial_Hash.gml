@@ -1,3 +1,4 @@
+// feather disable GM2023
 function ColWorldSpatialHash(chunk_size) constructor {
     self.chunk_size = chunk_size;
     self.chunks = { };
