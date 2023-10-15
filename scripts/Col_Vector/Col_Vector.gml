@@ -133,9 +133,12 @@ function Vector2(x, y = x) constructor {
 	};
 	
 	static Approach = function(target, amount) {
+        var dist = max(point_distance(target.x, target.y, self.x, self.y) - amount, 0);
+        var f = dist / amount;
+        
         return new Vector2(
-            (self.x < target.x) ? min(self.x + amount, target.x) : max(self.x - amount, target.x),
-            (self.y < target.y) ? min(self.y + amount, target.y) : max(self.y - amount, target.y)
+            lerp(self.x, target.x, f),
+            lerp(self.y, target.y, f)
         );
 	};
 }
@@ -281,10 +284,13 @@ function Vector3(x, y = x, z = x) constructor {
 	};
 	
 	static Approach = function(target, amount) {
+        var dist = max(point_distance_3d(target.x, target.y, target.z, self.x, self.y, self.z) - amount, 0);
+        var f = dist / amount;
+        
         return new Vector3(
-            (self.x < target.x) ? min(self.x + amount, target.x) : max(self.x - amount, target.x),
-            (self.y < target.y) ? min(self.y + amount, target.y) : max(self.y - amount, target.y),
-            (self.z < target.z) ? min(self.z + amount, target.z) : max(self.z - amount, target.z)
+            lerp(self.x, target.x, f),
+            lerp(self.y, target.y, f),
+            lerp(self.z, target.z, f)
         );
 	};
 }
@@ -428,11 +434,14 @@ function Vector4(x, y = x, z = x, w = x) constructor {
 	};
 	
 	static Approach = function(target, amount) {
-        return new Vector4(
-            (self.x < target.x) ? min(self.x + amount, target.x) : max(self.x - amount, target.x),
-            (self.y < target.y) ? min(self.y + amount, target.y) : max(self.y - amount, target.y),
-            (self.z < target.z) ? min(self.z + amount, target.z) : max(self.z - amount, target.z),
-            (self.w < target.w) ? min(self.w + amount, target.w) : max(self.w - amount, target.w)
+        var dist = max(sqrt(sqr(self.x - target.x) + sqr(self.y - target.y) + sqrt(self.z - target.z) + sqr(self.w - target.w)) - amount, 0);
+        var f = dist / amount;
+        
+        return new Vector3(
+            lerp(self.x, target.x, f),
+            lerp(self.y, target.y, f),
+            lerp(self.z, target.z, f),
+            lerp(self.w, target.w, f)
         );
 	};
 }
