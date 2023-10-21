@@ -84,7 +84,7 @@ function ColWorld(accelerator) constructor {
     static GetObjectsInFrustum = function(frustum) {
         var output = [];
         self.accelerator.GetObjectsInFrustum(frustum, output);
-        // if gamemaker ever fixes array_unique, use that here for a minor performance gain
+		array_unique_ext(output);
         return output;
     };
 }

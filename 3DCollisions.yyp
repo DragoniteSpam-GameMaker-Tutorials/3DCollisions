@@ -33,7 +33,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.8.2.108",
+    "IDEVersion": "2023.1100.0.411",
   },
   "resources": [
     {"id":{"name":"obj_demo","path":"objects/obj_demo/obj_demo.yy",},},
