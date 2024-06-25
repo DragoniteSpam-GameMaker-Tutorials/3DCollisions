@@ -99,7 +99,8 @@ function ColSphere(position, radius) constructor {
             contact_point.y = o.y + dir.y * t;
             contact_point.z = o.z + dir.z * t;
             
-            hit_info.Update(t, self, contact_point, contact_point.Sub(p).Normalize());
+            //hit_info.Update(t, self, contact_point, contact_point.Sub(p).Normalize());
+            hit_info.Update(contact_point.DistanceTo(ray.origin), self, contact_point, contact_point.Sub(p).Normalize());
         }
         
         return true;
