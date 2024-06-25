@@ -437,7 +437,7 @@ function Vector4(x, y = x, z = x, w = x) constructor {
         var dist = max(sqrt(sqr(self.x - target.x) + sqr(self.y - target.y) + sqrt(self.z - target.z) + sqr(self.w - target.w)) - amount, 0);
         var f = dist / amount;
         
-        return new Vector3(
+        return new Vector4(
             lerp(self.x, target.x, f),
             lerp(self.y, target.y, f),
             lerp(self.z, target.z, f),
