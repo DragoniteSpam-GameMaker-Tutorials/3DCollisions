@@ -53,7 +53,46 @@ function ColMesh(triangle_array) constructor {
             ];
             
             var i = 0;
-            repeat (8) {
+            repeat (array_length(self.children)) {
+                var tree = self.children[i++];
+                var j = 0;
+                repeat (array_length(self.triangles)) {
+                    if (tree.bounds.CheckTriangle(self.triangles[j])) {
+                        array_push(tree.triangles, self.triangles[j]);
+                    }
+                    j++;
+                }
+                tree.Split(depth - 1);
+            }
+        };
+    };
+    
+    static quadtree = function(bounds, quadtree) constructor {
+        self.bounds = bounds;
+        self.quadtree = quadtree;
+        
+        self.triangles = [];
+        self.children = undefined;
+        
+        static Split = function(depth) {
+            if (depth == 0) return;
+            if (array_length(self.triangles) < COL_MIN_TREE_DENSITY) return;
+            if (self.children != undefined) return;
+            
+            static subdivision_factor = new Vector3(0.5, 0.5, 1);
+            
+            var center = self.bounds.position;
+            var sides = self.bounds.half_extents.Mul(subdivision_factor);
+            
+            self.children = [
+                new self.quadtree(new ColAABB(center.Add(new Vector3(-sides.x,  sides.y, 0)), sides), self.quadtree),
+                new self.quadtree(new ColAABB(center.Add(new Vector3( sides.x,  sides.y, 0)), sides), self.quadtree),
+                new self.quadtree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, 0)), sides), self.quadtree),
+                new self.quadtree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y, 0)), sides), self.quadtree),
+            ];
+            
+            var i = 0;
+            repeat (array_length(self.children)) {
                 var tree = self.children[i++];
                 var j = 0;
                 repeat (array_length(self.triangles)) {
@@ -79,13 +118,13 @@ function ColMesh(triangle_array) constructor {
             array_delete(process_these, 0, 1);
             
             if (tree.children == undefined) {
-                for (var i = 0; i < array_length(tree.triangles); i++) {
+                for (var i = 0, n = array_length(tree.triangles); i < n; i++) {
                     if (shape.CheckTriangle(tree.triangles[i])) {
                         return true;
                     }
                 }
             } else {
-                for (var i = 0; i < 8; i++) {
+                for (var i = 0, n = array_length(tree.children); i < n; i++) {
                     if (shape.CheckAABB(tree.children[i].bounds)) {
                         array_push(process_these, tree.children[i]);
                     }
@@ -150,7 +189,7 @@ function ColMesh(triangle_array) constructor {
                     }
                 }
             } else {
-                for (var i = 0; i < 8; i++) {
+                for (var i = 0, n = array_length(tree.children); i < n; i++) {
                     if (ray.CheckAABB(tree.children[i].bounds, dummy_hit_info)) {
                         array_push(process_these, tree.children[i]);
                     }

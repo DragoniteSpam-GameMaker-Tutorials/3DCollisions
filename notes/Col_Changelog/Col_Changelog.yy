@@ -1,9 +1,11 @@
 {
-  "resourceType": "GMNotes",
-  "resourceVersion": "1.1",
-  "name": "Col_Changelog",
-  "parent": {
-    "name": "Collision Stuff",
-    "path": "folders/Collision Stuff.yy",
+  "$GMNotes":"",
+  "%Name":"Col_Changelog",
+  "name":"Col_Changelog",
+  "parent":{
+    "name":"Collision Stuff",
+    "path":"folders/Collision Stuff.yy",
   },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
 }
