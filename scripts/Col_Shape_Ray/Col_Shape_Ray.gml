@@ -1,6 +1,11 @@
 function ColRay(origin, direction) constructor {
     self.origin = origin;                   // Vec3
-    self.direction = direction.Normalize(); // Vec3
+    var mag = point_distance_3d(0, 0, 0, direction.x, direction.y, direction.z);
+    self.direction = new Vector3(
+        direction.x / mag,
+        direction.y / mag,
+        direction.z / mag
+    );                                      // vec3
     
     static CheckPoint = function(point, hit_info) {
         return point.CheckRay(self, hit_info);
@@ -38,7 +43,7 @@ function ColRay(origin, direction) constructor {
         return model.CheckRay(self, hit_info);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         return false;
     };
     
@@ -51,10 +56,17 @@ function ColRay(origin, direction) constructor {
     };
     
     static NearestPoint = function(vec3) {
-        var diff = vec3.Sub(self.origin);
-        var t = max(diff.Dot(self.direction), 0);
-        var scaled_dir = self.direction.Mul(t);
-        return self.origin.Add(scaled_dir);
+        var origin = self.origin;
+        var vx = vec3.x - origin.x;
+        var vy = vec3.y - origin.y;
+        var vz = vec3.z - origin.z;
+        var d = self.direction;
+        var t = max(dot_product_3d(vx, vy, vz, d.x, d.y, d.z), 0);
+        return new Vector3(
+            origin.x + d.x * t,
+            origin.y + d.y * t,
+            origin.z + d.z * t
+        );
     };
     
     static GetMin = function() {

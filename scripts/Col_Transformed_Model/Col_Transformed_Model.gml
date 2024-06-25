@@ -1,43 +1,65 @@
-function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = new Matrix3(1, 0, 0, 0, 1, 0, 0, 0, 1)) constructor {
-    self.mesh = mesh;
-    self.position = position;
-    self.rotation = rotation;
+// feather disable GM2023
+// feather disable GM1041
+function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = matrix_build_identity()) constructor {
+    self.mesh = undefined;
+    self.position = undefined;
+    self.rotation = undefined;
+    self.property_inverse = undefined;
+    self.Set(mesh, position, rotation);
+    
+    static Set = function(mesh = self.mesh, position = self.position, rotation = self.rotation) {
+		if (is_array(mesh)) mesh = new ColMesh(mesh);
+        self.mesh = mesh;
+        self.position = position;
+        self.rotation = rotation;
+        
+        self.property_transform = matrix_multiply(rotation, matrix_build(position.x, position.y, position.z, 0, 0, 0, 1, 1, 1));
+        self.property_inverse = mat4_inverse(self.property_transform);
+        
+        self.property_obb = new ColOBB(mat4_mul_point(self.property_transform, mesh.bounds.position), mesh.bounds.half_extents, self.property_transform);
+        self.property_min = self.property_obb.property_min;
+        self.property_max = self.property_obb.property_max;
+    };
     
     static GetTransformMatrix = function() {
-        return self.rotation.GetRotationMatrix().Mul(self.position.GetTranslationMatrix());
+        return variable_clone(self.property_transform);
     };
     
     static CheckPoint = function(point) {
-        var inverse = self.GetTransformMatrix().Inverse();
-        var untransformed = new ColPoint(inverse.MulPoint(point.position));
+		if (!self.property_obb.CheckPoint(point)) return false;
+		
+        var untransformed = new ColPoint(mat4_mul_point(self.property_inverse, point.position));
         return self.mesh.CheckPoint(untransformed);
     };
     
     static CheckSphere = function(sphere) {
-        var inverse = self.GetTransformMatrix().Inverse();
-        var untransformed = new ColSphere(inverse.MulPoint(sphere.position), sphere.radius);
+		if (!self.property_obb.CheckSphere(sphere)) return false;
+		
+        var untransformed = new ColSphere(mat4_mul_point(self.property_inverse, sphere.position), sphere.radius);
         return self.mesh.CheckSphere(untransformed);
     };
     
     static CheckAABB = function(aabb) {
-        var inverse = self.GetTransformMatrix().Inverse();
-        var untransformed = new ColOBB(inverse.MulPoint(aabb.position), aabb.half_extents, inverse.GetOrientationMatrix());
+		if (!self.property_obb.CheckAABB(aabb)) return false;
+		
+        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, aabb.position), aabb.half_extents, self.property_inverse);
         return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckOBB = function(obb) {
-        var inverse = self.GetTransformMatrix().Inverse();
-        var untransformed = new ColOBB(inverse.MulPoint(obb.position), obb.size, obb.orientation.Mul(inverse.GetOrientationMatrix()));
+		if (!self.property_obb.CheckOBB(obb)) return false;
+		
+        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, obb.position), obb.size, matrix_multiply(obb.orientation, self.property_inverse));
         return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckPlane = function(plane) {
-        var inverse = self.GetTransformMatrix().Inverse();
-        
+		if (!self.property_obb.CheckPlane(plane)) return false;
+		
         var point = plane.normal.Mul(plane.distance);
-        point = inverse.MulPoint(point);
+        point = mat4_mul_point(self.property_inverse, point);
         
-        var normal = inverse.MulVector(plane.normal);
+        var normal = mat4_mul_vector(self.property_inverse, plane.normal);
         var distance = point.Dot(normal);
         
         var untransformed = new ColPlane(normal, distance);
@@ -45,40 +67,53 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static CheckCapsule = function(capsule) {
-        var inverse = self.GetTransformMatrix().Inverse();
-        var untransformed = new ColCapsule(inverse.MulPoint(capsule.line.start), inverse.MulPoint(capsule.line.finish), capsule.radius);
+		if (!capsule.CheckOBB(self.property_obb)) return false;
+		
+        var untransformed = new ColCapsule(mat4_mul_point(self.property_inverse, capsule.line.start), mat4_mul_point(self.property_inverse, capsule.line.finish), capsule.radius);
         return self.mesh.CheckCapsule(untransformed);
     };
     
     static CheckTriangle = function(triangle) {
-        var inverse = self.GetTransformMatrix().Inverse();
+		if (!self.property_obb.CheckTriangle(triangle)) return false;
+		
+        var inverse = self.property_inverse;
         // "homework"
     };
     
     static CheckMesh = function(mesh) {
+		if (!mesh.CheckOBB(self.property_obb)) return false;
+		
         return false;
     };
     
-    static CheckModel = function(mesh) {
+    static CheckModel = function(model) {
+		if (!model.CheckOBB(self.property_obb)) return false;
+		
         return false;
     };
     
     static CheckLine = function(line) {
-        var inverse = self.GetTransformMatrix().Inverse();
+		if (!self.property_obb.CheckLine(line)) return false;
+		
+        var inverse = self.property_inverse;
         // "homework"
     };
     
-    static CheckRay = function(ray, hit_info) {
-        var transform = self.GetTransformMatrix();
-        var inverse = transform.Inverse();
-        var untransformed = new ColRay(inverse.MulPoint(ray.origin), inverse.MulVector(ray.direction));
-        var untransformed_hit_info = new RaycastHitInformation();
+    static CheckRay = function(ray, hit_info = undefined) {
+		if (!self.property_obb.CheckRay(ray)) return false;
+		
+        static untransformed_hit_info = new RaycastHitInformation();
+        untransformed_hit_info.distance = infinity;
+        
+        var untransformed = new ColRay(mat4_mul_point(self.property_inverse, ray.origin), mat4_mul_vector(self.property_inverse, ray.direction));
         
         if (self.mesh.CheckRay(untransformed, untransformed_hit_info)) {
-            var point = transform.MulPoint(untransformed_hit_info.point);
-            var normal = transform.MulVector(untransformed_hit_info.normal);
-            var distance = ray.origin.DistanceTo(point);
-            hit_info.Update(distance, self, point, normal);
+            if (hit_info) {
+                var point = mat4_mul_point(self.property_transform, untransformed_hit_info.point);
+                var normal = mat4_mul_vector(self.property_transform, untransformed_hit_info.normal);
+                var distance = point_distance_3d(ray.origin.x, ray.origin.y, ray.origin.z, point.x, point.y, point.z);
+                hit_info.Update(distance, self, point, normal);
+            }
             return true;
         }
         
@@ -90,14 +125,10 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = n
     };
     
     static GetMin = function() {
-        var transform = self.GetTransformMatrix();
-        var obb = new ColOBB(transform.MulPoint(self.mesh.bounds.position), self.mesh.bounds.size, transform.GetOrientationMatrix());
-        return obb.GetMin();
+        return self.property_min.Clone();
     };
     
     static GetMax = function() {
-        var transform = self.GetTransformMatrix();
-        var obb = new ColOBB(transform.MulPoint(self.mesh.bounds.position), self.mesh.bounds.size, transform.GetOrientationMatrix());
-        return obb.GetMax();
+        return self.property_max.Clone();
     };
 }

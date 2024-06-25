@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "screen_to_world",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "3DCollisions",
-    "path": "3DCollisions.yyp",
+  "$GMScript":"v1",
+  "%Name":"screen_to_world",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"screen_to_world",
+  "parent":{
+    "name":"3DCollisions",
+    "path":"3DCollisions.yyp",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,267 +1,20 @@
 function ColAABB(position, half_extents) constructor {
-    self.position = position;               // Vec3
-    self.half_extents = half_extents;       // Vec3
+    self.position = undefined;
+    self.half_extents = undefined;
+    self.Set(position, half_extents);
     
-    static DebugDraw = function() {
-        static vertex_add_point = function(vbuff, x, y, z, colour) {
-            vertex_position_3d(vbuff, x, y, z);
-            vertex_normal(vbuff, 0, 0, 1);
-            vertex_texcoord(vbuff, 0, 0);
-            vertex_colour(vbuff, colour, 1);
-        };
+    static Set = function(position = self.position, half_extents = self.half_extents) {
+        self.position = position;
+        self.half_extents = half_extents;
         
-        var vbuff = vertex_create_buffer();
-        vertex_begin(vbuff, obj_camera.format);
+        self.property_min = position.Sub(half_extents);
+        self.property_max = position.Add(half_extents);
+        self.property_radius = point_distance_3d(0, 0, 0, half_extents.x, half_extents.y, half_extents.z);
         
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y - self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y - self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y + self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y + self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y - self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y - self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y + self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y + self.half_extents.y, self.position.z + self.half_extents.z, c_red);
+        var pmin = self.property_min;
+        var pmax = self.property_max;
         
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y - self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y - self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y - self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y + self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y + self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y + self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y + self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y - self.half_extents.y, self.position.z - self.half_extents.z, c_red);
-        
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y - self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y - self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y - self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y + self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x + self.half_extents.x, self.position.y + self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y + self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y + self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        vertex_add_point(vbuff, self.position.x - self.half_extents.x, self.position.y - self.half_extents.y, self.position.z + self.half_extents.z, c_red);
-        
-        
-        vertex_end(vbuff);
-        vertex_submit(vbuff, pr_linelist, 1);
-        vertex_delete_buffer(vbuff);
-    };
-    
-    static CheckObject = function(object) {
-        return object.shape.CheckAABB(self);
-    };
-    
-    static CheckPoint = function(point) {
-        return point.CheckAABB(self);
-    };
-    
-    static CheckSphere = function(sphere) {
-        return sphere.CheckAABB(self);
-    };
-    
-    static CheckAABB = function(aabb) {
-        var box_min = self.GetMin();
-        var box_max = self.GetMax();
-        var other_min = aabb.GetMin();
-        var other_max = aabb.GetMax();
-        return ((box_min.x <= other_max.x) && (box_max.x >= other_min.x) && (box_min.y <= other_max.y) && (box_max.y >= other_min.y) && (box_min.z <= other_max.z) && (box_max.z >= other_min.z));
-    };
-    
-    static CheckPlane = function(plane) {
-        var anorm = plane.normal.Abs();
-        var plength = self.half_extents.Dot(anorm);
-        var ndot = plane.normal.Dot(self.position);
-        var dist = ndot - plane.distance;
-        return (abs(dist) <= plength);
-    };
-    
-    static CheckOBB = function(obb) {
-        return obb.CheckAABB(self);
-    };
-    
-    static CheckCapsule = function(capsule) {
-        return capsule.CheckAABB(self);
-    };
-    
-    static CheckTriangle = function(triangle) {
-        var ab = triangle.b.Sub(triangle.a);
-        var bc = triangle.c.Sub(triangle.b);
-        var ca = triangle.a.Sub(triangle.c);
-        
-        var nx = new Vector3(1, 0, 0);
-        var ny = new Vector3(0, 1, 0);
-        var nz = new Vector3(0, 0, 1);
-        
-        var axes = [
-            nx,
-            ny,
-            nz,
-            triangle.GetNormal(),
-            nx.Cross(ab),
-            nx.Cross(bc),
-            nx.Cross(ca),
-            ny.Cross(ab),
-            ny.Cross(bc),
-            ny.Cross(ca),
-            nz.Cross(ab),
-            nz.Cross(bc),
-            nz.Cross(ca),
-        ];
-        
-        for (var i = 0; i < 13; i++) {
-            if (!col_overlap_axis(self, triangle, axes[i])) {
-                return false;
-            }
-        }
-        
-        return true;
-    };
-    
-    static CheckMesh = function(mesh) {
-        return mesh.CheckAABB(self);
-    };
-    
-    static CheckModel = function(model) {
-        return model.CheckAABB(self);
-    };
-    
-    static CheckRay = function(ray, hit_info) {
-        var box_min = self.GetMin();
-        var box_max = self.GetMax();
-        
-        var ray_x = (ray.direction.x == 0) ? 0.0001 : ray.direction.x;
-        var ray_y = (ray.direction.y == 0) ? 0.0001 : ray.direction.y;
-        var ray_z = (ray.direction.z == 0) ? 0.0001 : ray.direction.z;
-        
-        var t1 = (box_min.x - ray.origin.x) / ray_x;
-        var t2 = (box_max.x - ray.origin.x) / ray_x;
-        var t3 = (box_min.y - ray.origin.y) / ray_y;
-        var t4 = (box_max.y - ray.origin.y) / ray_y;
-        var t5 = (box_min.z - ray.origin.z) / ray_z;
-        var t6 = (box_max.z - ray.origin.z) / ray_z;
-        
-        var tmin = max(
-            min(t1, t2),
-            min(t3, t4),
-            min(t5, t6)
-        );
-        var tmax = min(
-            max(t1, t2),
-            max(t3, t4),
-            max(t5, t6)
-        );
-        
-        if (tmax < 0) return false;
-        if (tmin > tmax) return false;
-        
-        var t = tmax;
-        if (tmin > 0) {
-            t = tmin;
-        }
-        
-        var contact_point = ray.origin.Add(ray.direction.Mul(t));
-        
-        var tnormal;
-        if (t == t1) tnormal = new Vector3(-1, 0, 0);
-        if (t == t2) tnormal = new Vector3(+1, 0, 0);
-        if (t == t3) tnormal = new Vector3(0, -1, 0);
-        if (t == t4) tnormal = new Vector3(0, +1, 0);
-        if (t == t5) tnormal = new Vector3(0, 0, -1);
-        if (t == t6) tnormal = new Vector3(0, 0, +1);
-        
-        hit_info.Update(t, self, contact_point, tnormal);
-        
-        return true;
-    };
-    
-    static CheckLine = function(line) {
-        var dir = line.finish.Sub(line.start).Normalize();
-        var ray = new ColRay(line.start, dir);
-        var hit_info = new RaycastHitInformation();
-        if (self.CheckRay(ray, hit_info)) {
-            return (hit_info.distance <= line.Length());
-        }
-        return false;
-    };
-    
-    static DisplaceSphere = function(sphere) {
-        if (!self.CheckSphere(sphere)) return undefined;
-        
-        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
-        
-        var nearest = self.NearestPoint(sphere.position);
-        
-        if (nearest.DistanceTo(sphere.position) == 0) {
-            return undefined;
-            /*
-            var dir_to_center = sphere.position.Sub(self.position).Normalize();
-            var new_point = dir_to_center.Mul(self.half_extents.Magnitude());
-            
-            nearest = self.NearestPoint(new_point);
-            var dir = nearest.Sub(sphere.position).Normalize();
-            */
-        } else {
-            var dir = sphere.position.Sub(nearest).Normalize();
-        }
-        
-        return nearest.Add(dir.Mul(sphere.radius));
-    };
-    
-    static GetMin = function() {
-        return self.position.Sub(self.half_extents);
-    };
-    
-    static GetMax = function() {
-        return self.position.Add(self.half_extents);
-    };
-    
-    static NearestPoint = function(vec3) {
-        var box_min = self.GetMin();
-        var box_max = self.GetMax();
-        var xx = (vec3.x < box_min.x) ? box_min.x : vec3.x;
-        var yy = (vec3.y < box_min.y) ? box_min.y : vec3.y;
-        var zz = (vec3.z < box_min.z) ? box_min.z : vec3.z;
-        xx = (xx > box_max.x) ? box_max.x : xx;
-        yy = (yy > box_max.y) ? box_max.y : yy;
-        zz = (zz > box_max.z) ? box_max.z : zz;
-        return new Vector3(xx, yy, zz);
-    };
-    
-    static CheckAABBSAT = function(aabb) {
-        var axes = [
-            new Vector3(1, 0, 0),
-            new Vector3(0, 1, 0),
-            new Vector3(0, 0, 1),
-        ];
-        
-        for (var i = 0; i < 3; i++) {
-            if (!col_overlap_axis(self, aabb, axes[i])) {
-                return false;
-            }
-        }
-        
-        return true;
-    };
-    
-    static GetInterval = function(axis) {
-        var vertices = self.GetVertices();
-        
-        var imin = axis.Dot(vertices[0]);
-        var imax = imin;
-        
-        for (var i = 1; i < 8; i++) {
-            var dot = axis.Dot(vertices[i]);
-            imin = min(imin, dot);
-            imax = max(imax, dot);
-        }
-        
-        return new ColInterval(imin, imax);
-    };
-    
-    static GetVertices = function() {
-        var pmin = self.GetMin();
-        var pmax = self.GetMax();
-        
-        return [
+        self.property_vertices = [
             new Vector3(pmin.x, pmax.y, pmax.z),
             new Vector3(pmin.x, pmax.y, pmin.z),
             new Vector3(pmin.x, pmin.y, pmax.z),
@@ -270,13 +23,11 @@ function ColAABB(position, half_extents) constructor {
             new Vector3(pmax.x, pmax.y, pmin.z),
             new Vector3(pmax.x, pmin.y, pmax.z),
             new Vector3(pmax.x, pmin.y, pmin.z),
-        ]
-    };
-    
-    static GetEdges = function() {
-        var vertices = self.GetVertices();
+        ];
         
-        return [
+        var vertices = self.property_vertices;
+        
+        self.property_edges = [
             new ColLine(vertices[0], vertices[1]),
             new ColLine(vertices[0], vertices[2]),
             new ColLine(vertices[1], vertices[3]),
@@ -292,13 +43,280 @@ function ColAABB(position, half_extents) constructor {
         ];
     };
     
-    static CheckFrustum = function(frustum) {
-        var planes = frustum.AsArray();
-        var is_intersecting_anything = false;
-        for (var i = 0, n = array_length(planes); i < n; i++) {
-            var r = self.half_extents.Magnitude();
+    static CheckObject = function(object) {
+        return object.shape.CheckAABB(self);
+    };
+    
+    static CheckPoint = function(point) {
+        return point.CheckAABB(self);
+    };
+    
+    static CheckSphere = function(sphere) {
+        return sphere.CheckAABB(self);
+    };
+    
+    static CheckAABB = function(aabb) {
+        var box_min = self.property_min;
+        var box_max = self.property_max;
+        var other_min = aabb.property_min;
+        var other_max = aabb.property_max;
+        return ((box_min.x <= other_max.x) && (box_max.x >= other_min.x) && (box_min.y <= other_max.y) && (box_max.y >= other_min.y) && (box_min.z <= other_max.z) && (box_max.z >= other_min.z));
+    };
+    
+    static CheckPlane = function(plane) {
+        var size = self.half_extents;
+        var normal = plane.normal;
+        var pos = self.position;
+        var anorm = normal.Abs();
+        var plength = dot_product_3d(anorm.x, anorm.y, anorm.z, size.x, size.y, size.z);
+        var ndot = dot_product_3d(normal.x, normal.y, normal.z, pos.x, pos.y, pos.z);
+        return (abs(ndot - plane.distance) <= plength);
+    };
+    
+    static CheckOBB = function(obb) {
+        return obb.CheckAABB(self);
+    };
+    
+    static CheckCapsule = function(capsule) {
+        return capsule.CheckAABB(self);
+    };
+    
+    static CheckTriangle = function(triangle) {
+        var p1 = self.position;
+        var p2 = triangle.property_center;
+        if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) > triangle.property_radius + self.property_radius) return false;
+        
+        var ab = triangle.property_edge_ab;
+        var bc = triangle.property_edge_bc;
+        var ca = triangle.property_edge_ca;
+         
+        static axes = [
+            1, 0, 0,
+            0, 1, 0,
+            0, 0, 1,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0
+        ];
+        
+        axes[3 * 3 + 0] = triangle.property_normal.x;
+        axes[3 * 3 + 1] = triangle.property_normal.y;
+        axes[3 * 3 + 2] = triangle.property_normal.z;
+        axes[4 * 3 + 1] = -ab.z;
+        axes[4 * 3 + 2] = ab.y;
+        axes[5 * 3 + 1] = -bc.z;
+        axes[5 * 3 + 2] = bc.y;
+        axes[6 * 3 + 1] = -ca.z;
+        axes[6 * 3 + 2] = ca.y;
+        axes[7 * 3 + 0] = ab.z;
+        axes[7 * 3 + 2] = -ab.x;
+        axes[8 * 3 + 0] = bc.z;
+        axes[8 * 3 + 2] = -bc.x;
+        axes[9 * 3 + 0] = ca.z;
+        axes[9 * 3 + 2] = -ca.x;
+        axes[10 * 3 + 0] = -ab.y;
+        axes[10 * 3 + 1] = ab.x;
+        axes[11 * 3 + 0] = -bc.y;
+        axes[11 * 3 + 1] = bc.x;
+        axes[12 * 3 + 0] = -ca.y;
+        axes[12 * 3 + 1] = ca.x;
+        
+        var vertices = self.property_vertices;
+        var tax = triangle.a.x;
+        var tay = triangle.a.y;
+        var taz = triangle.a.z;
+        var tbx = triangle.b.x;
+        var tby = triangle.b.y;
+        var tbz = triangle.b.z;
+        var tcx = triangle.c.x;
+        var tcy = triangle.c.y;
+        var tcz = triangle.c.z;
+        
+        var i = 0;
+        repeat (13) {
+            var ax = axes[i++];
+            var ay = axes[i++];
+            var az = axes[i++];
+        
+            var val_min_a = infinity;
+            var val_max_a = -infinity;
             
-            var dist = planes[i].normal.Dot(self.position) + planes[i].distance;
+            var j = 0;
+            repeat (8) {
+                var vertex = vertices[j++];
+                var dot = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+                val_min_a = min(val_min_a, dot);
+                val_max_a = max(val_max_a, dot);
+            }
+            
+            var ada = dot_product_3d(ax, ay, az, tax, tay, taz);
+            var adb = dot_product_3d(ax, ay, az, tbx, tby, tbz);
+            var adc = dot_product_3d(ax, ay, az, tcx, tcy, tcz);
+            var val_min_b = min(ada, adb, adc);
+            var val_max_b = max(ada, adb, adc);
+            
+            if ((val_min_b > val_max_a) || (val_min_a > val_max_b)) {
+                return false;
+            }
+        }
+        
+        return true;
+    };
+    
+    static CheckMesh = function(mesh) {
+        return mesh.CheckAABB(self);
+    };
+    
+    static CheckModel = function(model) {
+        return model.CheckAABB(self);
+    };
+    
+    static CheckRay = function(ray, hit_info = undefined) {
+        var box_min = self.property_min;
+        var box_max = self.property_max;
+        
+        var dir = ray.direction;
+        var p = ray.origin;
+        
+        var ray_x = (dir.x == 0) ? 0.0001 : dir.x;
+        var ray_y = (dir.y == 0) ? 0.0001 : dir.y;
+        var ray_z = (dir.z == 0) ? 0.0001 : dir.z;
+        
+        var t1 = (box_min.x - p.x) / ray_x;
+        var t2 = (box_max.x - p.x) / ray_x;
+        var t3 = (box_min.y - p.y) / ray_y;
+        var t4 = (box_max.y - p.y) / ray_y;
+        var t5 = (box_min.z - p.z) / ray_z;
+        var t6 = (box_max.z - p.z) / ray_z;
+        
+        var tmin = max(
+            min(t1, t2),
+            min(t3, t4),
+            min(t5, t6)
+        );
+        var tmax = min(
+            max(t1, t2),
+            max(t3, t4),
+            max(t5, t6)
+        );
+        
+        if (tmax < 0) return false;
+        if (tmin > tmax) return false;
+        
+        if (hit_info) {
+            var t = tmax;
+            if (tmin > 0) {
+                t = tmin;
+            }
+            
+            var tnormal;
+            if (t == t1) tnormal = new Vector3(-1, 0, 0);
+            if (t == t2) tnormal = new Vector3(+1, 0, 0);
+            if (t == t3) tnormal = new Vector3(0, -1, 0);
+            if (t == t4) tnormal = new Vector3(0, +1, 0);
+            if (t == t5) tnormal = new Vector3(0, 0, -1);
+            if (t == t6) tnormal = new Vector3(0, 0, +1);
+            
+            hit_info.Update(t, self, p.Add(dir.Mul(t)), tnormal);
+        }
+        
+        return true;
+    };
+    
+    static CheckLine = function(line) {
+        static hit_info = new RaycastHitInformation();
+        hit_info.distance = infinity;
+        
+        if (self.CheckRay(line.property_ray, hit_info)) {
+            return (hit_info.distance <= line.property_length);
+        }
+        return false;
+    };
+    
+    static DisplaceSphere = function(sphere) {
+        if (!sphere.CheckAABB(self)) return undefined;
+        var ps = sphere.position;
+        var pa = self.position;
+        if (ps.x == pa.x && ps.y == pa.y && ps.z == pa.z) return undefined;
+        
+        var nearest = self.NearestPoint(ps);
+        
+        if (ps.x == nearest.x && nearest.y == pa.y && nearest.z == pa.z) {
+            return undefined;
+        }
+        
+        var dir = ps.Sub(nearest).Normalize();
+        return nearest.Add(dir.Mul(sphere.radius));
+    };
+    
+    static NearestPoint = function(vec3) {
+        var box_min = self.property_min;
+        var box_max = self.property_max;
+        return new Vector3(
+            clamp(vec3.x, box_min.x, box_max.x),
+            clamp(vec3.y, box_min.y, box_max.y),
+            clamp(vec3.z, box_min.z, box_max.z)
+        );
+    };
+    
+    static GetInterval = function(axis) {
+        var vertices = self.property_vertices;
+        var ax = axis.x;
+        var ay = axis.y;
+        var az = axis.z;
+        
+        var imin = infinity;
+        var imax = -infinity;
+        
+        var i = 0;
+        repeat (8) {
+            var vertex = vertices[i++];
+            var dot = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            imin = min(imin, dot);
+            imax = max(imax, dot);
+        }
+        
+        return { val_min: imin, val_max: imax };
+    };
+    
+    static GetVertices = function() {
+        return array_map(self.property_vertices, function(item) {
+			return item.Clone();
+		});
+    };
+    
+    static GetEdges = function() {
+        return array_map(self.property_edges, function(item) {
+			return new ColLine(item.start, item.finish);
+		});
+    };
+    
+    static GetMin = function() {
+        return self.property_min.Clone();
+    };
+    
+    static GetMax = function() {
+        return self.property_max.Clone();
+    };
+    
+    static CheckFrustum = function(frustum) {
+        var planes = frustum.as_array;
+        var is_intersecting_anything = false;
+        var r = self.property_radius;
+        var p = self.position;
+        var px = p.x, py = p.y, pz = p.z;
+        var i = 0;
+        repeat (6) {
+            var plane = planes[i++];
+            var n = plane.normal;
+            var dist = dot_product_3d(n.x, n.y, n.z, px, py, pz) + plane.distance;
             
             if (dist < -r)
                 return EFrustumResults.OUTSIDE;

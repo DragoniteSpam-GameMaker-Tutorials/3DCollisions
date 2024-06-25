@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Col_Shape_Plane",
+  "%Name":"Col_Config",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Col_Shape_Plane",
+  "name":"Col_Config",
   "parent":{
-    "name":"Shapes",
-    "path":"folders/Collision Stuff/Shapes.yy",
+    "name":"Collision Stuff",
+    "path":"folders/Collision Stuff.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

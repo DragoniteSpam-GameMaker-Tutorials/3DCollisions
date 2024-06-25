@@ -1,29 +1,41 @@
 function ColPoint(position) constructor {
-    self.position = position;               // Vec3
+    self.Set(position);
+    
+    static Set = function(position) {
+        self.position = position;
+        self.property_min = position;
+        self.property_max = position;
+    };
     
     static CheckObject = function(object) {
         return object.shape.CheckPoint(self);
     };
     
     static CheckPoint = function(point) {
-        return self.position.Equals(point.position);
+        var p1 = self.position;
+        var p2 = point.position;
+        return p1.x == p2.x && p1.y == p2.y && p1.z == p2.z;
     };
     
     static CheckSphere = function(sphere) {
-        return self.position.DistanceTo(sphere.position) < sphere.radius;
+        var pp = self.position;
+        var ps = sphere.position;
+        return point_distance_3d(pp.x, pp.y, pp.z, ps.x, ps.y, ps.z) < sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
-        var box_min = aabb.GetMin();
-        var box_max = aabb.GetMax();
-        if (self.position.x < box_min.x || self.position.y < box_min.y || self.position.z < box_min.z) return false;
-        if (self.position.x > box_max.x || self.position.y > box_max.y || self.position.z > box_max.z) return false;
+        var box_min = aabb.property_min;
+        var box_max = aabb.property_max;
+        var p = self.position;
+        if (p.x < box_min.x || p.y < box_min.y || p.z < box_min.z) return false;
+        if (p.x > box_max.x || p.y > box_max.y || p.z > box_max.z) return false;
         return true;
     };
     
     static CheckPlane = function(plane) {
-        var ndot = self.position.Dot(plane.normal);
-        return (ndot == plane.distance);
+        var p = self.position;
+        var n = plane.normal;
+        return (dot_product_3d(p.x, p.y, p.z, n.x, n.y, n.z) == plane.distance);
     };
     
     static CheckOBB = function(obb) {
@@ -43,11 +55,11 @@ function ColPoint(position) constructor {
         var normPCA = pc.Cross(pa).Normalize();
         var normPAB = pa.Cross(pb).Normalize();
         
-        if (normPBC.Dot(normPCA) < 1) {
+        if (dot_product_3d(normPBC.x, normPBC.y, normPBC.z, normPCA.x, normPCA.y, normPCA.z) < 1) {
             return false;
         }
         
-        if (normPBC.Dot(normPAB) < 1) {
+        if (dot_product_3d(normPBC.x, normPBC.y, normPBC.z, normPAB.x, normPAB.y, normPAB.z) < 1) {
             return false;
         }
         
@@ -62,44 +74,51 @@ function ColPoint(position) constructor {
         return model.CheckPoint(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
-        var nearest = ray.NearestPoint(self.position);
-        if (nearest.DistanceTo(self.position) != 0) return false;
+    static CheckRay = function(ray, hit_info = undefined) {
+        var p = self.position;
+        var nearest = ray.NearestPoint(p);
+        if (point_distance_3d(nearest.x, nearest.y, nearest.z, p.x, p.y, p.z) > 0) return false;
         
-        hit_info.Update(self.position.DistanceTo(ray.origin), self, self.position, undefined);
+        if (hit_info) {
+            var ro = ray.origin;
+            hit_info.Update(point_distance_3d(p.x, p.y, p.z, ro.x, ro.x, ro.z), self, p, undefined);
+        }
         
         return true;
     };
     
     static CheckLine = function(line) {
-        var nearest = line.NearestPoint(self.position);
-         return (nearest.DistanceTo(self.position) == 0);
+        var p = self.position;
+        var nearest = line.NearestPoint(p);
+         return nearest.x == p.x && nearest.y == p.y && nearest.z == p.z;
     };
     
     static DisplaceSphere = function(sphere) {
-        if (!self.CheckSphere(sphere)) return undefined;
+        var pp = self.position;
+        var ps = sphere.position;
+        var d = point_distance_3d(pp.x, pp.y, pp.z, ps.x, ps.y, ps.z);
+        if (d == 0 || d > sphere.radius) return undefined;
         
-        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
-        
-        var dir = sphere.position.Sub(self.position).Normalize();
-        var offset = dir.Mul(sphere.radius);
-        
-        return self.position.Add(offset);
+        return pp.Add(ps.Sub(pp).Normalize().Mul(sphere.radius));
     };
     
     static GetMin = function() {
-        return self.position;
+        return self.position.Clone();
     };
     
     static GetMax = function() {
-        return self.position;
+        return self.position.Clone();
     };
     
     static CheckFrustum = function(frustum) {
-        var planes = frustum.AsArray();
-        for (var i = 0, n = array_length(planes); i < n; i++) {
-            var dist = planes[i].normal.Dot(self.position) + planes[i].distance;
-            if (dist < 0)
+        var planes = frustum.as_array;
+        var p = self.position;
+        var px = p.x, py = p.y, pz = p.z;
+        var i = 0;
+        repeat (6) {
+            var plane = planes[i++];
+            var n = plane.normal;
+            if (dot_product_3d(n.x, n.y, n.z, px, py, pz) + plane.distance < 0)
                 return EFrustumResults.OUTSIDE;
         }
         return EFrustumResults.INSIDE;

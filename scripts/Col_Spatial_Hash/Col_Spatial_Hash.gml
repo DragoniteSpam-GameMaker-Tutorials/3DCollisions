@@ -1,3 +1,4 @@
+// feather disable GM2023
 function ColWorldSpatialHash(chunk_size) constructor {
     self.chunk_size = chunk_size;
     self.chunks = { };
@@ -7,20 +8,13 @@ function ColWorldSpatialHash(chunk_size) constructor {
     
     self.planes = [];
     
-    static DebugDraw = function() {
-        self.bounds.DebugDraw();
-        struct_foreach(self.chunks, function(chunk) {
-            self.chunks[$ chunk].DebugDraw();
-        });
-    };
-    
     static HashFunction = function(x, y, z) {
         return $"{x},{y},{z}";
     };
     
     static GetBoundingChunk = function(object) {
-        var object_min = object.GetMin();
-        var object_max = object.GetMax();
+        var object_min = object.shape.property_min;
+        var object_max = object.shape.property_max;
         
         if (object_min == undefined) {
             return undefined;
@@ -58,13 +52,13 @@ function ColWorldSpatialHash(chunk_size) constructor {
             return;
         }
         
-        var bounds_min = bounds.GetMin();
-        var bounds_max = bounds.GetMax();
+        var bounds_min = bounds.property_min;
+        var bounds_max = bounds.property_max;
         
         // is the object already in the spatial hash?
         var location = self.Contains(object);
         if (location != undefined) {
-            if (location.GetMin().Equals(bounds_min) && location.GetMax().Equals(bounds_max)) {
+            if (location.property_min.Equals(bounds_min) && location.property_max.Equals(bounds_max)) {
                 // object's position is the same, there's no point
                 return;
             } else {
@@ -80,7 +74,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
                     if (chunk == undefined) {
                         var coords = new Vector3(i, j, k);
                         var coords_min = coords.Mul(self.chunk_size);
-                        var coords_max = coords.Mul(self.chunk_size).Add(self.chunk_size);
+                        var coords_max = coords_min.Add(self.chunk_size);
                         
                         var chunk_bounds = NewColAABBFromMinMax(coords_min, coords_max);
                         chunk = new ColSpatialHashNode(chunk_bounds);
@@ -90,8 +84,8 @@ function ColWorldSpatialHash(chunk_size) constructor {
                             self.bounds = NewColAABBFromMinMax(coords_min, coords_max);
                         } else {
                             self.bounds = NewColAABBFromMinMax(
-                                self.bounds.GetMin().Min(coords_min),
-                                self.bounds.GetMax().Max(coords_max)
+                                self.bounds.property_min.Min(coords_min),
+                                self.bounds.property_max.Max(coords_max)
                             );
                         }
                     }
@@ -117,8 +111,8 @@ function ColWorldSpatialHash(chunk_size) constructor {
             return;
         }
         
-        var bounds_min = location.GetMin();
-        var bounds_max = location.GetMax();
+        var bounds_min = location.property_min;
+        var bounds_max = location.property_max;
         
         for (var i = bounds_min.x; i <= bounds_max.x; i++) {
             for (var j = bounds_min.y; j <= bounds_max.y; j++) {
@@ -143,14 +137,14 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static CheckObject = function(object) {
-        for (var i = 0; i < array_length(self.planes); i++) {
+        for (var i = 0, n = array_length(self.planes); i < n; i++) {
             if (self.planes[i].CheckObject(object))
-                return true;
+                return self.planes[i];
         }
         
         var bounds = self.GetBoundingChunk(object);
-        var bounds_min = bounds.GetMin();
-        var bounds_max = bounds.GetMax();
+        var bounds_min = bounds.property_min;
+        var bounds_max = bounds.property_max;
         
         for (var i = bounds_min.x; i <= bounds_max.x; i++) {
             for (var j = bounds_min.y; j <= bounds_max.y; j++) {
@@ -170,13 +164,23 @@ function ColWorldSpatialHash(chunk_size) constructor {
     
     // https://github.com/prime31/Nez/blob/master/Nez.Portable/Physics/SpatialHash.cs
     static CheckRay = function(ray, group = 1) {
+        static bounds_hit_info = new RaycastHitInformation();
+        bounds_hit_info.shape = undefined;
+        bounds_hit_info.point = undefined;
+        bounds_hit_info.distance = infinity;
+        bounds_hit_info.normal = undefined;
+        
+        var cs = self.chunk_size;
+        var rd = ray.direction;
+        var rdx = rd.x, rdy = rd.y, rdz = rd.z;
+        var ro = ray.origin;
+        
         var hit_info = new RaycastHitInformation();
         
-        for (var i = 0; i < array_length(self.planes); i++) {
+        for (var i = 0, n = array_length(self.planes); i < n; i++) {
             self.planes[i].CheckRay(ray, hit_info, group);
         }
         
-        var bounds_hit_info = new RaycastHitInformation();
         self.bounds.CheckRay(ray, bounds_hit_info);
         
         // if the ray does not pass through the spatial hash at all, you can
@@ -189,7 +193,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
             }
         }
         
-        var current_cell = ray.origin.Div(self.chunk_size).Floor();
+        var current_cell = ro.Div(cs).Floor();
         
         var chunk = self.GetChunk(current_cell.x, current_cell.y, current_cell.z);
         if (chunk != undefined) {
@@ -198,11 +202,11 @@ function ColWorldSpatialHash(chunk_size) constructor {
             }
         }
         
-        var last_cell = bounds_hit_info.point.Div(self.chunk_size).Floor();
+        var last_cell = bounds_hit_info.point.Div(cs).Floor();
         
-        var dx = sign(ray.direction.x);
-        var dy = sign(ray.direction.y);
-        var dz = sign(ray.direction.z);
+        var dx = sign(rdx);
+        var dy = sign(rdy);
+        var dz = sign(rdz);
         
         if (current_cell.x == last_cell.x) dx = 0;
         if (current_cell.y == last_cell.y) dy = 0;
@@ -211,17 +215,17 @@ function ColWorldSpatialHash(chunk_size) constructor {
         var step_x = max(dx, 0);
         var step_y = max(dy, 0);
         var step_z = max(dz, 0);
-        var next_boundary_x = (current_cell.x + step_x) * self.chunk_size;
-        var next_boundary_y = (current_cell.y + step_y) * self.chunk_size;
-        var next_boundary_z = (current_cell.z + step_z) * self.chunk_size;
+        var next_boundary_x = (current_cell.x + step_x) * cs;
+        var next_boundary_y = (current_cell.y + step_y) * cs;
+        var next_boundary_z = (current_cell.z + step_z) * cs;
         
-        var max_x = (ray.direction.x != 0) ? ((next_boundary_x - ray.origin.x) / ray.direction.x) : infinity;
-        var max_y = (ray.direction.y != 0) ? ((next_boundary_y - ray.origin.y) / ray.direction.y) : infinity;
-        var max_z = (ray.direction.z != 0) ? ((next_boundary_z - ray.origin.z) / ray.direction.z) : infinity;
+        var max_x = (rdx != 0) ? ((next_boundary_x - ro.x) / rdx) : infinity;
+        var max_y = (rdy != 0) ? ((next_boundary_y - ro.y) / rdy) : infinity;
+        var max_z = (rdz != 0) ? ((next_boundary_z - ro.z) / rdz) : infinity;
         
-        var lookahead_x = (ray.direction.x != 0) ? floor(self.chunk_size / (ray.direction.x * dx)) : infinity;
-        var lookahead_y = (ray.direction.y != 0) ? floor(self.chunk_size / (ray.direction.y * dy)) : infinity;
-        var lookahead_z = (ray.direction.z != 0) ? floor(self.chunk_size / (ray.direction.z * dz)) : infinity;
+        var lookahead_x = (rdx != 0) ? floor(cs / (rdx * dx)) : infinity;
+        var lookahead_y = (rdy != 0) ? floor(cs / (rdy * dy)) : infinity;
+        var lookahead_z = (rdz != 0) ? floor(cs / (rdz * dz)) : infinity;
         
         do {
             if (max_x < max_y) {
@@ -248,7 +252,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
                     return hit_info;
                 }
             }
-        } until(current_cell.Equals(last_cell));
+        } until (current_cell.Equals(last_cell));
         
         if (hit_info.point == undefined) {
             return undefined;
@@ -257,39 +261,14 @@ function ColWorldSpatialHash(chunk_size) constructor {
         return hit_info;
     };
     
-    static DisplaceSphere = function(sphere_object, attempts = 5) {
-        var current_position = sphere_object.shape.position;
-        
-        repeat (attempts) {
-            var collided_with = self.CheckObject(sphere_object);
-            if (collided_with == undefined) break;
-            
-            var displaced_position = collided_with.DisplaceSphere(sphere_object.shape);
-            if (displaced_position == undefined) break;
-            
-            sphere_object.shape.position = displaced_position;
-        }
-        
-        var displaced_position = sphere_object.shape.position;
-        sphere_object.shape.position = current_position;
-        
-        if (current_position == displaced_position) return undefined;
-        
-        return displaced_position;
+    static GetObjectsInFrustum = function(frustum, output) {
+        // not implemented
     };
 }
 
 function ColSpatialHashNode(bounds) constructor {
     self.bounds = bounds;
     self.objects = [];
-    
-    static DebugDraw = function() {
-        self.bounds.DebugDraw();
-        /*array_foreach(self.objects, function(object) {
-            if (object.shape[$ "DebugDraw"])
-                object.shape.DebugDraw();
-        });*/
-    };
     
     static Add = function(object) {
         array_push(self.objects, object);
@@ -305,17 +284,20 @@ function ColSpatialHashNode(bounds) constructor {
     };
     
     static CheckObject = function(object) {
-        for (var i = 0; i < array_length(self.objects); i++) {
+        var i = 0;
+        repeat (array_length(self.objects)) {
             if (self.objects[i].CheckObject(object))
                 return self.objects[i];
+            i++;
         }
         return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
         var hit_detected = false;
-        for (var i = 0; i < array_length(self.objects); i++) {
-            if (self.objects[i].CheckRay(ray, hit_info, group))
+        var i = 0;
+        repeat (array_length(self.objects)) {
+            if (self.objects[i++].CheckRay(ray, hit_info, group))
                 hit_detected = true;
         }
         return hit_detected;

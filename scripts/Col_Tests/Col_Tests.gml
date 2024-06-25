@@ -1,25 +1,33 @@
+// feather disable GM2023
+// feather disable GM1050
 function ColTestPoint(vbuff) constructor {
     self.data = new ColPoint(new Vector3(0, 0, 0));
     self.vbuff = vbuff;
     
     self.update = function() {
         if (keyboard_check(vk_left)) {
-            self.data.position.x--;
+            var offset = new Vector3(-1, 0, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_right)) {
-            self.data.position.x++;
+            var offset = new Vector3(1, 0, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_up)) {
-            self.data.position.y--;
+            var offset = new Vector3(0, -1, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_down)) {
-            self.data.position.y++;
+            var offset = new Vector3(0, 1, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.position.z--;
+            var offset = new Vector3(0, 0, 1);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.position.z++;
+            var offset = new Vector3(0, 0, -1);
+            self.data.Set(self.data.position.Add(offset));
         }
     };
     self.draw = function() {
@@ -38,22 +46,28 @@ function ColTestSphere(vbuff) constructor {
     
     self.update = function() {
         if (keyboard_check(vk_left)) {
-            self.data.position.x--;
+            var offset = new Vector3(-1, 0, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_right)) {
-            self.data.position.x++;
+            var offset = new Vector3(1, 0, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_up)) {
-            self.data.position.y--;
+            var offset = new Vector3(0, -1, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_down)) {
-            self.data.position.y++;
+            var offset = new Vector3(0, 1, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.position.z--;
+            var offset = new Vector3(0, 0, 1);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.position.z++;
+            var offset = new Vector3(0, 0, -1);
+            self.data.Set(self.data.position.Add(offset));
         }
     };
     self.draw = function() {
@@ -76,22 +90,28 @@ function ColTestAABB(vbuff) constructor {
     
     self.update = function() {
         if (keyboard_check(vk_left)) {
-            self.data.position.x--;
+            var offset = new Vector3(-1, 0, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_right)) {
-            self.data.position.x++;
+            var offset = new Vector3(1, 0, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_up)) {
-            self.data.position.y--;
+            var offset = new Vector3(0, -1, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_down)) {
-            self.data.position.y++;
+            var offset = new Vector3(0, 1, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.position.z--;
+            var offset = new Vector3(0, 0, 1);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.position.z++;
+            var offset = new Vector3(0, 0, -1);
+            self.data.Set(self.data.position.Add(offset));
         }
     };
     self.draw = function() {
@@ -177,39 +197,33 @@ function ColTestTriangle() constructor {
     
     self.update = function() {
         if (keyboard_check(vk_left)) {
-            self.data.a.x--;
-            self.data.b.x--;
-            self.data.c.x--;
+            var offset = new Vector3(-1, 0, 0);
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.x--;
         }
         if (keyboard_check(vk_right)) {
-            self.data.a.x++;
-            self.data.b.x++;
-            self.data.c.x++;
+            var offset = new Vector3(1, 0, 0);
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.x++;
         }
         if (keyboard_check(vk_up)) {
-            self.data.a.y--;
-            self.data.b.y--;
-            self.data.c.y--;
+            var offset = new Vector3(0, -1, 0);
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.y--;
         }
         if (keyboard_check(vk_down)) {
-            self.data.a.y++;
-            self.data.b.y++;
-            self.data.c.y++;
+            var offset = new Vector3(0, 1, 0);
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.y++;
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.a.z++;
-            self.data.b.z++;
-            self.data.c.z++;
+            var offset = new Vector3(0, 0, 1);
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.z++;
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.a.z--;
-            self.data.b.z--;
-            self.data.c.z--;
+            var offset = new Vector3(0, 0, -1);
+            self.data.Set(self.data.a.Add(offset), self.data.b.Add(offset), self.data.c.Add(offset));
             self.offset.z--;
         }
     };
@@ -226,35 +240,43 @@ function ColTestTriangle() constructor {
 }
 
 function ColTestOBB(vbuff) constructor {
-    var orientation = new Matrix4(matrix_build(0, 0, 0, random(360), random(360), random(360), 1, 1, 1)).GetOrientationMatrix();
-    self.data = new ColOBB(new Vector3(0, 0, 0), new Vector3(irandom_range(2, 4), irandom_range(2, 4), irandom_range(2, 4)), orientation);
+	var xx = random(10);
+	var yy = random(10);
+	var zz = random(10);
+    var orientation = matrix_build(0, 0, 0, random(360), random(360), random(360), 1, 1, 1);
+    self.data = new ColOBB(new Vector3(xx, yy, zz), new Vector3(irandom_range(2, 4), irandom_range(2, 4), irandom_range(2, 4)), orientation);
     self.vbuff = vbuff;
     
     self.update = function() {
-        var step = 0.1;
         if (keyboard_check(vk_left)) {
-            self.data.SetPosition(new Vector3(self.data.position.x - step, self.data.position.y, self.data.position.z));
+            var offset = new Vector3(-1, 0, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_right)) {
-            self.data.SetPosition(new Vector3(self.data.position.x + step, self.data.position.y, self.data.position.z));
+            var offset = new Vector3(1, 0, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_up)) {
-            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y - step, self.data.position.z));
+            var offset = new Vector3(0, -1, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_down)) {
-            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y + step, self.data.position.z));
+            var offset = new Vector3(0, 1, 0);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pageup)) {
-            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y, self.data.position.z - step));
+            var offset = new Vector3(0, 0, 1);
+            self.data.Set(self.data.position.Add(offset));
         }
         if (keyboard_check(vk_pagedown)) {
-            self.data.SetPosition(new Vector3(self.data.position.x, self.data.position.y, self.data.position.z + step));
+            var offset = new Vector3(0, 0, -1);
+            self.data.Set(self.data.position.Add(offset));
         }
     };
     self.draw = function() {
         var mat_scale = matrix_build(0, 0, 0, 0, 0, 0, self.data.size.x, self.data.size.y, self.data.size.z);
         var mat_translation = matrix_build(self.data.position.x, self.data.position.y, self.data.position.z, 0, 0, 0, 1, 1, 1);
-        matrix_set(matrix_world, matrix_multiply(matrix_multiply(mat_scale, self.data.orientation.GetRotationMatrix().AsLinearArray()), mat_translation));
+        matrix_set(matrix_world, matrix_multiply(matrix_multiply(mat_scale, self.data.orientation), mat_translation));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build_identity());
     };
@@ -270,47 +292,41 @@ function ColTestCapsule(vbuff_end, vbuff_middle) constructor {
     
     self.update = function() {
         var step = 0.1;
-        // capsule start point - hold shift
-        if (!keyboard_check(vk_control) || keyboard_check(vk_shift)) {
-            if (keyboard_check(vk_left)) {
-                self.data.line.start.x -= step;
-            }
-            if (keyboard_check(vk_right)) {
-                self.data.line.start.x += step;
-            }
-            if (keyboard_check(vk_up)) {
-                self.data.line.start.y -= step;
-            }
-            if (keyboard_check(vk_down)) {
-                self.data.line.start.y += step;
-            }
-            if (keyboard_check(vk_pageup)) {
-                self.data.line.start.z -= step;
-            }
-            if (keyboard_check(vk_pagedown)) {
-                self.data.line.start.z += step;
-            }
+        if (keyboard_check(vk_left)) {
+			var diff = new Vector3(-step, 0, 0);
+			var start = self.data.line.start.Add(diff);
+			var finish = self.data.line.finish.Add(diff);
+			self.data.Set(start, finish);
         }
-        // capsule finish point - hold control
-        if (keyboard_check(vk_control) || !keyboard_check(vk_shift)) {
-            if (keyboard_check(vk_left)) {
-                self.data.line.finish.x -= step;
-            }
-            if (keyboard_check(vk_right)) {
-                self.data.line.finish.x += step;
-            }
-            if (keyboard_check(vk_up)) {
-                self.data.line.finish.y -= step;
-            }
-            if (keyboard_check(vk_down)) {
-                self.data.line.finish.y += step;
-            }
-            if (keyboard_check(vk_pageup)) {
-                self.data.line.finish.z -= step;
-            }
-            if (keyboard_check(vk_pagedown)) {
-                self.data.line.finish.z += step;
-            }
+        if (keyboard_check(vk_right)) {
+			var diff = new Vector3(step, 0, 0);
+			var start = self.data.line.start.Add(diff);
+			var finish = self.data.line.finish.Add(diff);
+			self.data.Set(start, finish);
+        }
+        if (keyboard_check(vk_up)) {
+			var diff = new Vector3(0, -step, 0);
+			var start = self.data.line.start.Add(diff);
+			var finish = self.data.line.finish.Add(diff);
+			self.data.Set(start, finish);
+        }
+        if (keyboard_check(vk_down)) {
+			var diff = new Vector3(0, step, 0);
+			var start = self.data.line.start.Add(diff);
+			var finish = self.data.line.finish.Add(diff);
+			self.data.Set(start, finish);
+        }
+        if (keyboard_check(vk_pageup)) {
+			var diff = new Vector3(0, 0, -step);
+			var start = self.data.line.start.Add(diff);
+			var finish = self.data.line.finish.Add(diff);
+			self.data.Set(start, finish);
+        }
+        if (keyboard_check(vk_pagedown)) {
+			var diff = new Vector3(0, 0, step);
+			var start = self.data.line.start.Add(diff);
+			var finish = self.data.line.finish.Add(diff);
+			self.data.Set(start, finish);
         }
     };
     self.draw = function() {
@@ -368,10 +384,10 @@ function ColTestLine(vbuff) constructor {
         if (keyboard_check(vk_pagedown)) {
             self.rotation--;
         }
-        self.data.start.x = 100 * dcos(self.rotation) + self.offset.x;
-        self.data.start.y = 100 * dsin(self.rotation) + self.offset.y;
-        self.data.finish.x = -100 * dcos(self.rotation) + self.offset.x;
-        self.data.finish.y = -100 * dsin(self.rotation) + self.offset.y;
+        self.data.Set(
+            new Vector3(100 * dcos(self.rotation) + self.offset.x, 100 * dsin(self.rotation) + self.offset.y, self.data.start.z),
+            new Vector3(-100 * dcos(self.rotation) + self.offset.x, -100 * dsin(self.rotation) + self.offset.y, self.data.finish.z)
+        );
     };
     self.draw = function() {
         var vbuff = vertex_create_buffer();
@@ -413,7 +429,7 @@ function ColTestMesh(vbuff) constructor {
                 buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 0, buffer_f32),
                 buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 4, buffer_f32),
                 buffer_peek(data, i * vertex_size * 3 + 2 * vertex_size + 8, buffer_f32)
-            ),
+            )
         );
     }
     buffer_delete(data);
@@ -469,9 +485,6 @@ function ColTestMesh(vbuff) constructor {
     self.draw = function() {
         matrix_set(matrix_world, matrix_build(self.offset.x, self.offset.y, self.offset.z, 0, 0, 0, 1, 1, 1));
         vertex_submit(self.vbuff, pr_trianglelist, -1);
-        if (keyboard_check(vk_tab)) {
-            self.data.accelerator.DebugDraw();
-        }
         matrix_set(matrix_world, matrix_build_identity());
     };
     
@@ -492,7 +505,7 @@ function ColTestModel(vbuff, triangles) constructor {
     self.position = new Vector3(RANDOM_POSITION, RANDOM_POSITION, RANDOM_POSITION);
     self.rotation = new Vector3(RANDOM_ROTATION, RANDOM_ROTATION, RANDOM_ROTATION);
     
-    var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+    var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
     
     self.data = new ColTransformedModel(new ColMesh(triangles), self.position, rotation_matrix);
     var t1 = get_timer();
@@ -528,39 +541,39 @@ function ColTestModel(vbuff, triangles) constructor {
         step = 5;
         if (keyboard_check(ord("I"))) {
             self.rotation.x -= step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("J"))) {
             self.rotation.x += step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("O"))) {
             self.rotation.y -= step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("K"))) {
             self.rotation.y += step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("P"))) {
             self.rotation.z -= step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
         if (keyboard_check(ord("L"))) {
             self.rotation.z += step;
-            var rotation_matrix = new Matrix4(matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1)).GetOrientationMatrix();
+            var rotation_matrix = matrix_build(0, 0, 0, self.rotation.x, self.rotation.y, self.rotation.z, 1, 1, 1);
             self.data.rotation = rotation_matrix;
         }
     };
     
     self.draw = function() {
         var transform = self.data.GetTransformMatrix();
-        matrix_set(matrix_world, transform.AsLinearArray());
+        matrix_set(matrix_world, transform);
         vertex_submit(self.vbuff, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build_identity());
     };
