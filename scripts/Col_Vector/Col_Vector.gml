@@ -446,6 +446,6 @@ function Vector4(x, y = x, z = x, w = x) constructor {
 	};
 }
 
-Vector2(0);
-Vector3(0);
-Vector4(0);
+new Vector2(0);
+new Vector3(0);
+new Vector4(0);
