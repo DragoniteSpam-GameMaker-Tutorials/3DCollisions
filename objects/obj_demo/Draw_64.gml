@@ -33,8 +33,10 @@ draw_text_colour(1080, n++ * 20, "8: Shape 2 OBB", c_white, c_white, c_white, c_
 draw_text_colour(1080, n++ * 20, "9: Shape 2 Capsule", c_white, c_white, c_white, c_white, 1);
 draw_text_colour(1080, n++ * 20, "0: Shape 2 Model", c_white, c_white, c_white, c_white, 1);
 
-repeat (1000) {
-    if (shape_2.test(shape_1)) {
-        draw_text_colour(32, 100, "Shapes overlap!", c_red, c_red, c_red, c_red, 1);
-    }
+var t0 = get_timer();
+var overlap = shape_2.test(shape_1);
+var t1 = get_timer();
+draw_text_colour(32, 100, $"Test time: {t1 - t0} microseconds", c_white, c_white, c_white, c_white, 1);
+if (overlap) {
+    draw_text_colour(32, 120, "Shapes overlap!", c_red, c_red, c_red, c_red, 1);
 }
