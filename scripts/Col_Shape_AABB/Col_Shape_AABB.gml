@@ -67,8 +67,10 @@ function ColAABB(position, half_extents) constructor {
         var size = self.half_extents;
         var normal = plane.normal;
         var pos = self.position;
-        var anorm = normal.Abs();
-        var plength = dot_product_3d(anorm.x, anorm.y, anorm.z, size.x, size.y, size.z);
+        var anx = abs(normal.x);
+        var any = abs(normal.y);
+        var anz = abs(normal.z);
+        var plength = dot_product_3d(anx, any, anz, size.x, size.y, size.z);
         var ndot = dot_product_3d(normal.x, normal.y, normal.z, pos.x, pos.y, pos.z);
         return (abs(ndot - plane.distance) <= plength);
     };

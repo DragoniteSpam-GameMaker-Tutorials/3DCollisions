@@ -46,11 +46,12 @@ function ColSphere(position, radius) constructor {
     
     static CheckPlane = function(plane) {
         var ps = self.position;
-        var dist = dot_product_3d(plane.normal.x, plane.normal.y, plane.normal.z, ps.x, ps.y, ps.z) - plane.distance;
+        var pn = plane.normal;
+        var dist = dot_product_3d(pn.x, pn.y, pn.z, ps.x, ps.y, ps.z) - plane.distance;
         return point_distance_3d(
-            ps.x - plane.normal.x * dist,
-            ps.y - plane.normal.y * dist,
-            ps.z - plane.normal.z * dist, ps.x, ps.y, ps.z) < self.radius;
+            ps.x - pn.x * dist,
+            ps.y - pn.y * dist,
+            ps.z - pn.z * dist, ps.x, ps.y, ps.z) < self.radius;
     };
     
     static CheckOBB = function(obb) {
