@@ -1,5 +1,9 @@
 Version 1.3
 
+ - Optimized AABB/OBB by like 40%
+    - This also means good things for OBB/trimesh
+ - Optimized trimesh/everything by "it depends"%
+    - You still shouldn't use these if you don't have to
  - Dropped support for anything older than 2024.14, so that we can take full advantage of a variety of new optimizations that were added then
     - Native matrix_inverse without a fallback solution
     - Native sphere visiblity checks are much faster than the ones we did ourselves
