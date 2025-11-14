@@ -4,17 +4,21 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     self.mesh = undefined;
     self.position = undefined;
     self.rotation = undefined;
-    self.property_inverse = undefined;
+    self.property_inverse = matrix_build_identity();
+    self.property_transform = matrix_build_identity();
     self.Set(mesh, position, rotation);
     
     static Set = function(mesh = self.mesh, position = self.position, rotation = self.rotation) {
+        static position_mat = matrix_build_identity();
+        
 		if (is_array(mesh)) mesh = new ColMesh(mesh);
         self.mesh = mesh;
         self.position = position;
         self.rotation = rotation;
         
-        self.property_transform = matrix_multiply(rotation, matrix_build(position.x, position.y, position.z, 0, 0, 0, 1, 1, 1));
-        self.property_inverse = mat4_inverse(self.property_transform);
+        matrix_build(position.x, position.y, position.z, 0, 0, 0, 1, 1, 1, position_mat);
+        matrix_multiply(rotation, position_mat, self.property_transform);
+        matrix_inverse(self.property_transform, self.property_inverse);
         
         self.property_obb = new ColOBB(mat4_mul_point(self.property_transform, mesh.bounds.position), mesh.bounds.half_extents, self.property_transform);
         self.property_min = self.property_obb.property_min;
@@ -48,8 +52,12 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     
     static CheckOBB = function(obb) {
 		if (!self.property_obb.CheckOBB(obb)) return false;
+        
+        static untransformed_inverse = matrix_build_identity();
+        
+        matrix_multiply(obb.orientation, self.property_inverse, untransformed_inverse);
 		
-        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, obb.position), obb.size, matrix_multiply(obb.orientation, self.property_inverse));
+        var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, obb.position), obb.size, untransformed_inverse);
         return self.mesh.CheckOBB(untransformed);
     };
     

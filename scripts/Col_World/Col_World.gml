@@ -67,7 +67,7 @@ function ColWorld(accelerator) constructor {
             var collided_with = self.accelerator.CheckObject(sphere_object);
             if (collided_with == undefined) break;
             
-            var displaced_position = collided_with.DisplaceSphere(sphere_object.shape);
+            var displaced_position = collided_with.shape.DisplaceSphere(sphere_object.shape);
             if (displaced_position == undefined) break;
             
             sphere_object.shape.Set(displaced_position);
@@ -81,10 +81,19 @@ function ColWorld(accelerator) constructor {
         return displaced_position;
     };
     
-    static GetObjectsInFrustum = function(frustum) {
+    static GetObjectsInFrustum = function(view_mat, proj_mat) {
+        var current_camera = camera_get_active();
+        static filter_camera = camera_create();
+        camera_set_view_mat(filter_camera, view_mat);
+        camera_set_proj_mat(filter_camera, proj_mat);
+        camera_apply(filter_camera);
+        matrix_set(matrix_view, view_mat);
+        matrix_set(matrix_projection, proj_mat);
         var output = [];
-        self.accelerator.GetObjectsInFrustum(frustum, output);
-		array_unique_ext(output);
+        self.accelerator.GetObjectsInFrustum(output);
+		var n = array_unique_ext(output);
+        array_resize(output, n);
+        camera_apply(current_camera);
         return output;
     };
 }
@@ -158,21 +167,24 @@ function ColWorldOctree(bounds, depth) constructor {
     };
     
     static CheckObject = function(object) {
-        if (!object.shape.CheckAABB(self.bounds)) return;
-        
-        if (self.children == undefined) {
-            var i = 0;
-            repeat (array_length(self.contents)) {
-                if (self.contents[i].CheckObject(object)) {
-                    return self.contents[i];
+        var to_check = [self];
+        while (array_length(to_check) > 0) {
+            var tree = to_check[0];
+            array_delete(to_check, 0, 1);
+            if (!object.shape.CheckAABB(tree.bounds)) continue;
+            if (tree.children == undefined) {
+                var i = 0;
+                repeat (array_length(tree.contents)) {
+                    if (tree.contents[i].shape.CheckObject(object)) {
+                        return tree.contents[i];
+                    }
+                    i++;
                 }
-                i++;
-            }
-        } else {
-            var i = 0;
-            repeat (array_length(self.children)) {
-                var recursive_result = self.children[i++].CheckObject(object);
-                if (recursive_result != undefined) return recursive_result;
+            } else {
+                var head = array_length(to_check);
+                var additions = array_length(tree.children);
+                array_resize(to_check, head + additions)
+                array_copy(to_check, head, tree.children, 0, additions);
             }
         }
         
@@ -202,13 +214,13 @@ function ColWorldOctree(bounds, depth) constructor {
         return result;
     };
     
-    static GetObjectsInFrustum = function(frustum, output) {
-        var status = self.bounds.CheckFrustum(frustum);
+    static GetObjectsInFrustum = function(output) {
+        var status = self.bounds.CheckFrustumFast();
         
         if (status == EFrustumResults.OUTSIDE)
             return;
         
-        if (status == EFrustumResults.INSIDE || self.children == undefined) {
+        if (self.children == undefined) {
             var output_length = array_length(output);
             var contents_length = array_length(self.contents);
             array_resize(output, output_length + contents_length);
@@ -216,8 +228,8 @@ function ColWorldOctree(bounds, depth) constructor {
             return;
         }
         
-        array_foreach(self.children, method({ frustum: frustum, output: output }, function(node) {
-            node.GetObjectsInFrustum(self.frustum, self.output);
+        array_foreach(self.children, method({ output: output }, function(node) {
+            node.GetObjectsInFrustum(self.output);
         }));
     };
 }

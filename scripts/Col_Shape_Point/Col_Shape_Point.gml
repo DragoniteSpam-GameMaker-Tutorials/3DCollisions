@@ -123,4 +123,9 @@ function ColPoint(position) constructor {
         }
         return EFrustumResults.INSIDE;
     };
+    
+    static CheckFrustumFast = function() {
+        var p = self.position;
+        return sphere_is_visible(p.x, p.y, p.z, 0.0001) ? EFrustumResults.INSIDE : EFrustumResults.OUTSIDE;
+    };
 }

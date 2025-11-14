@@ -326,4 +326,9 @@ function ColAABB(position, half_extents) constructor {
         }
         return is_intersecting_anything ? EFrustumResults.INTERSECTING : EFrustumResults.INSIDE;
     };
+    
+    static CheckFrustumFast = function() {
+        var p = self.position;
+        return sphere_is_visible(p.x, p.y, p.z, self.property_radius) ? EFrustumResults.INSIDE : EFrustumResults.OUTSIDE;
+    };
 }

@@ -11,7 +11,7 @@ function NewColAABBFromMinMax(point_min, point_max) {
 }
 
 function NewColRayFromPoints(start, finish) {
-    return new ColRay(start, new Vector3(finish.x - start.x, finisy.y - start.y, finish.z - start.z));
+    return new ColRay(start, new Vector3(finish.x - start.x, finish.y - start.y, finish.z - start.z));
 }
 
 function RaycastHitInformation() constructor {

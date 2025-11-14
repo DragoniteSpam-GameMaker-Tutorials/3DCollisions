@@ -1,6 +1,7 @@
 /// these two matrices are going to be Matrix4 instances
 function ColCameraFrustum(view_mat, proj_mat) constructor {
-    var vp = matrix_multiply(view_mat, proj_mat);
+    static vp = matrix_build_identity();
+    matrix_multiply(view_mat, proj_mat, vp);
     
     var c1 = new Vector3(vp[ 0], vp[ 4], vp[ 8]);
     var c2 = new Vector3(vp[ 1], vp[ 5], vp[ 9]);

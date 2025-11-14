@@ -286,7 +286,7 @@ function ColSpatialHashNode(bounds) constructor {
     static CheckObject = function(object) {
         var i = 0;
         repeat (array_length(self.objects)) {
-            if (self.objects[i].CheckObject(object))
+            if (self.objects[i].shape.CheckObject(object))
                 return self.objects[i];
             i++;
         }
