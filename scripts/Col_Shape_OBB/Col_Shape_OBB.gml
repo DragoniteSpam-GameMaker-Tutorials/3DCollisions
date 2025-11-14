@@ -213,16 +213,25 @@ function ColOBB(position, size, orientation) constructor {
             
             var val_min_a = axis_extents[axis_counter++];
             var val_max_a = axis_extents[axis_counter++];
-            var val_min_b = infinity;
-            var val_max_b = -infinity;
             
-            var j = 0;
-            repeat (8) {
-                var vertex = vertices_aabb[j++];
-                var dot = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
-                val_min_b = min(val_min_b, dot);
-                val_max_b = max(val_max_b, dot);
-            }
+            var vertex = vertices_aabb[0];
+            var dot0 = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+            vertex = vertices_aabb[1];
+            var dot1 = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+            vertex = vertices_aabb[2];
+            var dot2 = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+            vertex = vertices_aabb[3];
+            var dot3 = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+            vertex = vertices_aabb[4];
+            var dot4 = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+            vertex = vertices_aabb[5];
+            var dot5 = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+            vertex = vertices_aabb[6];
+            var dot6 = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+            vertex = vertices_aabb[7];
+            var dot7 = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+            var val_min_b = min(dot0, dot1, dot2, dot3, dot4, dot5, dot6, dot7);
+            var val_max_b = max(dot0, dot1, dot2, dot3, dot4, dot5, dot6, dot7);
             
             if ((val_min_b > val_max_a) || (val_min_a > val_max_b)) {
                 return false;

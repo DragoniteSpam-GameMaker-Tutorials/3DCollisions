@@ -22,7 +22,7 @@ function ColAABB(position, half_extents) constructor {
             new Vector3(pmax.x, pmax.y, pmax.z),
             new Vector3(pmax.x, pmax.y, pmin.z),
             new Vector3(pmax.x, pmin.y, pmax.z),
-            new Vector3(pmax.x, pmin.y, pmin.z),
+            new Vector3(pmax.x, pmin.y, pmin.z)
         ];
         
         var vertices = self.property_vertices;
@@ -39,7 +39,7 @@ function ColAABB(position, half_extents) constructor {
             new ColLine(vertices[0], vertices[4]),
             new ColLine(vertices[1], vertices[5]),
             new ColLine(vertices[2], vertices[6]),
-            new ColLine(vertices[3], vertices[7]),
+            new ColLine(vertices[3], vertices[7])
         ];
     };
     
