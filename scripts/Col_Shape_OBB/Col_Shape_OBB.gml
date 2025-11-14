@@ -205,7 +205,6 @@ function ColOBB(position, size, orientation) constructor {
         var i = 0;
         var axis_counter = 0;
         var axis_extents = self.property_axis_extents;
-        var vertices = self.property_vertices;
         var vertices_aabb = aabb.property_vertices;
         repeat (15) {
             var xx = axes[i++];

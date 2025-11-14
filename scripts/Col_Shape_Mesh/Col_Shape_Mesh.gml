@@ -54,7 +54,7 @@ function ColMesh(triangle_array) constructor {
             
             var i = 0;
             repeat (array_length(self.children)) {
-                var tree = self.children[i++];
+                var tree = self.children[i];
                 var j = 0;
                 repeat (array_length(self.triangles)) {
                     if (tree.bounds.CheckTriangle(self.triangles[j])) {
@@ -62,7 +62,12 @@ function ColMesh(triangle_array) constructor {
                     }
                     j++;
                 }
-                tree.Split(depth - 1);
+                if (array_length(tree.triangles) == 0) {
+                    self.children[i] = undefined;
+                } else {
+                    tree.Split(depth - 1);
+                }
+                i++;
             }
         };
     };
@@ -93,7 +98,7 @@ function ColMesh(triangle_array) constructor {
             
             var i = 0;
             repeat (array_length(self.children)) {
-                var tree = self.children[i++];
+                var tree = self.children[i];
                 var j = 0;
                 repeat (array_length(self.triangles)) {
                     if (tree.bounds.CheckTriangle(self.triangles[j])) {
@@ -101,7 +106,12 @@ function ColMesh(triangle_array) constructor {
                     }
                     j++;
                 }
-                tree.Split(depth - 1);
+                if (array_length(tree.triangles) == 0) {
+                    self.children[i] = undefined;
+                } else {
+                    tree.Split(depth - 1);
+                }
+                i++;
             }
         };
     };
@@ -125,6 +135,7 @@ function ColMesh(triangle_array) constructor {
                 }
             } else {
                 for (var i = 0, n = array_length(tree.children); i < n; i++) {
+                    if (tree.children[i] == undefined) continue;
                     if (shape.CheckAABB(tree.children[i].bounds)) {
                         array_push(process_these, tree.children[i]);
                     }
@@ -190,6 +201,7 @@ function ColMesh(triangle_array) constructor {
                 }
             } else {
                 for (var i = 0, n = array_length(tree.children); i < n; i++) {
+                    if (tree.children[i] == undefined) continue;
                     if (ray.CheckAABB(tree.children[i].bounds, dummy_hit_info)) {
                         array_push(process_these, tree.children[i]);
                     }
