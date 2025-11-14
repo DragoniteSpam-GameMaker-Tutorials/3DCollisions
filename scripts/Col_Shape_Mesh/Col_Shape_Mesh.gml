@@ -23,7 +23,7 @@ function ColMesh(triangle_array) constructor {
     self.accelerator = new self.octree(self.bounds, self.octree);
     self.accelerator.triangles = triangle_array;
     var t = get_timer();
-    self.accelerator.Split(3);
+    self.accelerator.Split(COL_MESH_MAX_SPLITS);
     show_debug_message($"hierarching the tree took {(get_timer() - t) / 1000} ms")
     
     static octree = function(bounds, octree) constructor {
