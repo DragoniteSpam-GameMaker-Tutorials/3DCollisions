@@ -1,8 +1,8 @@
 {
-  "$GMProject":"",
+  "$GMProject":"v1",
   "%Name":"3DCollisions",
   "AudioGroups":[
-    {"$GMAudioGroup":"","%Name":"audiogroup_default","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
   ],
   "configs":{
     "children":[],
@@ -14,6 +14,7 @@
     {"$GMFolder":"","%Name":"Shapes","folderPath":"folders/Collision Stuff/Shapes.yy","name":"Shapes","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Test stuff","folderPath":"folders/Test stuff.yy","name":"Test stuff","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
+  "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"merry.vbuff","CopyToMask":-1,"filePath":"datafiles/meshes","name":"merry.vbuff","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"terrain.vbuff","CopyToMask":-1,"filePath":"datafiles/meshes","name":"terrain.vbuff","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -32,7 +33,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.1100.0.666",
+    "IDEVersion":"2024.1400.1.926",
   },
   "name":"3DCollisions",
   "resources":[
