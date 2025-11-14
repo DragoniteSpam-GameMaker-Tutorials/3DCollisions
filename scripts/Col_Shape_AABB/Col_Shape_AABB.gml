@@ -145,16 +145,24 @@ function ColAABB(position, half_extents) constructor {
             var ay = axes[i++];
             var az = axes[i++];
         
-            var val_min_a = infinity;
-            var val_max_a = -infinity;
-            
-            var j = 0;
-            repeat (8) {
-                var vertex = vertices[j++];
-                var dot = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
-                val_min_a = min(val_min_a, dot);
-                val_max_a = max(val_max_a, dot);
-            }
+            var vertex = vertices[0];
+            var dot0 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[1];
+            var dot1 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[2];
+            var dot2 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[3];
+            var dot3 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[4];
+            var dot4 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[5];
+            var dot5 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[6];
+            var dot6 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[7];
+            var dot7 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            var val_min_a = min(dot0, dot1, dot2, dot3, dot4, dot5, dot6, dot7);
+            var val_max_a = max(dot0, dot1, dot2, dot3, dot4, dot5, dot6, dot7);
             
             var ada = dot_product_3d(ax, ay, az, tax, tay, taz);
             var adb = dot_product_3d(ax, ay, az, tbx, tby, tbz);
