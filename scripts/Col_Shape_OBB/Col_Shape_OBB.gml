@@ -122,6 +122,29 @@ function ColOBB(position, size, orientation) constructor {
         axes[14 + 3 + 0] = -oz.y;
         axes[14 + 3 + 1] =  oz.x;
         
+        self.property_axis_extents = array_create(30);
+        var i = 0;
+        var axis_counter = 0;
+        
+        repeat (15) {
+            var xx = axes[i++];
+            var yy = axes[i++];
+            var zz = axes[i++];
+            
+            var val_min_a = infinity;
+            var val_max_a = -infinity;
+            
+            var j = 0;
+            repeat (8) {
+                var vertex = vertices[j++];
+                var dot = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
+                val_min_a = min(val_min_a, dot);
+                val_max_a = max(val_max_a, dot);
+            }
+            
+            self.property_axis_extents[axis_counter++] = val_min_a;
+            self.property_axis_extents[axis_counter++] = val_max_a;
+        }
     };
     
     static CheckObject = function(object) {
@@ -180,6 +203,8 @@ function ColOBB(position, size, orientation) constructor {
         var axes = self.property_aabb_axes;
         
         var i = 0;
+        var axis_counter = 0;
+        var axis_extents = self.property_axis_extents;
         var vertices = self.property_vertices;
         var vertices_aabb = aabb.property_vertices;
         repeat (15) {
@@ -187,19 +212,15 @@ function ColOBB(position, size, orientation) constructor {
             var yy = axes[i++];
             var zz = axes[i++];
             
-            var val_min_a = infinity;
-            var val_max_a = -infinity;
+            var val_min_a = axis_extents[axis_counter++];
+            var val_max_a = axis_extents[axis_counter++];
             var val_min_b = infinity;
             var val_max_b = -infinity;
             
             var j = 0;
             repeat (8) {
-                var vertex = vertices[j];
+                var vertex = vertices_aabb[j++];
                 var dot = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
-                val_min_a = min(val_min_a, dot);
-                val_max_a = max(val_max_a, dot);
-                vertex = vertices_aabb[j++];
-                dot = dot_product_3d(xx, yy, zz, vertex.x, vertex.y, vertex.z);
                 val_min_b = min(val_min_b, dot);
                 val_max_b = max(val_max_b, dot);
             }
