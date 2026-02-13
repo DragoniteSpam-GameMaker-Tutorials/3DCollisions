@@ -11,7 +11,7 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     static Set = function(mesh = self.mesh, position = self.position, rotation = self.rotation) {
         static position_mat = matrix_build_identity();
         
-		if (is_array(mesh)) mesh = new ColMesh(mesh);
+        if (is_array(mesh)) mesh = new ColMesh(mesh);
         self.mesh = mesh;
         self.position = position;
         self.rotation = rotation;
@@ -30,40 +30,40 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     };
     
     static CheckPoint = function(point) {
-		if (!self.property_obb.CheckPoint(point)) return false;
-		
+        if (!self.property_obb.CheckPoint(point)) return false;
+        
         var untransformed = new ColPoint(mat4_mul_point(self.property_inverse, point.position));
         return self.mesh.CheckPoint(untransformed);
     };
     
     static CheckSphere = function(sphere) {
-		if (!self.property_obb.CheckSphere(sphere)) return false;
-		
+        if (!self.property_obb.CheckSphere(sphere)) return false;
+        
         var untransformed = new ColSphere(mat4_mul_point(self.property_inverse, sphere.position), sphere.radius);
         return self.mesh.CheckSphere(untransformed);
     };
     
     static CheckAABB = function(aabb) {
-		if (!self.property_obb.CheckAABB(aabb)) return false;
-		
+        if (!self.property_obb.CheckAABB(aabb)) return false;
+        
         var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, aabb.position), aabb.half_extents, self.property_inverse);
         return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckOBB = function(obb) {
-		if (!self.property_obb.CheckOBB(obb)) return false;
+        if (!self.property_obb.CheckOBB(obb)) return false;
         
         static untransformed_inverse = matrix_build_identity();
         
         matrix_multiply(obb.orientation, self.property_inverse, untransformed_inverse);
-		
+        
         var untransformed = new ColOBB(mat4_mul_point(self.property_inverse, obb.position), obb.size, untransformed_inverse);
         return self.mesh.CheckOBB(untransformed);
     };
     
     static CheckPlane = function(plane) {
-		if (!self.property_obb.CheckPlane(plane)) return false;
-		
+        if (!self.property_obb.CheckPlane(plane)) return false;
+        
         var point = plane.normal.Mul(plane.distance);
         point = mat4_mul_point(self.property_inverse, point);
         
@@ -75,41 +75,41 @@ function ColTransformedModel(mesh, position = new Vector3(0, 0, 0), rotation = m
     };
     
     static CheckCapsule = function(capsule) {
-		if (!capsule.CheckOBB(self.property_obb)) return false;
-		
+        if (!capsule.CheckOBB(self.property_obb)) return false;
+        
         var untransformed = new ColCapsule(mat4_mul_point(self.property_inverse, capsule.line.start), mat4_mul_point(self.property_inverse, capsule.line.finish), capsule.radius);
         return self.mesh.CheckCapsule(untransformed);
     };
     
     static CheckTriangle = function(triangle) {
-		if (!self.property_obb.CheckTriangle(triangle)) return false;
-		
+        if (!self.property_obb.CheckTriangle(triangle)) return false;
+        
         var inverse = self.property_inverse;
         // "homework"
     };
     
     static CheckMesh = function(mesh) {
-		if (!mesh.CheckOBB(self.property_obb)) return false;
-		
+        if (!mesh.CheckOBB(self.property_obb)) return false;
+        
         return false;
     };
     
     static CheckModel = function(model) {
-		if (!model.CheckOBB(self.property_obb)) return false;
-		
+        if (!model.CheckOBB(self.property_obb)) return false;
+        
         return false;
     };
     
     static CheckLine = function(line) {
-		if (!self.property_obb.CheckLine(line)) return false;
-		
+        if (!self.property_obb.CheckLine(line)) return false;
+        
         var inverse = self.property_inverse;
         // "homework"
     };
     
     static CheckRay = function(ray, hit_info = undefined) {
-		if (!self.property_obb.CheckRay(ray)) return false;
-		
+        if (!self.property_obb.CheckRay(ray)) return false;
+        
         static untransformed_hit_info = new RaycastHitInformation();
         untransformed_hit_info.distance = infinity;
         

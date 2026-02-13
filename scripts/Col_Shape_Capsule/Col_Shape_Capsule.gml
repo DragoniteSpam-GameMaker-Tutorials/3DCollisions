@@ -112,13 +112,13 @@ function ColCapsule(start, finish, radius) constructor {
         if (point_distance_3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z) >= (self.property_radius + obb.property_radius)) return false;
         
         var obb_position = obb.position;
-		var obb_orientation = obb.property_orientation_array;
+        var obb_orientation = obb.property_orientation_array;
         var obb_size_array = [obb.size.x, obb.size.y, obb.size.z];
         
         var r = self.radius;
         var line = self.line;
         var p = line.start;
-		
+        
         var nx = obb_position.x, ny = obb_position.y, nz = obb_position.z;
         var dx = p.x - nx, dy = p.y - ny, dz = p.z - nz;
         
@@ -135,11 +135,11 @@ function ColCapsule(start, finish, radius) constructor {
         p = line.finish;
         
         nx = obb_position.x;
-		ny = obb_position.y;
-		nz = obb_position.z;
+        ny = obb_position.y;
+        nz = obb_position.z;
         dx = p.x - nx;
-		dy = p.y - ny;
-		dz = p.z - nz;
+        dy = p.y - ny;
+        dz = p.z - nz;
         
         for (var i = 0; i < 3; i++) {
             var axis = obb_orientation[i];
@@ -163,11 +163,11 @@ function ColCapsule(start, finish, radius) constructor {
             p = (nearest_self.x == nearest_start.x && nearest_self.y == nearest_start.y && nearest_self.z == nearest_start.z) ? nearest_line_to_edge.start : nearest_line_to_edge.finish;
             
             nx = obb_position.x;
-			ny = obb_position.y;
-			nz = obb_position.z;
+            ny = obb_position.y;
+            nz = obb_position.z;
             dx = p.x - nx;
-			dy = p.y - ny;
-			dz = p.z - nz;
+            dy = p.y - ny;
+            dz = p.z - nz;
             
             for (var j = 0; j < 3; j++) {
                 var axis = obb.property_orientation_array[j];

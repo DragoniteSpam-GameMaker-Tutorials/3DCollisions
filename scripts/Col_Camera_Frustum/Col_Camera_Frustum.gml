@@ -7,8 +7,8 @@ function ColCameraFrustum(view_mat, proj_mat) constructor {
     var c2 = new Vector3(vp[ 1], vp[ 5], vp[ 9]);
     var c3 = new Vector3(vp[ 2], vp[ 6], vp[10]);
     var c4 = new Vector3(vp[ 3], vp[ 7], vp[11]);
-	
-	var ww = vp[15];
+    
+    var ww = vp[15];
     
     self.left =         new ColPlane(c4.Add(c1), ww + vp[12]).Normalize();
     self.right =        new ColPlane(c4.Sub(c1), ww - vp[12]).Normalize();

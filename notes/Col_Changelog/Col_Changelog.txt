@@ -1,5 +1,11 @@
 Version 1.3
 
+ - Added ColWorldGameMaker, which uses GameMaker instances to do the broad phase of the collision detection before using 3D collision logic to narrow down exact hits
+    - This speeds up collision checks against the world by "it depends"% but in my test world there was about a 10x improvement
+	- Frustum checks in dense areas can be up to about twice as expensive as quad and octrees, but are still far cheaper than rendering everything in the world at all times
+		- If you have very dense environments you may want to use two structures: a ColWorldGameMaker for collisions, and a quad or octree for frustum culling
+	- You can only have one ColWorldGameMaker at once, as instances are not filtered for which world they belong to for performance reasons
+ - 50% of ColObject/ColObject checks no longer result in an additional indirect method call
  - Optimized AABB/OBB by like 40%
     - This also means good things for OBB/trimesh
  - Optimized trimesh/everything by "it depends"%
@@ -21,7 +27,7 @@ Version 1.1
  - A whole bunch of new `Vector` functions (including a Vector2 class), just for fun
  - Removed the Matrix classes in favor of just using the GameMaker 16-element array matrices, because those were confusing and using them added more overhead that I really like
  - If you construct a ColTransformedModel (or call the Set() method that goes with them) with an array of ColTriangles instead of a ColMesh, a ColMesh will be created for you
-	 - This will create a new ColMesh from scratch, so only do this if each Transformed Model is to be associated with a unique Mesh
+     - This will create a new ColMesh from scratch, so only do this if each Transformed Model is to be associated with a unique Mesh
  - ColWorld now takes an Octree, **Quadtree**, or _Spatial Hash_ as its preferred acceleration structure instead of creating one for you
  - ColWorld::CheckRay can now take a maximum distance, discarding any hits that are farther away
  - Added `COL_MIN_TREE_DENSITY` to set the object threshold for when a tree structure is subdivided, which can speed them up by a fair amount
